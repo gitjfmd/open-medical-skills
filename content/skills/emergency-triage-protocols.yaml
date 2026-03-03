@@ -2,14 +2,14 @@ name: "emergency-triage-protocols"
 display_name: "Emergency Department Triage Protocols"
 description: "AI-assisted emergency department triage tool with evidence-based protocols for rapid patient assessment. Helps prioritize cases based on acuity and clinical presentation."
 author: "Healthcare MCP Public"
-repository: "https://github.com/Cicatriiz/healthcare-mcp-public"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "emergency"
 tags: ["emergency-medicine", "triage", "acuity-assessment"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/Cicatriiz/healthcare-mcp-public"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/emergency-triage-protocols"
 evidence_level: "moderate"
 safety_classification: "caution"
 specialty: ["emergency-medicine"]

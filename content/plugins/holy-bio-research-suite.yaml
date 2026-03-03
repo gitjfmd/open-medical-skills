@@ -2,14 +2,14 @@ name: "holy-bio-research-suite"
 display_name: "Holy Bio Bioinformatics Research Suite"
 description: "Unified framework of 50+ specialized bioinformatics MCP functions for biomedical research. Includes pharmacology (Guide to PHARMACOLOGY), aging/longevity research (opengenes), gene/variant/chemical data (biothings), genomics toolkit (gget), and genetic interactions (synergy-age). Single unified configuration enables all servers at once."
 author: "longevity-genie"
-repository: "https://github.com/longevity-genie/holy-bio-mcp"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "research"
 tags: ["mcp-plugin", "bioinformatics", "genomics", "pharmacology", "longevity", "research-suite"]
 version: "1.0.0"
 license: "MIT"
 type: "plugin"
 install:
-  git: "git clone https://github.com/longevity-genie/holy-bio-mcp"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/plugins/holy-bio-research-suite"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["bioinformatics", "genomics", "pharmacology"]

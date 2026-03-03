@@ -2,14 +2,14 @@ name: "pubmed-literature-search"
 display_name: "PubMed Medical Literature Search"
 description: "Search 36M+ citations from PubMed and PubMed Central. Advanced search with boolean operators, MeSH terms, author/journal filters, and full-text access."
 author: "Augmented-Nature"
-repository: "https://github.com/Augmented-Nature/PubMed-MCP-Server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "research"
 tags: ["pubmed", "literature-search", "research", "evidence-based-medicine"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/Augmented-Nature/PubMed-MCP-Server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/pubmed-literature-search"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["research", "all-specialties"]

@@ -2,14 +2,14 @@ name: "pediatric-drug-dosing"
 display_name: "Pediatric Drug Dosing Calculator"
 description: "Weight-based and body-surface-area-based drug dosing calculator for pediatric patients. Includes common pediatric medications with age-appropriate dosing ranges."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/pediatric-dosing"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "pediatrics"
 tags: ["pediatric-dosing", "medication-safety", "weight-based-dosing"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/pediatric-dosing ~/.claude/skills/peds-dosing"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/pediatric-drug-dosing"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["pediatrics", "pharmacy"]

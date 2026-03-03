@@ -2,14 +2,14 @@ name: "hipaa-compliance-checker"
 display_name: "HIPAA Compliance & De-identification"
 description: "Clinical de-identification pipeline that detects 30+ PHI entity types. Provides masked and obfuscated output modes for HIPAA compliance. Runs locally with data never leaving secure environment."
 author: "John Snow Labs"
-repository: "https://github.com/JohnSnowLabs/spark-nlp-workshop"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "administrative"
 tags: ["hipaa", "de-identification", "phi", "privacy"]
 version: "6.3.0"
 license: "Commercial"
 type: "skill"
 install:
-  git: "git clone https://github.com/JohnSnowLabs/spark-nlp-workshop"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/hipaa-compliance-checker"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["health-information-management", "compliance"]

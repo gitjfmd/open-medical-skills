@@ -2,14 +2,14 @@ name: "phq9-depression-screening"
 display_name: "PHQ-9 Depression Screening Tool"
 description: "Validated Patient Health Questionnaire-9 (PHQ-9) for depression screening and severity assessment. Automatic scoring and interpretation with suicide risk flagging."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/mental-health-screening"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "mental-health"
 tags: ["depression", "screening", "phq-9", "mental-health"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/mental-health-screening ~/.claude/skills/mental-health"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/phq9-depression-screening"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["psychiatry", "primary-care"]

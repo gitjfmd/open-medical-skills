@@ -2,14 +2,14 @@ name: "epidemiology-surveillance"
 display_name: "Epidemiology & Disease Surveillance"
 description: "Access WHO Global Health Observatory data for epidemiological analysis. Track disease prevalence, mortality rates, and public health indicators by country and region."
 author: "Medical MCP"
-repository: "https://github.com/JamesANZ/medical-mcp"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "public-health"
 tags: ["epidemiology", "surveillance", "who", "public-health"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/JamesANZ/medical-mcp"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/epidemiology-surveillance"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["public-health", "epidemiology"]

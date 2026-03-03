@@ -2,14 +2,14 @@ name: "supplement-drug-interactions"
 display_name: "Supplement-Drug Interaction Safety"
 description: "First supplement-drug interaction safety tool for AI agents. Evidence-based supplement safety intelligence with 805 FDA FAERS adverse event signals and CYP450 pathway analysis."
 author: "TruthStack1"
-repository: "https://github.com/TruthStack1/truthstack-mcp"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "pharmacy"
 tags: ["supplements", "drug-interactions", "herbal-medicine", "safety"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/TruthStack1/truthstack-mcp"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/supplement-drug-interactions"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "integrative-medicine"]

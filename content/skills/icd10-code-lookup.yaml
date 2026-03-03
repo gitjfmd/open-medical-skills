@@ -2,14 +2,14 @@ name: "icd10-code-lookup"
 display_name: "ICD-10 Diagnosis Code Lookup"
 description: "Search and validate ICD-10-CM diagnosis codes using NLM Clinical Tables API. Supports partial matching and hierarchical browsing of code categories."
 author: "MCP Healthcare Server"
-repository: "https://github.com/shinegami-2002/mcp-healthcare-server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "administrative"
 tags: ["icd-10", "medical-coding", "billing"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/shinegami-2002/mcp-healthcare-server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/icd10-code-lookup"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["medical-coding", "health-information-management"]

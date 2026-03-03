@@ -2,14 +2,14 @@ name: "dicom-metadata-extractor"
 display_name: "DICOM Metadata & PHI Anonymization"
 description: "Extract metadata from DICOM medical images, anonymize protected health information (PHI), and process imaging data for research or clinical workflows. Supports pydicom integration."
 author: "Healthcare MCP Public"
-repository: "https://github.com/Cicatriiz/healthcare-mcp-public"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "lab-imaging"
 tags: ["dicom", "medical-imaging", "phi-anonymization", "metadata"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/Cicatriiz/healthcare-mcp-public"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/dicom-metadata-extractor"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["radiology", "medical-informatics"]

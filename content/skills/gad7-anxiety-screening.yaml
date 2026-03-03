@@ -2,14 +2,14 @@ name: "gad7-anxiety-screening"
 display_name: "GAD-7 Anxiety Screening Tool"
 description: "Generalized Anxiety Disorder 7-item (GAD-7) screening tool with automated scoring. Assesses anxiety severity and guides treatment decisions."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/mental-health-screening"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "mental-health"
 tags: ["anxiety", "screening", "gad-7", "mental-health"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/mental-health-screening ~/.claude/skills/mental-health"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/gad7-anxiety-screening"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["psychiatry", "primary-care"]

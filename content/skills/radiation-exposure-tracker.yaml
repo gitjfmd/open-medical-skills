@@ -2,14 +2,14 @@ name: "radiation-exposure-tracker"
 display_name: "Medical Radiation Exposure Tracker"
 description: "Track cumulative radiation exposure from medical imaging procedures (X-rays, CT scans). Includes body surface area adjustments and radioactive decay models for comprehensive dosimetry."
 author: "Claude-Ally-Health / WellAlly Tech"
-repository: "https://github.com/huifer/Claude-Ally-Health"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "lab-imaging"
 tags: ["radiation-safety", "medical-imaging", "dosimetry"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/huifer/Claude-Ally-Health ~/.claude/skills/claude-ally-health"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/radiation-exposure-tracker"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["radiology", "radiation-oncology", "nuclear-medicine"]

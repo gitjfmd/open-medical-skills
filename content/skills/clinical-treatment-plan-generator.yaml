@@ -2,14 +2,14 @@ name: "clinical-treatment-plan-generator"
 display_name: "Clinical Treatment Plan Generator"
 description: "Generate comprehensive clinical treatment plans with SMART goal frameworks and evidence-based interventions. Exports to LaTeX/PDF format for clinical documentation."
 author: "K-Dense-AI"
-repository: "https://github.com/K-Dense-AI/claude-scientific-skills"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "treatment"
 tags: ["treatment-planning", "clinical-documentation", "smart-goals"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/K-Dense-AI/claude-scientific-skills ~/.claude/skills/scientific"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/clinical-treatment-plan-generator"
 evidence_level: "moderate"
 safety_classification: "caution"
 specialty: ["internal-medicine", "psychiatry", "family-medicine"]

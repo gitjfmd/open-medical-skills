@@ -2,7 +2,7 @@ name: "medikode-medical-coding-platform"
 display_name: "Medikode AI Medical Coding Platform"
 description: "AI-driven medical coding platform for CPT/ICD-10 validation, quality assurance, EOB parsing, and RAF score calculation. Five integrated tools providing code validation against clinical documentation, coding QA with gap identification, structured EOB data extraction, RAF/HCC scoring, and composite workflow validation. Requires API key from Medikode."
 author: "medikode-ai"
-repository: "https://github.com/medikode-ai/mcp-server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "administrative"
 tags: ["mcp-plugin", "medical-coding", "cpt", "icd-10", "raf-score", "hcc", "billing"]
 version: "1.0.0"
@@ -10,7 +10,7 @@ license: "Commercial"
 type: "plugin"
 install:
   npx: "npx @medikode/mcp-server"
-  git: "git clone https://github.com/medikode-ai/mcp-server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/plugins/medikode-medical-coding-platform"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["medical-coding", "health-information-management", "revenue-cycle"]

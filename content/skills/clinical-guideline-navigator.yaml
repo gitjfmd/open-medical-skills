@@ -2,14 +2,14 @@ name: "clinical-guideline-navigator"
 display_name: "Clinical Practice Guideline Navigator"
 description: "Search and navigate clinical practice guidelines from major organizations (AHA, ACC, ACP, IDSA, etc.). Provides evidence-graded recommendations for common clinical scenarios."
 author: "MCP Healthcare Server"
-repository: "https://github.com/shinegami-2002/mcp-healthcare-server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "clinical-research-summarizing"
 tags: ["clinical-guidelines", "evidence-based-medicine", "best-practices"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/shinegami-2002/mcp-healthcare-server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/clinical-guideline-navigator"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["all-specialties"]

@@ -2,14 +2,14 @@ name: "raf-score-calculator"
 display_name: "RAF Score & HCC Calculator"
 description: "Risk Adjustment Factor (RAF) score calculator with Hierarchical Condition Category (HCC) capture from encounter documentation for Medicare Advantage."
 author: "Medikode"
-repository: "https://github.com/medikode-ai/mcp-server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "administrative"
 tags: ["raf-score", "hcc", "risk-adjustment", "medicare"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/medikode-ai/mcp-server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/raf-score-calculator"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["health-information-management", "value-based-care"]

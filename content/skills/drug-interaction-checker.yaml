@@ -2,14 +2,14 @@ name: "drug-interaction-checker"
 display_name: "Drug Interaction Safety Checker"
 description: "Real-time drug-drug interaction detection with five-level severity classification (A/B/C/D/X). Checks for drug-disease, drug-dose, and drug-food interactions using FDA and clinical databases."
 author: "Claude-Ally-Health / WellAlly Tech"
-repository: "https://github.com/huifer/Claude-Ally-Health"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "treatment"
 tags: ["drug-interactions", "medication-safety", "pharmacology"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/huifer/Claude-Ally-Health ~/.claude/skills/claude-ally-health"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/drug-interaction-checker"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "clinical-pharmacology"]

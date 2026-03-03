@@ -2,14 +2,14 @@ name: "medical-paper-humanizer"
 display_name: "Medical Academic Writing Humanizer"
 description: "Removes signs of AI-generated writing from medical papers and makes them sound more natural. Based on Wikipedia's AI writing guide, adapted for medical literature."
 author: "matsuikentaro1"
-repository: "https://github.com/matsuikentaro1/humanizer_academic"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "clinical-research-summarizing"
 tags: ["academic-writing", "medical-papers", "writing-tools"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/matsuikentaro1/humanizer_academic ~/.claude/skills/humanizer"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/medical-paper-humanizer"
 evidence_level: "low"
 safety_classification: "safe"
 specialty: ["medical-writing", "research"]

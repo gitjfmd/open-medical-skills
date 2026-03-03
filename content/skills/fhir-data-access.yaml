@@ -2,14 +2,14 @@ name: "fhir-data-access"
 display_name: "FHIR Healthcare Data Access"
 description: "Connect to FHIR-compliant electronic health record systems to query, retrieve, and analyze patient data using natural language. Supports full CRUD operations on FHIR resources with SMART-on-FHIR authentication."
 author: "WSO2"
-repository: "https://github.com/wso2/fhir-mcp-server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "diagnosis"
 tags: ["fhir", "ehr", "patient-data", "smart-on-fhir"]
 version: "1.0.0"
 license: "Apache-2.0"
 type: "skill"
 install:
-  git: "git clone https://github.com/wso2/fhir-mcp-server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/fhir-data-access"
 evidence_level: "high"
 safety_classification: "restricted"
 specialty: ["health-informatics", "clinical-data-management"]

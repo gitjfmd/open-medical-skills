@@ -2,14 +2,14 @@ name: "precision-medicine-therapeutics"
 display_name: "Precision Medicine Treatment Planning"
 description: "Generate personalized treatment plans based on pharmacogenomics, variant interpretation, and patient-specific data. Integrates ClinPGx and ClinVar databases for evidence-based precision therapeutics."
 author: "K-Dense-AI"
-repository: "https://github.com/K-Dense-AI/claude-scientific-skills"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "treatment"
 tags: ["precision-medicine", "pharmacogenomics", "personalized-treatment"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/K-Dense-AI/claude-scientific-skills ~/.claude/skills/scientific"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/precision-medicine-therapeutics"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["medical-genetics", "oncology", "pharmacology"]

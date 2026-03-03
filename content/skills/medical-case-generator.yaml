@@ -2,14 +2,14 @@ name: "medical-case-generator"
 display_name: "Clinical Case Scenario Generator"
 description: "Generate realistic clinical case scenarios for medical education and assessment. Customizable by specialty, complexity level, and learning objectives."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/case-generator"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "education"
 tags: ["medical-education", "case-scenarios", "teaching"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/case-generator ~/.claude/skills/cases"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/medical-case-generator"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["medical-education"]

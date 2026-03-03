@@ -2,14 +2,14 @@ name: "outbreak-investigation"
 display_name: "Outbreak Investigation Assistant"
 description: "Systematic approach to outbreak investigation using CDC guidelines. Assists with case definition, epidemic curve analysis, and source identification."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/outbreak-tools"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "public-health"
 tags: ["outbreak", "infectious-disease", "epidemiology", "cdc"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/outbreak-tools ~/.claude/skills/outbreak"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/outbreak-investigation"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["public-health", "infectious-disease"]

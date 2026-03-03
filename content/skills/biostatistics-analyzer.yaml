@@ -2,14 +2,14 @@ name: "biostatistics-analyzer"
 display_name: "Biostatistics Analysis Tool"
 description: "Perform common biostatistical analyses for medical research including survival analysis, logistic regression, ROC curves, and sample size calculations."
 author: "K-Dense-AI"
-repository: "https://github.com/K-Dense-AI/claude-scientific-skills"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "clinical-research-summarizing"
 tags: ["biostatistics", "research", "data-analysis"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/K-Dense-AI/claude-scientific-skills ~/.claude/skills/scientific"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/biostatistics-analyzer"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["research", "biostatistics"]

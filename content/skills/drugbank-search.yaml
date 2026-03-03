@@ -2,14 +2,14 @@ name: "drugbank-search"
 display_name: "DrugBank Comprehensive Drug Database"
 description: "Access 17,430+ drugs (13,166 small molecules + 4,264 biotech drugs) with high-performance SQLite backend. Search by name, therapeutic category, elimination half-life, or molecular similarity."
 author: "openpharma-org"
-repository: "https://github.com/openpharma-org/drugbank-mcp-server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "pharmacy"
 tags: ["drugbank", "drug-database", "pharmacology"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/openpharma-org/drugbank-mcp-server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/drugbank-search"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "clinical-pharmacology"]

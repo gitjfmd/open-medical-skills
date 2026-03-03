@@ -2,14 +2,14 @@ name: "clinical-trials-search"
 display_name: "ClinicalTrials.gov Database Access"
 description: "Access 400,000+ clinical trials from 220+ countries via ClinicalTrials.gov API v2. Search by condition, intervention, sponsor, or location."
 author: "Augmented-Nature"
-repository: "https://github.com/Augmented-Nature/ClinicalTrials-MCP-Server"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "research"
 tags: ["clinical-trials", "research", "evidence-based-medicine"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/Augmented-Nature/ClinicalTrials-MCP-Server"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/clinical-trials-search"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["research", "clinical-research"]

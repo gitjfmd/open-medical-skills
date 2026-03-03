@@ -2,14 +2,14 @@ name: "trauma-management-protocols"
 display_name: "Trauma Management Protocols (ATLS)"
 description: "Advanced Trauma Life Support (ATLS) protocol assistant for initial assessment and management of trauma patients. Covers primary/secondary surveys and critical interventions."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/trauma-protocols"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "emergency"
 tags: ["trauma", "atls", "emergency-surgery", "critical-care"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/trauma-protocols ~/.claude/skills/trauma"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/trauma-management-protocols"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["emergency-medicine", "trauma-surgery"]

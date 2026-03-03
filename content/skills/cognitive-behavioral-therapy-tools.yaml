@@ -2,14 +2,14 @@ name: "cognitive-behavioral-therapy-tools"
 display_name: "CBT Therapeutic Techniques Guide"
 description: "Evidence-based cognitive behavioral therapy (CBT) tools and worksheets. Includes thought records, behavioral activation, and cognitive restructuring exercises."
 author: "Open Medical Skills Community"
-repository: "https://github.com/open-medical-skills/cbt-tools"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "mental-health"
 tags: ["cbt", "psychotherapy", "mental-health", "therapy"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/open-medical-skills/cbt-tools ~/.claude/skills/cbt"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/cognitive-behavioral-therapy-tools"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["psychiatry", "psychology", "counseling"]

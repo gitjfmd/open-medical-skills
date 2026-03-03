@@ -2,14 +2,14 @@ name: "systematic-review-assistant"
 display_name: "Systematic Review & Meta-Analysis Assistant"
 description: "Assists with systematic review methodology including PICO formulation, search strategy development, study selection, and quality assessment using PRISMA guidelines."
 author: "K-Dense-AI"
-repository: "https://github.com/K-Dense-AI/claude-scientific-skills"
+repository: "https://github.com/gitjfmd/open-medical-skills"
 category: "research"
 tags: ["systematic-review", "meta-analysis", "prisma", "evidence-synthesis"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/K-Dense-AI/claude-scientific-skills ~/.claude/skills/scientific"
+  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/systematic-review-assistant"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["research", "epidemiology"]
