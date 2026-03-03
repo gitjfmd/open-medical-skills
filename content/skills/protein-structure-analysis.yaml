@@ -1,15 +1,16 @@
 name: "protein-structure-analysis"
 display_name: "Protein Structure Database (AlphaFold & PDB)"
 description: "Access AlphaFold Protein Structure Database and Protein Data Bank (PDB) for structural biology research. Analyze protein structures and molecular interactions."
-author: "Augmented-Nature"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/protein-structure-analysis"
 category: "clinical-research-summarizing"
 tags: ["protein-structure", "alphafold", "structural-biology", "bioinformatics"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/protein-structure-analysis"
+  npx: "npx skills add gitjfmd/oms-site --skill protein-structure-analysis"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/protein-structure-analysis ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["biochemistry", "molecular-biology"]

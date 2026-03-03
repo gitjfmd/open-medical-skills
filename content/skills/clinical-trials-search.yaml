@@ -1,15 +1,16 @@
 name: "clinical-trials-search"
 display_name: "ClinicalTrials.gov Database Access"
 description: "Access 400,000+ clinical trials from 220+ countries via ClinicalTrials.gov API v2. Search by condition, intervention, sponsor, or location."
-author: "Augmented-Nature"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/clinical-trials-search"
 category: "research"
 tags: ["clinical-trials", "research", "evidence-based-medicine"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/clinical-trials-search"
+  npx: "npx skills add gitjfmd/oms-site --skill clinical-trials-search"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/clinical-trials-search ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["research", "clinical-research"]

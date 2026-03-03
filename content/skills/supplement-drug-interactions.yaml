@@ -1,15 +1,16 @@
 name: "supplement-drug-interactions"
 display_name: "Supplement-Drug Interaction Safety"
 description: "First supplement-drug interaction safety tool for AI agents. Evidence-based supplement safety intelligence with 805 FDA FAERS adverse event signals and CYP450 pathway analysis."
-author: "TruthStack1"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/supplement-drug-interactions"
 category: "pharmacy"
 tags: ["supplements", "drug-interactions", "herbal-medicine", "safety"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/supplement-drug-interactions"
+  npx: "npx skills add gitjfmd/oms-site --skill supplement-drug-interactions"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/supplement-drug-interactions ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "integrative-medicine"]

@@ -10,3 +10,5 @@ ALLOWED_ORIGIN = "https://oms.jfmd.win"
 
 # Secrets (set via wrangler secret put):
 # GITHUB_TOKEN - fine-grained PAT with contents:write and pull_requests:write
+# GITHUB_CLIENT_ID - OAuth App client ID (for user authentication)
+# GITHUB_CLIENT_SECRET - OAuth App client secret (for token exchange)

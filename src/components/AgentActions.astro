@@ -1,0 +1,169 @@
+---
+interface Props {
+  skillName: string;
+  displayName: string;
+  repository: string;
+}
+
+const { skillName, displayName, repository } = Astro.props;
+
+const repo = "gitjfmd/oms-site";
+const baseCmd = `npx skills add ${repo} --skill ${skillName}`;
+
+const actions = [
+  {
+    id: "claude-code",
+    label: "Install in Claude Code",
+    command: `${baseCmd} -a claude-code`,
+    primary: true,
+    icon: "clipboard",
+  },
+  {
+    id: "manus",
+    label: "Run in Manus",
+    href: `https://manus.im/import-skills?githubUrl=${encodeURIComponent(repository)}&utm_source=oms`,
+    primary: true,
+    icon: "external",
+  },
+  {
+    id: "codex",
+    label: "Add to Codex",
+    command: `${baseCmd} -a codex`,
+    primary: false,
+    icon: "clipboard",
+  },
+  {
+    id: "cursor",
+    label: "Add to Cursor",
+    command: `${baseCmd} -a cursor`,
+    primary: false,
+    icon: "clipboard",
+  },
+  {
+    id: "windsurf",
+    label: "Add to Windsurf",
+    command: `${baseCmd} -a windsurf`,
+    primary: false,
+    icon: "clipboard",
+  },
+  {
+    id: "copilot",
+    label: "Add to GitHub Copilot",
+    command: `${baseCmd} -a github-copilot`,
+    primary: false,
+    icon: "clipboard",
+  },
+  {
+    id: "all-agents",
+    label: "Install for All Agents",
+    command: `${baseCmd} -a '*'`,
+    primary: false,
+    icon: "clipboard",
+  },
+];
+
+const copyActions = actions.filter((a) => a.command);
+const linkActions = actions.filter((a) => a.href);
+---
+
+<div class="mt-8">
+  <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Quick Install</h2>
+
+  <!-- Primary actions -->
+  <div class="mt-3 flex flex-wrap gap-3">
+    {actions.filter(a => a.primary).map((action) => (
+      action.command ? (
+        <button
+          class="agent-copy-btn inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700 dark:bg-primary dark:hover:bg-teal-500"
+          data-command={action.command}
+          data-label={action.label}
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+          </svg>
+          {action.label}
+        </button>
+      ) : (
+        <a
+          href={action.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+          {action.label}
+        </a>
+      )
+    ))}
+  </div>
+
+  <!-- Secondary actions -->
+  <div class="mt-2 flex flex-wrap gap-2">
+    {actions.filter(a => !a.primary).map((action) => (
+      action.command ? (
+        <button
+          class="agent-copy-btn inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
+          data-command={action.command}
+          data-label={action.label}
+        >
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+          </svg>
+          {action.label}
+        </button>
+      ) : (
+        <a
+          href={action.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
+        >
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+          {action.label}
+        </a>
+      )
+    ))}
+
+    <a
+      href={repository}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
+    >
+      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      View Source
+    </a>
+  </div>
+</div>
+
+<script>
+  const COPY_FEEDBACK_DELAY_MS = 2000;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll<HTMLButtonElement>(".agent-copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const command = btn.dataset.command;
+        if (!command) return;
+
+        await navigator.clipboard.writeText(command);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<svg class="h-4 w-4 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" /></svg> Copied!`;
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+        }, COPY_FEEDBACK_DELAY_MS);
+      });
+    });
+  });
+</script>

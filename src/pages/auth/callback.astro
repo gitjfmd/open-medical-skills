@@ -1,0 +1,118 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Signing in..." description="Completing GitHub authentication.">
+  <div class="mx-auto flex max-w-md flex-col items-center justify-center px-4 py-24 text-center">
+    <!-- Loading state (shown initially) -->
+    <div id="auth-loading">
+      <div class="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-primary dark:border-slate-700 dark:border-t-primary-light"></div>
+      <h1 class="text-xl font-semibold text-slate-900 dark:text-white">Signing you in...</h1>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        Completing GitHub authentication. You will be redirected shortly.
+      </p>
+    </div>
+
+    <!-- Success state (hidden initially) -->
+    <div id="auth-success" class="hidden">
+      <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+        <svg class="h-7 w-7 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h1 class="text-xl font-semibold text-slate-900 dark:text-white">Signed in successfully</h1>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        Welcome, <span id="auth-username" class="font-medium text-primary dark:text-primary-light"></span>! Redirecting...
+      </p>
+    </div>
+
+    <!-- Error state (hidden initially) -->
+    <div id="auth-error" class="hidden">
+      <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+        <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </div>
+      <h1 class="text-xl font-semibold text-slate-900 dark:text-white">Authentication failed</h1>
+      <p id="auth-error-message" class="mt-2 text-sm text-red-600 dark:text-red-400"></p>
+      <a
+        href="/"
+        class="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
+      >
+        Return home
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { exchangeCode, fetchUser, saveAuth, verifyState, getReturnUrl } from "../../lib/auth";
+
+  async function handleCallback() {
+    const loadingEl = document.getElementById("auth-loading");
+    const successEl = document.getElementById("auth-success");
+    const errorEl = document.getElementById("auth-error");
+    const errorMessageEl = document.getElementById("auth-error-message");
+    const usernameEl = document.getElementById("auth-username");
+
+    function showError(message: string) {
+      loadingEl?.classList.add("hidden");
+      errorEl?.classList.remove("hidden");
+      if (errorMessageEl) errorMessageEl.textContent = message;
+    }
+
+    function showSuccess(username: string) {
+      loadingEl?.classList.add("hidden");
+      successEl?.classList.remove("hidden");
+      if (usernameEl) usernameEl.textContent = `@${username}`;
+    }
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      const state = params.get("state");
+      const ghError = params.get("error");
+
+      // GitHub returned an error (e.g. user denied access)
+      if (ghError) {
+        const description = params.get("error_description") || "Authorization was denied.";
+        showError(description);
+        return;
+      }
+
+      if (!code) {
+        showError("No authorization code received from GitHub.");
+        return;
+      }
+
+      // Verify state parameter to prevent CSRF
+      if (state && !verifyState(state)) {
+        showError("Invalid state parameter. Please try signing in again.");
+        return;
+      }
+
+      // Exchange code for access token via our Worker API
+      const token = await exchangeCode(code);
+
+      // Fetch user info from GitHub
+      const user = await fetchUser(token);
+
+      // Save to localStorage
+      saveAuth(token, user);
+
+      // Show success briefly, then redirect
+      showSuccess(user.login);
+
+      const returnUrl = getReturnUrl();
+      setTimeout(() => {
+        window.location.href = returnUrl;
+      }, 1200);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred.";
+      showError(message);
+    }
+  }
+
+  // Run on page load
+  handleCallback();
+</script>

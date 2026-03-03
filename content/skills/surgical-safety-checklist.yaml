@@ -2,17 +2,476 @@ name: "surgical-safety-checklist"
 display_name: "WHO Surgical Safety Checklist"
 description: "Digital implementation of the WHO Surgical Safety Checklist for pre-operative, intra-operative, and post-operative verification. Reduces surgical complications and improves team communication."
 author: "Open Medical Skills Community"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/surgical-safety-checklist"
 category: "surgery"
 tags: ["surgical-safety", "who-checklist", "patient-safety"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/surgical-safety-checklist"
+  npx: "npx skills add gitjfmd/oms-site --skill surgical-safety-checklist"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/surgical-safety-checklist ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["surgery", "anesthesiology"]
 reviewer: "Pending Review"
 date_added: "2026-03-02"
 verified: false
+script_language: "python"
+script_content: |
+  #!/usr/bin/env python3
+  """
+  WHO Surgical Safety Checklist
+  ===============================
+  Digital implementation of the WHO Surgical Safety Checklist, a 3-phase
+  verification system proven to reduce surgical mortality and complications
+  by over 30% (Haynes et al., NEJM 2009).
+
+  Clinical Purpose:
+      Ensures critical safety checks are completed at three key phases of
+      every surgical procedure: Sign In (before anesthesia induction),
+      Time Out (before skin incision), and Sign Out (before patient leaves
+      the operating room). Promotes team communication and catches errors
+      before they cause harm.
+
+  References:
+      - Haynes AB, et al. "A Surgical Safety Checklist to Reduce Morbidity
+        and Mortality in a Global Population." N Engl J Med. 2009;360(5):491-499.
+      - WHO. "WHO Surgical Safety Checklist." 2009.
+      - de Vries EN, et al. "Effect of a Comprehensive Surgical Safety System
+        on Patient Outcomes." N Engl J Med. 2010;363(20):1928-1937.
+      - Borchard A, et al. "A Systematic Review of the Effectiveness, Compliance,
+        and Critical Factors for Implementation of Safety Checklists in Surgery."
+        Ann Surg. 2012;256(6):925-933.
+
+  DISCLAIMER: This digital checklist supplements but does not replace
+  institutional surgical safety protocols. All items must be verbally
+  confirmed by the surgical team at the point of care.
+  """
+
+  import json
+  from dataclasses import dataclass, field
+  from datetime import datetime
+  from typing import Optional
+  from enum import Enum
+
+
+  class ChecklistPhase(Enum):
+      SIGN_IN = "sign_in"
+      TIME_OUT = "time_out"
+      SIGN_OUT = "sign_out"
+
+
+  class ItemStatus(Enum):
+      NOT_CHECKED = "not_checked"
+      CONFIRMED = "confirmed"
+      NOT_APPLICABLE = "not_applicable"
+      CONCERN_FLAGGED = "concern_flagged"
+
+
+  class CompletionStatus(Enum):
+      INCOMPLETE = "incomplete"
+      COMPLETE = "complete"
+      COMPLETE_WITH_CONCERNS = "complete_with_concerns"
+      BLOCKED = "blocked"
+
+
+  @dataclass
+  class ChecklistItem:
+      item_id: str
+      phase: ChecklistPhase
+      text: str
+      responsible_role: str  # surgeon, anesthesiologist, nurse, all
+      is_critical: bool = True  # Must be confirmed to proceed
+      status: ItemStatus = ItemStatus.NOT_CHECKED
+      notes: str = ""
+      timestamp: str = ""
+
+
+  # WHO Surgical Safety Checklist Items (2009, 2nd Edition)
+  SIGN_IN_ITEMS = [
+      ChecklistItem("SI-01", ChecklistPhase.SIGN_IN,
+                     "Has the patient confirmed identity, site, procedure, and consent?",
+                     "nurse", True),
+      ChecklistItem("SI-02", ChecklistPhase.SIGN_IN,
+                     "Is the surgical site marked? (if applicable)",
+                     "surgeon", True),
+      ChecklistItem("SI-03", ChecklistPhase.SIGN_IN,
+                     "Is the anesthesia machine and medication check complete?",
+                     "anesthesiologist", True),
+      ChecklistItem("SI-04", ChecklistPhase.SIGN_IN,
+                     "Is the pulse oximeter on the patient and functioning?",
+                     "anesthesiologist", True),
+      ChecklistItem("SI-05", ChecklistPhase.SIGN_IN,
+                     "Does the patient have a known allergy?",
+                     "anesthesiologist", True),
+      ChecklistItem("SI-06", ChecklistPhase.SIGN_IN,
+                     "Difficult airway or aspiration risk? (Equipment and assistance available)",
+                     "anesthesiologist", True),
+      ChecklistItem("SI-07", ChecklistPhase.SIGN_IN,
+                     "Risk of blood loss > 500 mL (7 mL/kg in children)? "
+                     "(Adequate IV access and blood products planned)",
+                     "anesthesiologist", True),
+  ]
+
+  TIME_OUT_ITEMS = [
+      ChecklistItem("TO-01", ChecklistPhase.TIME_OUT,
+                     "All team members have introduced themselves by name and role?",
+                     "all", True),
+      ChecklistItem("TO-02", ChecklistPhase.TIME_OUT,
+                     "Confirm patient's name, procedure, and incision site",
+                     "all", True),
+      ChecklistItem("TO-03", ChecklistPhase.TIME_OUT,
+                     "Has antibiotic prophylaxis been given within the last 60 minutes?",
+                     "anesthesiologist", True),
+      ChecklistItem("TO-04", ChecklistPhase.TIME_OUT,
+                     "SURGEON: What are the critical or non-routine steps?",
+                     "surgeon", True),
+      ChecklistItem("TO-05", ChecklistPhase.TIME_OUT,
+                     "SURGEON: How long will the case take?",
+                     "surgeon", False),
+      ChecklistItem("TO-06", ChecklistPhase.TIME_OUT,
+                     "SURGEON: What is the anticipated blood loss?",
+                     "surgeon", True),
+      ChecklistItem("TO-07", ChecklistPhase.TIME_OUT,
+                     "ANESTHESIOLOGIST: Are there any patient-specific concerns?",
+                     "anesthesiologist", True),
+      ChecklistItem("TO-08", ChecklistPhase.TIME_OUT,
+                     "NURSING: Has sterility been confirmed (including indicator results)?",
+                     "nurse", True),
+      ChecklistItem("TO-09", ChecklistPhase.TIME_OUT,
+                     "NURSING: Are there equipment issues or any concerns?",
+                     "nurse", True),
+      ChecklistItem("TO-10", ChecklistPhase.TIME_OUT,
+                     "Is essential imaging displayed? (if applicable)",
+                     "surgeon", False),
+      ChecklistItem("TO-11", ChecklistPhase.TIME_OUT,
+                     "VTE prophylaxis: mechanical and/or pharmacological measures in place?",
+                     "surgeon", True),
+  ]
+
+  SIGN_OUT_ITEMS = [
+      ChecklistItem("SO-01", ChecklistPhase.SIGN_OUT,
+                     "Nurse verbally confirms: Name of procedure as recorded",
+                     "nurse", True),
+      ChecklistItem("SO-02", ChecklistPhase.SIGN_OUT,
+                     "Nurse verbally confirms: Instrument, sponge, and needle counts are correct "
+                     "(or not applicable)",
+                     "nurse", True),
+      ChecklistItem("SO-03", ChecklistPhase.SIGN_OUT,
+                     "Nurse verbally confirms: Specimen labeling (including patient name)",
+                     "nurse", True),
+      ChecklistItem("SO-04", ChecklistPhase.SIGN_OUT,
+                     "Nurse verbally confirms: Whether there are any equipment problems to be addressed",
+                     "nurse", True),
+      ChecklistItem("SO-05", ChecklistPhase.SIGN_OUT,
+                     "SURGEON, ANESTHESIOLOGIST, NURSE review: Key concerns for recovery "
+                     "and management of this patient",
+                     "all", True),
+  ]
+
+  ALL_ITEMS = {
+      ChecklistPhase.SIGN_IN: SIGN_IN_ITEMS,
+      ChecklistPhase.TIME_OUT: TIME_OUT_ITEMS,
+      ChecklistPhase.SIGN_OUT: SIGN_OUT_ITEMS,
+  }
+
+
+  @dataclass
+  class SurgicalChecklist:
+      """Complete surgical safety checklist for a case."""
+      case_id: str
+      patient_name: str = ""
+      procedure: str = ""
+      date: str = ""
+      sign_in_items: list = field(default_factory=list)
+      time_out_items: list = field(default_factory=list)
+      sign_out_items: list = field(default_factory=list)
+      sign_in_complete: bool = False
+      time_out_complete: bool = False
+      sign_out_complete: bool = False
+      concerns: list = field(default_factory=list)
+
+      def __post_init__(self):
+          if not self.date:
+              self.date = datetime.now().strftime("%Y-%m-%d")
+          if not self.sign_in_items:
+              self.sign_in_items = [_item_to_dict(i) for i in SIGN_IN_ITEMS]
+          if not self.time_out_items:
+              self.time_out_items = [_item_to_dict(i) for i in TIME_OUT_ITEMS]
+          if not self.sign_out_items:
+              self.sign_out_items = [_item_to_dict(i) for i in SIGN_OUT_ITEMS]
+
+
+  def _item_to_dict(item: ChecklistItem) -> dict:
+      return {
+          "item_id": item.item_id,
+          "text": item.text,
+          "responsible_role": item.responsible_role,
+          "is_critical": item.is_critical,
+          "status": ItemStatus.NOT_CHECKED.value,
+          "notes": "",
+      }
+
+
+  def create_checklist(patient_name: str = "", procedure: str = "") -> dict:
+      """Create a new surgical safety checklist for a case."""
+      checklist = SurgicalChecklist(
+          case_id=f"SSC-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+          patient_name=patient_name,
+          procedure=procedure,
+      )
+      return {
+          "case_id": checklist.case_id,
+          "patient_name": checklist.patient_name,
+          "procedure": checklist.procedure,
+          "date": checklist.date,
+          "phases": {
+              "sign_in": {
+                  "description": "BEFORE INDUCTION OF ANESTHESIA",
+                  "timing": "With at least nurse and anesthesiologist present",
+                  "items": checklist.sign_in_items,
+                  "status": "not_started",
+              },
+              "time_out": {
+                  "description": "BEFORE SKIN INCISION",
+                  "timing": "With all team members present (surgeon, anesthesiologist, nurse)",
+                  "items": checklist.time_out_items,
+                  "status": "not_started",
+              },
+              "sign_out": {
+                  "description": "BEFORE PATIENT LEAVES OPERATING ROOM",
+                  "timing": "With nurse, anesthesiologist, and surgeon",
+                  "items": checklist.sign_out_items,
+                  "status": "not_started",
+              },
+          },
+          "instructions": {
+              "general": "Each phase MUST be completed BEFORE proceeding to the next phase. "
+                         "All items must be verbally confirmed by the responsible team member.",
+              "critical_items": "Items marked as critical MUST be confirmed. Procedure should "
+                               "NOT proceed if a critical item cannot be confirmed.",
+              "concerns": "Any team member may raise a concern at any time. All concerns "
+                          "must be addressed before proceeding.",
+          },
+      }
+
+
+  def verify_phase(phase: str, responses: dict) -> dict:
+      """
+      Verify a checklist phase with team responses.
+
+      Args:
+          phase: "sign_in", "time_out", or "sign_out"
+          responses: Dict mapping item_id to status ("confirmed", "not_applicable",
+                     "concern_flagged") and optional notes
+
+      Returns:
+          Phase verification result
+      """
+      try:
+          phase_enum = ChecklistPhase(phase)
+      except ValueError:
+          return {
+              "error": f"Unknown phase: {phase}",
+              "valid_phases": [p.value for p in ChecklistPhase],
+          }
+
+      items = ALL_ITEMS[phase_enum]
+      results = []
+      concerns = []
+      blocked = False
+
+      for item in items:
+          response = responses.get(item.item_id, {})
+          status_str = response.get("status", "not_checked")
+          notes = response.get("notes", "")
+
+          try:
+              status = ItemStatus(status_str)
+          except ValueError:
+              status = ItemStatus.NOT_CHECKED
+
+          verified = status in [ItemStatus.CONFIRMED, ItemStatus.NOT_APPLICABLE]
+
+          if item.is_critical and not verified:
+              blocked = True
+
+          if status == ItemStatus.CONCERN_FLAGGED:
+              concerns.append({
+                  "item_id": item.item_id,
+                  "item_text": item.text,
+                  "notes": notes,
+                  "responsible": item.responsible_role,
+                  "action_required": True,
+              })
+
+          results.append({
+              "item_id": item.item_id,
+              "text": item.text,
+              "responsible_role": item.responsible_role,
+              "is_critical": item.is_critical,
+              "status": status.value,
+              "verified": verified,
+              "notes": notes,
+          })
+
+      total_items = len(items)
+      verified_items = sum(1 for r in results if r["verified"])
+      critical_items = sum(1 for i in items if i.is_critical)
+      critical_verified = sum(1 for r in results if r["verified"] and r["is_critical"])
+
+      if blocked:
+          completion = CompletionStatus.BLOCKED
+          message = ("CANNOT PROCEED: Critical checklist items not confirmed. "
+                     "All critical items must be verified before proceeding.")
+      elif concerns:
+          completion = CompletionStatus.COMPLETE_WITH_CONCERNS
+          message = (f"Phase complete with {len(concerns)} concern(s) flagged. "
+                     "Address all concerns before proceeding.")
+      elif verified_items == total_items:
+          completion = CompletionStatus.COMPLETE
+          message = f"{phase_enum.value.upper()} phase complete. Safe to proceed."
+      else:
+          completion = CompletionStatus.INCOMPLETE
+          message = f"{verified_items}/{total_items} items verified. Complete remaining items."
+
+      return {
+          "phase": phase_enum.value,
+          "completion_status": completion.value,
+          "message": message,
+          "summary": {
+              "total_items": total_items,
+              "verified": verified_items,
+              "critical_total": critical_items,
+              "critical_verified": critical_verified,
+          },
+          "items": results,
+          "concerns": concerns,
+          "safe_to_proceed": completion in [CompletionStatus.COMPLETE,
+                                             CompletionStatus.COMPLETE_WITH_CONCERNS],
+          "timestamp": datetime.now().isoformat(),
+      }
+
+
+  def get_phase_guide(phase: str) -> dict:
+      """Get detailed guide for a specific checklist phase."""
+      phase_guides = {
+          "sign_in": {
+              "phase": "Sign In",
+              "timing": "Before induction of anesthesia",
+              "team_required": ["Nurse", "Anesthesiologist (minimum)"],
+              "purpose": "Verify patient identity, procedure, consent, and assess "
+                         "anesthesia-related risks before any medications are given.",
+              "key_principle": "This is the last reliable opportunity to catch wrong-patient "
+                               "or wrong-site errors before the patient is under anesthesia.",
+              "evidence": "Site marking and verification processes have been shown to "
+                          "virtually eliminate wrong-site surgery (Haynes et al., NEJM 2009).",
+          },
+          "time_out": {
+              "phase": "Time Out",
+              "timing": "Immediately before skin incision",
+              "team_required": ["Surgeon", "Anesthesiologist", "Nurse (all)"],
+              "purpose": "Final confirmation of patient, procedure, and site. Brief the "
+                         "team on critical steps, anticipated complications, and concerns.",
+              "key_principle": "Every team member must actively participate. The Time Out "
+                               "is not merely administrative -- it establishes shared mental "
+                               "model and psychological safety for the entire team.",
+              "evidence": "Team briefings reduce surgical complications by 36% and "
+                          "mortality by 47% (Haynes et al., NEJM 2009).",
+          },
+          "sign_out": {
+              "phase": "Sign Out",
+              "timing": "Before patient leaves the operating room",
+              "team_required": ["Surgeon", "Anesthesiologist", "Nurse"],
+              "purpose": "Verify procedure documentation, confirm counts, label specimens, "
+                         "and communicate post-operative care priorities.",
+              "key_principle": "Ensures continuity of care and catches retained surgical "
+                               "items before the patient leaves the controlled environment.",
+              "evidence": "Instrument and sponge count verification prevents retained "
+                          "foreign bodies (incidence: 1 in 5,500 operations without counts).",
+          },
+      }
+
+      guide = phase_guides.get(phase)
+      if not guide:
+          return {
+              "error": f"Unknown phase: {phase}",
+              "available_phases": list(phase_guides.keys()),
+          }
+      return guide
+
+
+  def run_surgical_checklist(action: str, **kwargs) -> str:
+      """
+      Main entry point for the WHO Surgical Safety Checklist.
+
+      Actions:
+          create: Create new checklist (patient_name, procedure)
+          verify: Verify a phase (phase, responses)
+          guide: Get phase guide (phase)
+      """
+      if action == "create":
+          result = create_checklist(
+              kwargs.get("patient_name", ""),
+              kwargs.get("procedure", ""),
+          )
+      elif action == "verify":
+          result = verify_phase(
+              kwargs.get("phase", ""),
+              kwargs.get("responses", {}),
+          )
+      elif action == "guide":
+          result = get_phase_guide(kwargs.get("phase", ""))
+      else:
+          result = {
+              "error": f"Unknown action: {action}",
+              "available_actions": ["create", "verify", "guide"],
+          }
+
+      return json.dumps(result, indent=2)
+
+
+  if __name__ == "__main__":
+      print("=== Create New Surgical Checklist ===")
+      print(run_surgical_checklist("create", patient_name="John Doe",
+                                    procedure="Laparoscopic cholecystectomy"))
+      print()
+      print("=== Time Out Phase Guide ===")
+      print(run_surgical_checklist("guide", phase="time_out"))
+skill_md: |
+  # WHO Surgical Safety Checklist
+
+  ## Overview
+
+  The WHO Surgical Safety Checklist is a digital implementation of the World Health Organization's evidence-based surgical safety protocol. Introduced in 2008 as part of the WHO "Safe Surgery Saves Lives" initiative, this three-phase checklist has been demonstrated to reduce surgical mortality by 47% and major complications by 36% across diverse hospital settings worldwide (Haynes et al., NEJM 2009).
+
+  ## Clinical Context
+
+  An estimated 310 million surgical procedures are performed worldwide each year, with major complication rates of 3-17% and death rates of 0.4-0.8% in developed countries. Many surgical complications are preventable through systematic verification of critical safety steps. The WHO Surgical Safety Checklist addresses the most common categories of surgical error: wrong patient/site/procedure, anesthesia equipment failure, retained foreign bodies, and communication breakdowns.
+
+  ## Three Phases
+
+  ### Sign In (Before Anesthesia Induction)
+  Verifies patient identity, procedure, consent, and surgical site marking. Assesses anesthesia risks including difficult airway, allergy history, and anticipated blood loss. This is the last reliable opportunity to catch identification errors.
+
+  ### Time Out (Before Skin Incision)
+  Full team introduction and verbal confirmation of patient, procedure, and site. Surgeon briefs on critical steps and anticipated duration. Anesthesiologist reports patient-specific concerns. Nursing confirms sterility and equipment readiness. Antibiotic prophylaxis timing is verified.
+
+  ### Sign Out (Before Patient Leaves OR)
+  Procedure documentation verified. Instrument, sponge, and needle counts confirmed. Specimens labeled. Equipment issues documented. Key recovery and management concerns communicated to the entire team.
+
+  ## Features
+
+  - Complete WHO checklist item set with role assignments (surgeon, anesthesiologist, nurse)
+  - Critical item flagging that blocks phase progression if not confirmed
+  - Concern escalation protocol for any team member
+  - Phase completion verification with summary statistics
+  - Detailed phase guides with evidence-based rationale
+
+  ## References
+
+  - Haynes AB, et al. "A Surgical Safety Checklist to Reduce Morbidity and Mortality." *N Engl J Med*. 2009;360(5):491-499.
+  - de Vries EN, et al. "Effect of a Comprehensive Surgical Safety System on Patient Outcomes." *N Engl J Med*. 2010;363(20):1928-1937.
+  - Borchard A, et al. "A Systematic Review of Safety Checklists in Surgery." *Ann Surg*. 2012;256(6):925-933.
+  - WHO. *WHO Guidelines for Safe Surgery 2009*. World Health Organization, 2009.

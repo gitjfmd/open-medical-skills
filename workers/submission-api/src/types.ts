@@ -6,6 +6,8 @@ export interface Env {
   GITHUB_OWNER: string;
   GITHUB_REPO: string;
   ALLOWED_ORIGIN: string;
+  GITHUB_CLIENT_ID: string;
+  GITHUB_CLIENT_SECRET: string;
 }
 
 /**

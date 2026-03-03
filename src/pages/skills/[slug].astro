@@ -2,6 +2,9 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import InstallCommands from "../../components/InstallCommands.astro";
+import AgentActions from "../../components/AgentActions.astro";
+import SkillFileViewer from "../../components/SkillFileViewer.astro";
+import SkillSocialBar from "../../components/SkillSocialBar.astro";
 import { CATEGORY_LABELS, CATEGORY_STYLES, EVIDENCE_STYLES, SAFETY_STYLES } from "../../lib/categories";
 
 export async function getStaticPaths() {
@@ -73,6 +76,9 @@ const safetyStyle = SAFETY_STYLES[data.safety_classification] ?? SAFETY_STYLES.s
 
       <h1 class="mt-4 text-3xl font-bold text-slate-900 dark:text-white">{data.display_name}</h1>
       <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">by {data.author}</p>
+
+      <!-- Social Bar -->
+      <SkillSocialBar skillSlug={skill.id} skillName={data.display_name} />
     </div>
 
     <!-- Description -->
@@ -81,6 +87,9 @@ const safetyStyle = SAFETY_STYLES[data.safety_classification] ?? SAFETY_STYLES.s
       <p class="mt-2 text-slate-600 leading-relaxed dark:text-slate-400">{data.description}</p>
     </div>
 
+    <!-- Agent Actions (Quick Install) -->
+    <AgentActions skillName={data.name} displayName={data.display_name} repository={data.repository} />
+
     <!-- Install Commands -->
     <div class="mt-8">
       <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Installation</h2>
@@ -88,6 +97,15 @@ const safetyStyle = SAFETY_STYLES[data.safety_classification] ?? SAFETY_STYLES.s
         <InstallCommands install={data.install} />
       </div>
     </div>
+
+    <!-- Skill Files (script + README) -->
+    {(data.script_content || data.skill_md) && (
+      <SkillFileViewer
+        scriptContent={data.script_content}
+        scriptLanguage={data.script_language}
+        skillMd={data.skill_md}
+      />
+    )}
 
     <!-- Metadata grid -->
     <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">

@@ -1,0 +1,505 @@
+#!/usr/bin/env python3
+"""
+Nursing Care Plan Generator
+=============================
+Generates evidence-based nursing care plans using the NANDA-I, NOC, NIC
+(NNN) linkage framework. Supports individualized care planning with
+standardized nursing language.
+
+Clinical Purpose:
+    Assists nurses in developing structured care plans that link nursing
+    diagnoses (NANDA-I) to patient outcomes (NOC) and evidence-based
+    interventions (NIC). Promotes consistent, standardized documentation
+    and facilitates interprofessional communication.
+
+References:
+    - Herdman TH, Kamitsuru S, Lopes CT. NANDA International Nursing
+      Diagnoses: Definitions and Classification, 2024-2026. 13th Ed.
+    - Moorhead S, et al. Nursing Outcomes Classification (NOC). 6th Ed.
+    - Butcher HK, et al. Nursing Interventions Classification (NIC). 7th Ed.
+    - Johnson M, et al. NANDA, NOC, and NIC Linkages. 3rd Ed.
+
+DISCLAIMER: This tool supports care plan development. All nursing care
+plans must be individualized to the patient and approved by the
+responsible nurse. This tool does not replace clinical nursing judgment.
+"""
+
+import json
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Optional
+from enum import Enum
+
+
+class NandaDomain(Enum):
+    HEALTH_PROMOTION = "health_promotion"
+    NUTRITION = "nutrition"
+    ELIMINATION = "elimination_and_exchange"
+    ACTIVITY_REST = "activity_rest"
+    PERCEPTION_COGNITION = "perception_cognition"
+    SELF_PERCEPTION = "self_perception"
+    ROLE_RELATIONSHIPS = "role_relationships"
+    SEXUALITY = "sexuality"
+    COPING_STRESS = "coping_stress_tolerance"
+    LIFE_PRINCIPLES = "life_principles"
+    SAFETY_PROTECTION = "safety_protection"
+    COMFORT = "comfort"
+    GROWTH_DEVELOPMENT = "growth_development"
+
+
+class Priority(Enum):
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+
+
+@dataclass
+class NandaDiagnosis:
+    """NANDA-I Nursing Diagnosis."""
+    code: str
+    label: str
+    domain: NandaDomain
+    definition: str
+    related_factors: list  # Etiology ("related to")
+    defining_characteristics: list  # Signs/symptoms ("as evidenced by")
+    risk_factors: list = field(default_factory=list)  # For risk diagnoses
+    is_risk_diagnosis: bool = False
+
+
+@dataclass
+class NOCOutcome:
+    """Nursing Outcomes Classification (NOC) outcome."""
+    code: str
+    label: str
+    definition: str
+    indicators: list  # Specific measurable indicators
+    measurement_scale: str  # 1-5 Likert scale description
+    target_rating: int = 4  # Goal rating on 1-5 scale
+    baseline_rating: int = 2
+
+
+@dataclass
+class NICIntervention:
+    """Nursing Interventions Classification (NIC) intervention."""
+    code: str
+    label: str
+    definition: str
+    activities: list  # Specific nursing activities
+    frequency: str = ""
+    rationale: str = ""
+
+
+@dataclass
+class CarePlan:
+    """Complete nursing care plan."""
+    patient_id: str
+    date_created: str
+    priority: Priority
+    nanda_diagnosis: NandaDiagnosis
+    noc_outcomes: list  # List of NOCOutcome
+    nic_interventions: list  # List of NICIntervention
+    evaluation_date: str = ""
+    notes: str = ""
+
+
+# Common NANDA-NNN Linkages Database
+CARE_PLAN_DATABASE = {
+    "impaired_gas_exchange": {
+        "diagnosis": NandaDiagnosis(
+            code="00030",
+            label="Impaired Gas Exchange",
+            domain=NandaDomain.ELIMINATION,
+            definition="Excess or deficit in oxygenation and/or carbon dioxide "
+                       "elimination at the alveolar-capillary membrane.",
+            related_factors=[
+                "Ventilation-perfusion imbalance",
+                "Alveolar-capillary membrane changes",
+            ],
+            defining_characteristics=[
+                "Abnormal arterial blood gases",
+                "Abnormal skin color (pallor, cyanosis)",
+                "Confusion or restlessness",
+                "Dyspnea",
+                "Hypoxemia (SpO2 < 90%)",
+                "Tachycardia",
+                "Abnormal rate, rhythm, or depth of breathing",
+            ],
+        ),
+        "outcomes": [
+            NOCOutcome(
+                code="0402",
+                label="Respiratory Status: Gas Exchange",
+                definition="Alveolar exchange of CO2 and O2 to maintain ABG concentrations.",
+                indicators=[
+                    "SpO2 within normal limits (>= 94%)",
+                    "PaO2 within normal range (80-100 mmHg)",
+                    "PaCO2 within normal range (35-45 mmHg)",
+                    "End-tidal CO2 within normal range",
+                    "Absence of cyanosis",
+                    "Cognitive status at baseline",
+                ],
+                measurement_scale="1=Severe deviation, 5=No deviation from normal range",
+            ),
+        ],
+        "interventions": [
+            NICIntervention(
+                code="3140",
+                label="Airway Management",
+                definition="Facilitation of patency of air passages.",
+                activities=[
+                    "Position patient to maximize ventilation (semi-Fowler or high-Fowler)",
+                    "Auscultate breath sounds, noting areas of decreased or absent ventilation",
+                    "Monitor respiratory rate, depth, and effort Q2-4 hours",
+                    "Encourage deep breathing and coughing exercises Q2 hours while awake",
+                    "Suction airway as needed using appropriate technique",
+                    "Maintain patent airway (jaw thrust, oral airway if indicated)",
+                ],
+                frequency="Continuous monitoring, interventions Q2-4 hours",
+                rationale="Optimal airway patency is prerequisite for adequate gas exchange.",
+            ),
+            NICIntervention(
+                code="3320",
+                label="Oxygen Therapy",
+                definition="Administration of oxygen and monitoring of its effectiveness.",
+                activities=[
+                    "Administer supplemental O2 as prescribed",
+                    "Monitor SpO2 continuously; maintain target range per order",
+                    "Assess for signs/symptoms of O2 toxicity and absorption atelectasis",
+                    "Monitor ABGs as ordered (baseline and with FiO2 changes)",
+                    "Ensure proper fit and function of O2 delivery device",
+                    "Titrate O2 to maintain prescribed SpO2 range",
+                    "Monitor for skin breakdown under O2 device",
+                ],
+                frequency="Continuous SpO2 monitoring, ABGs per order",
+                rationale="Supplemental oxygen corrects hypoxemia; monitoring prevents "
+                          "hyperoxia and ensures appropriate device selection.",
+            ),
+            NICIntervention(
+                code="6680",
+                label="Vital Signs Monitoring",
+                definition="Collection and analysis of cardiovascular, respiratory, "
+                           "and body temperature data.",
+                activities=[
+                    "Monitor vital signs Q2-4 hours (or more frequently if unstable)",
+                    "Note trends in vital signs, especially respiratory rate and SpO2",
+                    "Assess for signs of respiratory distress (accessory muscle use, nasal flaring)",
+                    "Monitor level of consciousness (confusion may indicate hypoxia/hypercarbia)",
+                    "Document and report abnormal findings to provider promptly",
+                ],
+                frequency="Q2-4 hours or per unit protocol",
+                rationale="Vital sign trends enable early detection of deterioration.",
+            ),
+        ],
+    },
+    "risk_for_falls": {
+        "diagnosis": NandaDiagnosis(
+            code="00155",
+            label="Risk for Falls",
+            domain=NandaDomain.SAFETY_PROTECTION,
+            definition="Susceptible to increased risk of falling, which may cause "
+                       "physical harm and compromise health.",
+            related_factors=[],
+            defining_characteristics=[],
+            risk_factors=[
+                "Age >= 65 years",
+                "History of falls",
+                "Impaired mobility or gait",
+                "Use of assistive devices",
+                "Altered mental status or confusion",
+                "Medications (sedatives, antihypertensives, opioids)",
+                "Orthostatic hypotension",
+                "Visual or hearing impairment",
+                "Environmental hazards",
+                "Urinary urgency or incontinence",
+            ],
+            is_risk_diagnosis=True,
+        ),
+        "outcomes": [
+            NOCOutcome(
+                code="1902",
+                label="Risk Control: Falls",
+                definition="Personal actions to understand, prevent, eliminate, "
+                           "or reduce the threat of falls.",
+                indicators=[
+                    "Acknowledges fall risk factors",
+                    "Uses assistive devices correctly",
+                    "Calls for assistance when needed",
+                    "Uses grab bars and handrails appropriately",
+                    "Wears appropriate footwear",
+                    "Eliminates environmental hazards",
+                ],
+                measurement_scale="1=Never demonstrated, 5=Consistently demonstrated",
+            ),
+            NOCOutcome(
+                code="1912",
+                label="Fall Prevention Behavior",
+                definition="Personal or family caregiver actions to minimize "
+                           "risk factors that might precipitate falls.",
+                indicators=[
+                    "Uses call light to request help",
+                    "Uses handrails when ambulating",
+                    "Places frequently used items within reach",
+                    "Uses adequate lighting",
+                ],
+                measurement_scale="1=Never demonstrated, 5=Consistently demonstrated",
+            ),
+        ],
+        "interventions": [
+            NICIntervention(
+                code="6490",
+                label="Fall Prevention",
+                definition="Instituting special precautions with patient at risk for "
+                           "injury from falling.",
+                activities=[
+                    "Complete fall risk assessment on admission and Q shift (Morse Fall Scale)",
+                    "Implement fall precautions: bed in lowest position, brakes locked",
+                    "Ensure call light within reach at all times and patient understands use",
+                    "Place non-skid footwear on patient when ambulating",
+                    "Keep frequently used items within arm's reach",
+                    "Provide adequate lighting, especially at night (nightlight in bathroom)",
+                    "Clear pathways of clutter, cords, and obstacles",
+                    "Assist with ambulation and transfers as needed",
+                    "Apply fall risk identification (yellow wristband, door sign per policy)",
+                    "Toilet patient on a regular schedule to reduce urgency-related falls",
+                    "Review medications for fall risk (sedatives, opioids, antihypertensives)",
+                    "Consider 1:1 sitter or bed alarm if high risk",
+                ],
+                frequency="Continuous; reassess Q shift and with status change",
+                rationale="Multi-component fall prevention programs reduce falls by 20-30% "
+                          "in hospital settings (Cameron et al., Cochrane 2018).",
+            ),
+            NICIntervention(
+                code="5612",
+                label="Teaching: Prescribed Activity/Exercise",
+                definition="Preparing a patient to achieve and/or maintain prescribed "
+                           "level of activity.",
+                activities=[
+                    "Teach patient safe transfer techniques (bed to chair, chair to standing)",
+                    "Instruct on proper use of assistive devices (walker, cane)",
+                    "Educate on importance of calling for help before getting up",
+                    "Teach exercises to improve balance and lower extremity strength",
+                    "Discuss medication side effects that increase fall risk",
+                ],
+                frequency="Prior to discharge and as needed during hospitalization",
+                rationale="Patient education empowers self-management and reduces "
+                          "fall risk after discharge.",
+            ),
+        ],
+    },
+    "acute_pain": {
+        "diagnosis": NandaDiagnosis(
+            code="00132",
+            label="Acute Pain",
+            domain=NandaDomain.COMFORT,
+            definition="An unpleasant sensory and emotional experience associated with "
+                       "actual or potential tissue damage, or described in terms of "
+                       "such damage; onset sudden or slow, of any intensity from mild "
+                       "to severe, with an anticipated or predictable end.",
+            related_factors=[
+                "Biological injury agents (infection, ischemia, inflammation)",
+                "Chemical injury agents",
+                "Physical injury agents (surgical incision, trauma, burns)",
+            ],
+            defining_characteristics=[
+                "Self-report of pain (using validated pain scale)",
+                "Guarding behavior",
+                "Facial grimacing or expressions of pain",
+                "Changes in vital signs (tachycardia, hypertension, tachypnea)",
+                "Diaphoresis",
+                "Restlessness",
+                "Positioning to minimize pain",
+                "Altered sleep pattern",
+            ],
+        ),
+        "outcomes": [
+            NOCOutcome(
+                code="2102",
+                label="Pain Level",
+                definition="Severity of observed or reported pain.",
+                indicators=[
+                    "Reported pain intensity (0-10 NRS) at goal of <= 4/10",
+                    "Length of pain episodes reduced",
+                    "Facial expressions relaxed",
+                    "Restlessness reduced",
+                    "Vital signs within normal limits",
+                    "Able to participate in care activities",
+                ],
+                measurement_scale="1=Severe, 5=None",
+                target_rating=4,
+                baseline_rating=2,
+            ),
+            NOCOutcome(
+                code="1605",
+                label="Pain Control",
+                definition="Personal actions to control pain.",
+                indicators=[
+                    "Recognizes pain onset",
+                    "Uses preventive measures (pre-medication before activity)",
+                    "Uses non-pharmacological relief measures",
+                    "Reports pain controlled to satisfaction",
+                ],
+                measurement_scale="1=Never demonstrated, 5=Consistently demonstrated",
+            ),
+        ],
+        "interventions": [
+            NICIntervention(
+                code="1400",
+                label="Pain Management",
+                definition="Alleviation of pain or reduction to a level of comfort "
+                           "acceptable to the patient.",
+                activities=[
+                    "Perform comprehensive pain assessment (PQRST): Provokes/Palliates, "
+                    "Quality, Region/Radiation, Severity (0-10), Timing",
+                    "Assess pain using validated tool: NRS (0-10), Wong-Baker FACES, "
+                    "FLACC (non-verbal), or BPS (intubated)",
+                    "Administer analgesics as prescribed (scheduled + PRN)",
+                    "Evaluate analgesic effectiveness 30 min after IV, 60 min after PO",
+                    "Implement multimodal analgesia approach when ordered",
+                    "Apply non-pharmacological interventions: ice/heat, repositioning, "
+                    "relaxation techniques, distraction, guided imagery",
+                    "Premedicate before painful procedures or activities",
+                    "Document pain assessments and interventions per protocol",
+                    "Communicate pain management plan during handoff (SBAR)",
+                    "Educate patient on pain management expectations and goals",
+                ],
+                frequency="Assess Q4 hours and PRN; reassess after each intervention",
+                rationale="Multimodal pain management reduces opioid requirements "
+                          "and improves patient outcomes (Chou et al., J Pain 2016).",
+            ),
+        ],
+    },
+}
+
+
+def generate_care_plan(diagnosis_key: str, patient_data: dict = None) -> dict:
+    """
+    Generate a nursing care plan for a given NANDA-I diagnosis.
+
+    Args:
+        diagnosis_key: Key for the NANDA diagnosis template
+        patient_data: Optional dict with patient-specific information
+
+    Returns:
+        Complete care plan with diagnosis, outcomes, and interventions
+    """
+    template = CARE_PLAN_DATABASE.get(diagnosis_key)
+    if not template:
+        return {
+            "error": f"Diagnosis '{diagnosis_key}' not found",
+            "available_diagnoses": list(CARE_PLAN_DATABASE.keys()),
+        }
+
+    dx = template["diagnosis"]
+    outcomes = template["outcomes"]
+    interventions = template["interventions"]
+
+    # Build the PES (Problem-Etiology-Signs/Symptoms) statement
+    if dx.is_risk_diagnosis:
+        pes_statement = f"{dx.label} related to {', '.join(dx.risk_factors[:3])}"
+    else:
+        pes_statement = (
+            f"{dx.label} related to {dx.related_factors[0] if dx.related_factors else 'unspecified etiology'} "
+            f"as evidenced by {', '.join(dx.defining_characteristics[:3])}"
+        )
+
+    care_plan = {
+        "care_plan": {
+            "date_created": datetime.now().strftime("%Y-%m-%d"),
+            "patient_data": patient_data or {"note": "Individualize to patient"},
+            "nursing_diagnosis": {
+                "nanda_code": dx.code,
+                "label": dx.label,
+                "domain": dx.domain.value,
+                "definition": dx.definition,
+                "pes_statement": pes_statement,
+                "related_factors": dx.related_factors,
+                "defining_characteristics": dx.defining_characteristics,
+                "risk_factors": dx.risk_factors if dx.is_risk_diagnosis else None,
+                "is_risk_diagnosis": dx.is_risk_diagnosis,
+            },
+            "expected_outcomes": [
+                {
+                    "noc_code": o.code,
+                    "label": o.label,
+                    "definition": o.definition,
+                    "indicators": o.indicators,
+                    "measurement_scale": o.measurement_scale,
+                    "baseline_rating": o.baseline_rating,
+                    "target_rating": o.target_rating,
+                }
+                for o in outcomes
+            ],
+            "nursing_interventions": [
+                {
+                    "nic_code": i.code,
+                    "label": i.label,
+                    "definition": i.definition,
+                    "activities": i.activities,
+                    "frequency": i.frequency,
+                    "rationale": i.rationale,
+                }
+                for i in interventions
+            ],
+            "evaluation_plan": {
+                "frequency": "Reassess outcomes each shift and at discharge",
+                "method": "Compare current NOC indicator ratings to baseline and target",
+                "documentation": "Document progress toward outcomes in nursing notes",
+            },
+        },
+        "disclaimer": "Individualize all care plans to the patient. This template "
+                      "provides a starting framework based on NNN linkages.",
+    }
+
+    return care_plan
+
+
+def list_available_diagnoses() -> dict:
+    """List all available NANDA-I diagnosis templates."""
+    diagnoses = []
+    for key, template in CARE_PLAN_DATABASE.items():
+        dx = template["diagnosis"]
+        diagnoses.append({
+            "key": key,
+            "nanda_code": dx.code,
+            "label": dx.label,
+            "domain": dx.domain.value,
+            "is_risk_diagnosis": dx.is_risk_diagnosis,
+            "num_outcomes": len(template["outcomes"]),
+            "num_interventions": len(template["interventions"]),
+        })
+    return {
+        "available_diagnoses": diagnoses,
+        "total": len(diagnoses),
+    }
+
+
+def run_care_plan(action: str, **kwargs) -> str:
+    """
+    Main entry point for the Nursing Care Plan Generator.
+
+    Actions:
+        generate: Generate care plan (diagnosis_key, patient_data)
+        list: List available diagnosis templates
+    """
+    if action == "generate":
+        result = generate_care_plan(
+            kwargs.get("diagnosis_key", ""),
+            kwargs.get("patient_data"),
+        )
+    elif action == "list":
+        result = list_available_diagnoses()
+    else:
+        result = {
+            "error": f"Unknown action: {action}",
+            "available_actions": ["generate", "list"],
+        }
+
+    return json.dumps(result, indent=2)
+
+
+if __name__ == "__main__":
+    print("=== Available Nursing Diagnoses ===")
+    print(run_care_plan("list"))
+    print()
+    print("=== Impaired Gas Exchange Care Plan ===")
+    print(run_care_plan("generate", diagnosis_key="impaired_gas_exchange"))

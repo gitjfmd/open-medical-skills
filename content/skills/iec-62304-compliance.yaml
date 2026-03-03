@@ -1,15 +1,16 @@
 name: "iec-62304-compliance"
 display_name: "IEC 62304 Medical Device Software Lifecycle"
 description: "Modular skills for AI coding agents working on medical device software. Aligned to IEC 62304, ISO 14971, FDA, and EU MDR standards for software lifecycle management."
-author: "AminAlam"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/iec-62304-compliance"
 category: "administrative"
 tags: ["iec-62304", "medical-devices", "software-lifecycle", "iso-14971"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/iec-62304-compliance"
+  npx: "npx skills add gitjfmd/oms-site --skill iec-62304-compliance"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/iec-62304-compliance ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["regulatory-affairs", "quality-assurance", "medical-devices"]

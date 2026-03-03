@@ -1,0 +1,127 @@
+---
+interface Props {
+  scriptContent?: string;
+  scriptLanguage?: string;
+  skillMd?: string;
+}
+
+const { scriptContent, scriptLanguage = 'python', skillMd } = Astro.props;
+const hasScript = !!scriptContent;
+const hasReadme = !!skillMd;
+const hasBoth = hasScript && hasReadme;
+
+const langLabel: Record<string, string> = {
+  python: 'Python',
+  javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  bash: 'Shell',
+  yaml: 'YAML',
+  json: 'JSON',
+};
+---
+
+{(hasScript || hasReadme) && (
+  <div class="mt-8">
+    <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Skill Files</h2>
+
+    {hasBoth && (
+      <div class="mt-3 flex gap-1 border-b border-slate-200 dark:border-slate-700" id="file-tabs">
+        <button
+          data-tab="script"
+          class="tab-btn active-tab rounded-t-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+        >
+          {langLabel[scriptLanguage] || scriptLanguage} Script
+        </button>
+        <button
+          data-tab="readme"
+          class="tab-btn rounded-t-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+        >
+          README
+        </button>
+      </div>
+    )}
+
+    {hasScript && (
+      <div id="panel-script" class="file-panel mt-3">
+        <div class="group relative">
+          <div class="flex items-center justify-between rounded-t-lg border border-b-0 border-slate-200 bg-slate-100 px-4 py-2 dark:border-slate-700 dark:bg-slate-800">
+            <span class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              {langLabel[scriptLanguage] || scriptLanguage}
+            </span>
+            <button
+              class="copy-btn rounded-md px-2.5 py-1 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+              data-code="script-code"
+            >
+              Copy
+            </button>
+          </div>
+          <pre class="overflow-x-auto rounded-b-lg border border-slate-200 bg-slate-950 p-4 dark:border-slate-700"><code id="script-code" class="font-mono text-sm leading-relaxed text-slate-200" style="font-family: 'JetBrains Mono', monospace;">{scriptContent}</code></pre>
+        </div>
+      </div>
+    )}
+
+    {hasReadme && (
+      <div id="panel-readme" class:list={["file-panel mt-3", { hidden: hasBoth }]}>
+        <div class="group relative">
+          <div class="flex items-center justify-between rounded-t-lg border border-b-0 border-slate-200 bg-slate-100 px-4 py-2 dark:border-slate-700 dark:bg-slate-800">
+            <span class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              skill.md
+            </span>
+            <button
+              class="copy-btn rounded-md px-2.5 py-1 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+              data-code="readme-code"
+            >
+              Copy
+            </button>
+          </div>
+          <pre class="overflow-x-auto rounded-b-lg border border-slate-200 bg-slate-950 p-4 dark:border-slate-700"><code id="readme-code" class="font-mono text-sm leading-relaxed text-slate-200" style="font-family: 'JetBrains Mono', monospace;">{skillMd}</code></pre>
+        </div>
+      </div>
+    )}
+  </div>
+)}
+
+<style>
+  .tab-btn.active-tab {
+    color: #0d9488;
+    border-bottom: 2px solid #0d9488;
+  }
+  :global(.dark) .tab-btn.active-tab {
+    color: #5eead4;
+    border-bottom-color: #5eead4;
+  }
+</style>
+
+<script>
+  const COPY_FEEDBACK_DELAY_MS = 2000;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Tab switching
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const targetPanel = (tab as HTMLElement).dataset.tab;
+        tabButtons.forEach((t) => t.classList.remove('active-tab'));
+        tab.classList.add('active-tab');
+        document.querySelectorAll('.file-panel').forEach((panel) => {
+          (panel as HTMLElement).classList.toggle('hidden', !panel.id.includes(targetPanel!));
+        });
+      });
+    });
+
+    // Copy buttons
+    const copyButtons = document.querySelectorAll('.copy-btn');
+    copyButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const codeId = (btn as HTMLElement).dataset.code;
+        const codeElement = document.getElementById(codeId!);
+        if (!codeElement) return;
+
+        navigator.clipboard.writeText(codeElement.textContent || '');
+        const originalLabel = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = originalLabel; }, COPY_FEEDBACK_DELAY_MS);
+      });
+    });
+  });
+</script>

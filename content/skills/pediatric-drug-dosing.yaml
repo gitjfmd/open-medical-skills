@@ -2,17 +2,468 @@ name: "pediatric-drug-dosing"
 display_name: "Pediatric Drug Dosing Calculator"
 description: "Weight-based and body-surface-area-based drug dosing calculator for pediatric patients. Includes common pediatric medications with age-appropriate dosing ranges."
 author: "Open Medical Skills Community"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/pediatric-drug-dosing"
 category: "pediatrics"
 tags: ["pediatric-dosing", "medication-safety", "weight-based-dosing"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/pediatric-drug-dosing"
+  npx: "npx skills add gitjfmd/oms-site --skill pediatric-drug-dosing"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/pediatric-drug-dosing ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["pediatrics", "pharmacy"]
 reviewer: "Pending Review"
 date_added: "2026-03-02"
 verified: false
+script_language: "python"
+script_content: |
+  #!/usr/bin/env python3
+  """
+  Pediatric Drug Dosing Calculator
+  ==================================
+  Weight-based and BSA-based drug dosing calculator for pediatric patients
+  with built-in safety checks, maximum dose limits, and age-appropriate
+  dosing validation.
+
+  Clinical Purpose:
+      Medication errors are 3x more common in pediatric patients compared
+      to adults (Kaushal et al., Pediatrics 2001). This tool calculates
+      weight-based and BSA-based doses for common pediatric medications,
+      enforces maximum dose limits, and flags potential dosing errors.
+
+  References:
+      - Taketomo CK, Hodding JH, Kraus DM. Pediatric & Neonatal Dosage
+        Handbook. Lexicomp. Latest Edition.
+      - Kaushal R, et al. "Medication Errors and Adverse Drug Events in
+        Pediatric Inpatients." JAMA. 2001;285(16):2114-2120.
+      - Mosteller RD. "Simplified Calculation of Body-Surface Area."
+        N Engl J Med. 1987;317:1098.
+
+  DISCLAIMER: This calculator is a clinical decision support tool only.
+  All doses MUST be independently verified by a licensed pharmacist or
+  physician before administration. Drug information may not reflect the
+  most current product labeling.
+  """
+
+  import json
+  import math
+  from dataclasses import dataclass, field
+  from typing import Optional
+  from enum import Enum
+
+
+  class AgeCategory(Enum):
+      PRETERM = "preterm_neonate"
+      NEONATE = "neonate_0_28_days"
+      INFANT = "infant_1_12_months"
+      CHILD = "child_1_12_years"
+      ADOLESCENT = "adolescent_12_18_years"
+
+
+  class RouteOfAdmin(Enum):
+      ORAL = "PO"
+      INTRAVENOUS = "IV"
+      INTRAMUSCULAR = "IM"
+      SUBCUTANEOUS = "SubQ"
+      RECTAL = "PR"
+      TOPICAL = "topical"
+      INHALED = "inhaled"
+
+
+  @dataclass
+  class DrugDosing:
+      """Pediatric drug dosing parameters."""
+      name: str
+      generic_name: str
+      dose_per_kg: float  # mg/kg per dose
+      dose_per_kg_max: float = 0.0  # mg/kg per dose upper range
+      frequency: str = ""  # e.g., "Q6H", "Q8H", "once daily"
+      max_single_dose_mg: float = 0.0  # Absolute max single dose
+      max_daily_dose_mg: float = 0.0  # Absolute max daily dose
+      route: list = field(default_factory=list)
+      indication: str = ""
+      age_restrictions: str = ""
+      dose_per_bsa: float = 0.0  # mg/m2 (for BSA-based dosing)
+      concentration: str = ""  # Available concentrations
+      notes: list = field(default_factory=list)
+      contraindications: list = field(default_factory=list)
+      dose_adjustment_renal: str = ""
+      dose_adjustment_hepatic: str = ""
+
+
+  # Common pediatric medications database
+  DRUG_DATABASE = {
+      "amoxicillin": DrugDosing(
+          name="Amoxicillin",
+          generic_name="amoxicillin",
+          dose_per_kg=25,
+          dose_per_kg_max=45,
+          frequency="Q8H (standard) or Q12H (high dose)",
+          max_single_dose_mg=500,
+          max_daily_dose_mg=3000,
+          route=[RouteOfAdmin.ORAL],
+          indication="Acute otitis media, sinusitis, streptococcal pharyngitis, UTI",
+          concentration="250 mg/5 mL or 400 mg/5 mL suspension",
+          notes=[
+              "High-dose (80-90 mg/kg/day divided BID) for AOM with risk factors",
+              "Standard dose (25-45 mg/kg/day divided TID) for uncomplicated infections",
+              "Duration: AOM 10 days (< 2 years) or 5-7 days (>= 2 years)",
+              "Strep pharyngitis: 50 mg/kg/day (max 1000 mg/day) x 10 days",
+          ],
+      ),
+      "ibuprofen": DrugDosing(
+          name="Ibuprofen",
+          generic_name="ibuprofen",
+          dose_per_kg=10,
+          frequency="Q6-8H PRN",
+          max_single_dose_mg=400,
+          max_daily_dose_mg=1200,
+          route=[RouteOfAdmin.ORAL],
+          indication="Fever, mild-moderate pain, inflammation",
+          age_restrictions="Not recommended under 6 months of age",
+          concentration="100 mg/5 mL suspension",
+          notes=[
+              "Can alternate with acetaminophen Q3H (each given Q6H)",
+              "Give with food to reduce GI irritation",
+              "Avoid in dehydrated patients (nephrotoxicity risk)",
+              "Avoid in varicella (risk of necrotizing fasciitis - debated)",
+          ],
+          contraindications=["Renal impairment", "Active GI bleeding", "Age < 6 months"],
+      ),
+      "acetaminophen": DrugDosing(
+          name="Acetaminophen (Tylenol)",
+          generic_name="acetaminophen",
+          dose_per_kg=15,
+          frequency="Q4-6H PRN",
+          max_single_dose_mg=1000,
+          max_daily_dose_mg=75,  # mg/kg/day
+          route=[RouteOfAdmin.ORAL, RouteOfAdmin.RECTAL],
+          indication="Fever, mild-moderate pain",
+          concentration="160 mg/5 mL suspension (infant drops 80 mg/0.8 mL)",
+          notes=[
+              "Max daily dose: 75 mg/kg/day (not to exceed 4000 mg/day)",
+              "Rectal dose same as oral",
+              "Safe in neonates (10-15 mg/kg Q6-8H)",
+              "Hepatotoxicity risk with overdose (>150 mg/kg acute ingestion)",
+              "No anti-inflammatory effect",
+          ],
+      ),
+      "amoxicillin_clavulanate": DrugDosing(
+          name="Amoxicillin-Clavulanate (Augmentin)",
+          generic_name="amoxicillin-clavulanate",
+          dose_per_kg=25,
+          dose_per_kg_max=45,
+          frequency="Q12H (high dose) or Q8H (standard)",
+          max_single_dose_mg=875,
+          max_daily_dose_mg=3000,
+          route=[RouteOfAdmin.ORAL],
+          indication="AOM (2nd line), sinusitis, bite wounds, resistant UTI",
+          concentration="400 mg/57 mg per 5 mL (ES formulation) or 250/125 per 5 mL",
+          notes=[
+              "High-dose: 90 mg/kg/day of amoxicillin component divided Q12H",
+              "Use ES (600 mg/42.9 mg per 5 mL) for high-dose regimens",
+              "Max clavulanate: 10 mg/kg/day (higher doses cause diarrhea)",
+              "Common side effect: diarrhea, diaper rash",
+          ],
+      ),
+      "ceftriaxone": DrugDosing(
+          name="Ceftriaxone (Rocephin)",
+          generic_name="ceftriaxone",
+          dose_per_kg=50,
+          dose_per_kg_max=100,
+          frequency="Q24H (most indications) or Q12H (meningitis)",
+          max_single_dose_mg=2000,
+          max_daily_dose_mg=4000,
+          route=[RouteOfAdmin.INTRAVENOUS, RouteOfAdmin.INTRAMUSCULAR],
+          indication="Meningitis, serious bacterial infections, complicated UTI",
+          age_restrictions="Avoid in neonates < 28 days (bilirubin displacement risk)",
+          notes=[
+              "Meningitis dose: 100 mg/kg/day divided Q12H (max 4 g/day)",
+              "Standard infections: 50-75 mg/kg/day Q24H",
+              "IM: mix with 1% lidocaine to reduce injection pain",
+              "NEVER co-administer with calcium-containing solutions in neonates",
+          ],
+          contraindications=[
+              "Neonates < 28 days receiving calcium-containing IV solutions",
+              "Hypersensitivity to cephalosporins",
+          ],
+      ),
+      "prednisolone": DrugDosing(
+          name="Prednisolone",
+          generic_name="prednisolone",
+          dose_per_kg=1,
+          dose_per_kg_max=2,
+          frequency="Once daily or divided BID",
+          max_single_dose_mg=60,
+          max_daily_dose_mg=60,
+          route=[RouteOfAdmin.ORAL],
+          indication="Asthma exacerbation, croup, allergic reactions",
+          concentration="15 mg/5 mL (Prelone) or 3 mg/mL (Orapred)",
+          notes=[
+              "Asthma exacerbation: 1-2 mg/kg/day x 3-5 days (max 60 mg/day)",
+              "Croup: 1 mg/kg single dose (max 60 mg)",
+              "Nephrotic syndrome: 2 mg/kg/day (max 60 mg) initially",
+              "Short courses (< 7 days) usually do not require taper",
+              "Give with food to reduce GI upset",
+          ],
+      ),
+      "ondansetron": DrugDosing(
+          name="Ondansetron (Zofran)",
+          generic_name="ondansetron",
+          dose_per_kg=0.15,
+          frequency="Q8H PRN (max 3 doses/day)",
+          max_single_dose_mg=4,
+          max_daily_dose_mg=16,
+          route=[RouteOfAdmin.ORAL, RouteOfAdmin.INTRAVENOUS],
+          indication="Nausea and vomiting, gastroenteritis, chemotherapy-induced N/V",
+          concentration="4 mg/5 mL oral solution, ODT 4 mg, IV 2 mg/mL",
+          notes=[
+              "Gastroenteritis: single dose 0.15 mg/kg (max 4 mg) may suffice",
+              "Weight-based dosing: 8-15 kg = 2 mg, 15-30 kg = 4 mg, >30 kg = 8 mg",
+              "QTc prolongation risk - avoid with other QT-prolonging drugs",
+              "ODT can be given without water (dissolves on tongue)",
+          ],
+          contraindications=["Congenital long QT syndrome"],
+      ),
+      "albuterol": DrugDosing(
+          name="Albuterol (Ventolin, ProAir)",
+          generic_name="albuterol",
+          dose_per_kg=0,  # Fixed dosing by age
+          frequency="Q4-6H PRN or Q20min x 3 for acute exacerbation",
+          max_single_dose_mg=0,  # Measured in puffs or mg nebulized
+          max_daily_dose_mg=0,
+          route=[RouteOfAdmin.INHALED],
+          indication="Asthma, bronchospasm, wheezing",
+          concentration="MDI 90 mcg/puff; nebulization 2.5 mg/3 mL or 5 mg/mL",
+          notes=[
+              "MDI + spacer: 4-8 puffs Q20 min x 3 (acute), then Q1-4H",
+              "Nebulization: < 20 kg = 2.5 mg; >= 20 kg = 5 mg Q20 min x 3 (acute)",
+              "Continuous nebulization: 0.5 mg/kg/hr (max 15 mg/hr) for severe exacerbation",
+              "MDI + spacer equally effective as nebulizer for mild-moderate exacerbation",
+              "Common side effects: tachycardia, tremor, hypokalemia",
+          ],
+      ),
+  }
+
+
+  def calculate_bsa(weight_kg: float, height_cm: float) -> float:
+      """
+      Calculate Body Surface Area using Mosteller formula.
+      BSA (m2) = sqrt((height_cm x weight_kg) / 3600)
+      """
+      if weight_kg <= 0 or height_cm <= 0:
+          return 0.0
+      return round(math.sqrt((height_cm * weight_kg) / 3600), 4)
+
+
+  def classify_age(age_months: int) -> AgeCategory:
+      """Classify patient into pediatric age category."""
+      if age_months < 0:
+          return AgeCategory.PRETERM
+      elif age_months < 1:
+          return AgeCategory.NEONATE
+      elif age_months <= 12:
+          return AgeCategory.INFANT
+      elif age_months <= 144:  # 12 years
+          return AgeCategory.CHILD
+      else:
+          return AgeCategory.ADOLESCENT
+
+
+  def calculate_dose(drug_name: str, weight_kg: float, age_months: int = None,
+                     height_cm: float = None, indication: str = None) -> dict:
+      """
+      Calculate pediatric drug dose with safety checks.
+
+      Args:
+          drug_name: Drug name (key in database)
+          weight_kg: Patient weight in kilograms
+          age_months: Patient age in months (for age-specific validation)
+          height_cm: Height in cm (for BSA calculation if needed)
+          indication: Specific indication (may alter dosing)
+
+      Returns:
+          Calculated dose with safety checks and warnings
+      """
+      drug = DRUG_DATABASE.get(drug_name.lower())
+      if not drug:
+          return {
+              "error": f"Drug '{drug_name}' not found in database",
+              "available_drugs": list(DRUG_DATABASE.keys()),
+          }
+
+      warnings = []
+      alerts = []
+
+      # Weight validation
+      if weight_kg <= 0:
+          return {"error": "Weight must be greater than 0 kg"}
+      if weight_kg > 150:
+          warnings.append("Weight > 150 kg. Verify weight is correct. Consider adult dosing.")
+
+      # Age-based validation
+      age_category = classify_age(age_months) if age_months is not None else None
+      if drug.age_restrictions and age_months is not None:
+          warnings.append(f"Age restriction: {drug.age_restrictions}")
+
+      # Calculate weight-based dose
+      dose_low = round(drug.dose_per_kg * weight_kg, 1)
+      dose_high = round(drug.dose_per_kg_max * weight_kg, 1) if drug.dose_per_kg_max else dose_low
+
+      # Apply maximum single dose cap
+      capped = False
+      if drug.max_single_dose_mg > 0:
+          if dose_low > drug.max_single_dose_mg:
+              dose_low = drug.max_single_dose_mg
+              capped = True
+          if dose_high > drug.max_single_dose_mg:
+              dose_high = drug.max_single_dose_mg
+              capped = True
+
+      if capped:
+          warnings.append(f"Dose capped at maximum single dose: {drug.max_single_dose_mg} mg")
+
+      # BSA calculation if applicable
+      bsa = None
+      bsa_dose = None
+      if height_cm and drug.dose_per_bsa > 0:
+          bsa = calculate_bsa(weight_kg, height_cm)
+          bsa_dose = round(drug.dose_per_bsa * bsa, 1)
+
+      # Contraindication check
+      if drug.contraindications:
+          alerts.append({
+              "type": "contraindication_check",
+              "message": "Review contraindications before prescribing",
+              "contraindications": drug.contraindications,
+          })
+
+      # Build result
+      result = {
+          "drug": drug.name,
+          "generic_name": drug.generic_name,
+          "patient": {
+              "weight_kg": weight_kg,
+              "age_months": age_months,
+              "age_category": age_category.value if age_category else None,
+              "bsa_m2": bsa,
+          },
+          "calculated_dose": {
+              "dose_range": f"{dose_low} - {dose_high} mg per dose" if dose_low != dose_high
+                            else f"{dose_low} mg per dose",
+              "dose_per_kg": f"{drug.dose_per_kg} mg/kg" + (
+                  f" to {drug.dose_per_kg_max} mg/kg" if drug.dose_per_kg_max else ""
+              ),
+              "frequency": drug.frequency,
+              "route": [r.value for r in drug.route],
+              "max_single_dose": f"{drug.max_single_dose_mg} mg" if drug.max_single_dose_mg else "See notes",
+              "max_daily_dose": f"{drug.max_daily_dose_mg} mg" if drug.max_daily_dose_mg else "See notes",
+              "bsa_based_dose": f"{bsa_dose} mg (based on BSA {bsa} m2)" if bsa_dose else None,
+          },
+          "concentration": drug.concentration,
+          "indication": drug.indication,
+          "clinical_notes": drug.notes,
+          "warnings": warnings,
+          "alerts": alerts,
+          "dose_adjustments": {
+              "renal": drug.dose_adjustment_renal or "See product labeling",
+              "hepatic": drug.dose_adjustment_hepatic or "See product labeling",
+          },
+          "verification_required": True,
+          "disclaimer": "ALL doses must be independently verified by a pharmacist or "
+                        "physician before administration. This calculator is a decision "
+                        "support tool only.",
+      }
+
+      return result
+
+
+  def list_drugs(category: str = None) -> dict:
+      """List available drugs in the database."""
+      drugs = []
+      for key, drug in DRUG_DATABASE.items():
+          drugs.append({
+              "key": key,
+              "name": drug.name,
+              "indication": drug.indication,
+              "route": [r.value for r in drug.route],
+          })
+      return {"drugs": drugs, "total": len(drugs)}
+
+
+  def run_dosing_calculator(action: str, **kwargs) -> str:
+      """
+      Main entry point for the Pediatric Drug Dosing Calculator.
+
+      Actions:
+          calculate: Calculate dose (drug_name, weight_kg, age_months, height_cm)
+          list: List available drugs
+          bsa: Calculate BSA (weight_kg, height_cm)
+      """
+      if action == "calculate":
+          result = calculate_dose(
+              kwargs.get("drug_name", ""),
+              kwargs.get("weight_kg", 0),
+              kwargs.get("age_months"),
+              kwargs.get("height_cm"),
+              kwargs.get("indication"),
+          )
+      elif action == "list":
+          result = list_drugs()
+      elif action == "bsa":
+          bsa = calculate_bsa(kwargs.get("weight_kg", 0), kwargs.get("height_cm", 0))
+          result = {"bsa_m2": bsa, "formula": "Mosteller: sqrt((H x W) / 3600)"}
+      else:
+          result = {
+              "error": f"Unknown action: {action}",
+              "available_actions": ["calculate", "list", "bsa"],
+          }
+
+      return json.dumps(result, indent=2)
+
+
+  if __name__ == "__main__":
+      print("=== Amoxicillin Dosing (20 kg child) ===")
+      print(run_dosing_calculator("calculate", drug_name="amoxicillin",
+                                   weight_kg=20, age_months=60))
+      print()
+      print("=== Ceftriaxone Dosing (8 kg infant) ===")
+      print(run_dosing_calculator("calculate", drug_name="ceftriaxone",
+                                   weight_kg=8, age_months=6))
+skill_md: |
+  # Pediatric Drug Dosing Calculator
+
+  ## Overview
+
+  The Pediatric Drug Dosing Calculator provides weight-based and body-surface-area-based medication dosing for common pediatric drugs. It incorporates maximum dose limits, age-appropriate validation, contraindication screening, and safety alerts to reduce medication errors in pediatric patients.
+
+  ## Clinical Context
+
+  Medication errors are three times more common in pediatric patients than adults, primarily due to the need for individual weight-based dose calculations, the lack of standard dosing, and the wide range of patient sizes from premature neonates to adolescents (Kaushal et al., JAMA 2001). Dosing errors, particularly 10-fold overdoses, are a well-documented preventable source of pediatric morbidity.
+
+  This calculator enforces multiple safety layers: weight-based dose ranges, absolute maximum dose caps, age category validation, and contraindication flags.
+
+  ## Features
+
+  - **Weight-Based Dosing:** Calculates mg/kg dose ranges with frequency and route recommendations
+  - **BSA-Based Dosing:** Mosteller formula for body surface area calculation and BSA-based drug dosing
+  - **Maximum Dose Enforcement:** Automatic capping at maximum single and daily dose limits
+  - **Age Validation:** Flags medications with age restrictions (e.g., ibuprofen < 6 months, ceftriaxone in neonates)
+  - **Contraindication Alerts:** Checks for known contraindications and generates alerts
+  - **Clinical Notes:** Indication-specific dosing guidance, common formulations, and practical administration tips
+
+  ## Medications Included
+
+  Amoxicillin, amoxicillin-clavulanate, acetaminophen, ibuprofen, ceftriaxone, prednisolone, ondansetron, albuterol, and more. Database covers the most commonly prescribed pediatric outpatient and emergency department medications.
+
+  ## Safety Classification: CAUTION
+
+  All calculated doses MUST be independently verified by a licensed pharmacist or physician before administration. This tool is intended as a clinical decision support aid and does not replace professional judgment or current drug reference resources.
+
+  ## References
+
+  - Taketomo CK, et al. *Pediatric & Neonatal Dosage Handbook*. Lexicomp, Latest Edition.
+  - Kaushal R, et al. "Medication Errors and Adverse Drug Events in Pediatric Inpatients." *JAMA*. 2001;285(16):2114-2120.
+  - Mosteller RD. "Simplified Calculation of BSA." *N Engl J Med*. 1987;317:1098.

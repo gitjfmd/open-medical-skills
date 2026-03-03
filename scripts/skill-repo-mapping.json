@@ -1,0 +1,288 @@
+{
+  "_description": "Maps each OMS skill name to its source third-party repository and the path within that repo where relevant files live.",
+  "_generated": "2026-03-03",
+  "_total_skills": 32,
+  "_total_repos": 13,
+
+  "repos": {
+    "K-Dense-AI/claude-scientific-skills": {
+      "url": "https://github.com/K-Dense-AI/claude-scientific-skills",
+      "default_branch": "main",
+      "description": "Claude scientific skills collection with SKILL.md, references/, scripts/, and assets/ per skill",
+      "skills": {
+        "biostatistics-analyzer": {
+          "source_path": "scientific-skills/statistical-analysis",
+          "notes": "Statistical analysis skill covers biostatistics methods (survival analysis, logistic regression, ROC curves, sample size calcs)"
+        },
+        "clinical-treatment-plan-generator": {
+          "source_path": "scientific-skills/treatment-plans",
+          "notes": "Treatment plan generation skill with LaTeX templates and validation scripts"
+        },
+        "genomics-variant-interpreter": {
+          "source_path": "scientific-skills/clinvar-database",
+          "notes": "ClinVar database skill for genomic variant interpretation with clinical significance references"
+        },
+        "medical-imaging-analysis": {
+          "source_path": "scientific-skills/imaging-data-commons",
+          "notes": "Imaging Data Commons skill for medical imaging analysis via BigQuery, DICOM, and cloud storage"
+        },
+        "precision-medicine-therapeutics": {
+          "source_path": "scientific-skills/clinical-decision-support",
+          "notes": "Clinical decision support with biomarker classification, treatment recommendations, cohort analysis"
+        },
+        "systematic-review-assistant": {
+          "source_path": "scientific-skills/literature-review",
+          "notes": "Literature review skill for systematic review workflows"
+        },
+        "surgical-procedure-planner": {
+          "source_path": "scientific-skills/clinical-reports",
+          "notes": "Clinical reports skill with surgical/operative templates, discharge summaries, H&P templates"
+        }
+      }
+    },
+
+    "huifer/Claude-Ally-Health": {
+      "url": "https://github.com/huifer/Claude-Ally-Health",
+      "default_branch": "main",
+      "description": "Claude health assistant with skills in .claude/skills/ and commands in .claude/commands/",
+      "skills": {
+        "clinical-differential-diagnosis": {
+          "source_path": ".claude/commands/symptom.md",
+          "copy_also": [".claude/commands/consult.md", ".claude/commands/query.md", ".claude/skills/ai-analyzer"],
+          "notes": "Symptom analysis command + AI analyzer skill for differential diagnosis workflows"
+        },
+        "drug-interaction-checker": {
+          "source_path": ".claude/commands/interaction.md",
+          "copy_also": [".claude/commands/polypharmacy.md", ".claude/skills/food-database-query"],
+          "notes": "Drug interaction command + polypharmacy check + food-database skill for interaction analysis"
+        },
+        "lab-result-interpreter": {
+          "source_path": ".claude/skills/health-trend-analyzer",
+          "copy_also": [".claude/commands/screening.md"],
+          "notes": "Health trend analyzer skill with data sources, algorithms, templates for lab result interpretation"
+        },
+        "medication-administration-safety": {
+          "source_path": ".claude/commands/medication.md",
+          "copy_also": [".claude/commands/polypharmacy.md", ".claude/commands/allergy.md"],
+          "notes": "Medication safety commands covering administration, polypharmacy, and allergy cross-referencing"
+        },
+        "radiation-exposure-tracker": {
+          "source_path": ".claude/commands/radiation.md",
+          "copy_also": [".claude/commands/radiation-data.md"],
+          "notes": "Radiation exposure tracking with both the guidance command and data reference command"
+        }
+      }
+    },
+
+    "Augmented-Nature/ClinicalTrials-MCP-Server": {
+      "url": "https://github.com/Augmented-Nature/ClinicalTrials-MCP-Server",
+      "default_branch": "main",
+      "description": "MCP server for ClinicalTrials.gov API v2 access (TypeScript)",
+      "skills": {
+        "clinical-trials-search": {
+          "source_path": ".",
+          "notes": "Entire repo is a single MCP server — copy src/, README.md, package.json, tsconfig.json"
+        }
+      }
+    },
+
+    "Augmented-Nature/OpenFDA-MCP-Server": {
+      "url": "https://github.com/Augmented-Nature/OpenFDA-MCP-Server",
+      "default_branch": "main",
+      "description": "MCP server for OpenFDA API (TypeScript, drug + device handlers)",
+      "skills": {
+        "fda-drug-information": {
+          "source_path": ".",
+          "notes": "Entire repo — src/ has handlers (drug, device), types, utils, plus README.md, package.json, tsconfig.json"
+        }
+      }
+    },
+
+    "Augmented-Nature/PubMed-MCP-Server": {
+      "url": "https://github.com/Augmented-Nature/PubMed-MCP-Server",
+      "default_branch": "main",
+      "description": "MCP server for PubMed/PMC E-utilities API (TypeScript)",
+      "skills": {
+        "pubmed-literature-search": {
+          "source_path": ".",
+          "notes": "Entire repo — src/ has api/ (eutils, pmc, utils), types, plus README.md, package.json, tsconfig.json"
+        }
+      }
+    },
+
+    "Augmented-Nature/AlphaFold-MCP-Server": {
+      "url": "https://github.com/Augmented-Nature/AlphaFold-MCP-Server",
+      "default_branch": "main",
+      "description": "MCP server for AlphaFold protein structure database (TypeScript)",
+      "skills": {
+        "protein-structure-analysis": {
+          "source_path": ".",
+          "notes": "Entire repo — src/index.ts, README.md, package.json, tsconfig.json"
+        }
+      }
+    },
+
+    "Cicatriiz/healthcare-mcp-public": {
+      "url": "https://github.com/Cicatriiz/healthcare-mcp-public",
+      "default_branch": "main",
+      "description": "Multi-tool healthcare MCP server (Node.js) with individual tool files in server/",
+      "skills": {
+        "clinical-guideline-navigator": {
+          "source_path": "server/health-topics-tool.js",
+          "copy_also": ["server/ncbi-bookshelf-tool.js", "server/base-tool.js", "server/index.js", "README.md", "package.json", "manifest.json"],
+          "notes": "Health topics + NCBI bookshelf tools provide clinical guideline navigation"
+        },
+        "icd10-code-lookup": {
+          "source_path": "server/medical-terminology-tool.js",
+          "copy_also": ["server/base-tool.js", "server/index.js", "README.md", "package.json", "manifest.json"],
+          "notes": "Medical terminology tool covers ICD-10 code lookup and medical term resolution"
+        },
+        "dicom-metadata-extractor": {
+          "source_path": "server/dicom-tool.js",
+          "copy_also": ["server/base-tool.js", "server/index.js", "README.md", "package.json", "manifest.json"],
+          "notes": "DICOM tool for metadata extraction from medical imaging files"
+        },
+        "emergency-triage-protocols": {
+          "source_path": "server/medical-calculator-tool.js",
+          "copy_also": ["server/base-tool.js", "server/index.js", "README.md", "package.json", "manifest.json"],
+          "notes": "Medical calculator tool handles triage scoring and clinical calculations"
+        },
+        "evidence-synthesis-ai": {
+          "source_path": "server/pubmed-tool.js",
+          "copy_also": ["server/medrxiv-tool.js", "server/base-tool.js", "server/index.js", "README.md", "package.json", "manifest.json"],
+          "notes": "PubMed + MedRxiv tools for evidence synthesis from literature"
+        },
+        "pediatric-growth-charts": {
+          "source_path": "server/medical-calculator-tool.js",
+          "copy_also": ["server/fda-tool.js", "server/base-tool.js", "server/index.js", "README.md", "package.json", "manifest.json"],
+          "notes": "Medical calculator tool includes pediatric growth/BMI calculations, FDA tool for pediatric drug info"
+        }
+      }
+    },
+
+    "openpharma-org/drugbank-mcp-server": {
+      "url": "https://github.com/openpharma-org/drugbank-mcp-server",
+      "default_branch": "main",
+      "description": "DrugBank MCP server with SQLite backend (Node.js)",
+      "skills": {
+        "drugbank-search": {
+          "source_path": ".",
+          "notes": "Entire repo — src/ (drugbank-api, parser-sqlite, index), scripts/ (build-db, download-db), README.md, package.json"
+        }
+      }
+    },
+
+    "openpharma-org/medicare-mcp": {
+      "url": "https://github.com/openpharma-org/medicare-mcp",
+      "default_branch": "main",
+      "description": "Medicare drug pricing and formulary MCP server (TypeScript)",
+      "skills": {
+        "medicare-drug-stats": {
+          "source_path": ".",
+          "notes": "Entire repo — src/ (index.ts, types.ts), data/ (asp, formulary), README.md, package.json, tsconfig.json. Note: data/ contains .csv.gz and .txt.gz files"
+        }
+      }
+    },
+
+    "JamesANZ/medical-mcp": {
+      "url": "https://github.com/JamesANZ/medical-mcp",
+      "default_branch": "main",
+      "description": "Medical MCP server for WHO Global Health Observatory (TypeScript)",
+      "skills": {
+        "epidemiology-surveillance": {
+          "source_path": ".",
+          "notes": "Entire repo — src/ (index.ts, types.ts, utils.ts, cache/), scripts/, README.md, package.json, tsconfig.json"
+        }
+      }
+    },
+
+    "wso2/fhir-mcp-server": {
+      "url": "https://github.com/wso2/fhir-mcp-server",
+      "default_branch": "main",
+      "description": "FHIR MCP server with SMART-on-FHIR auth (Python)",
+      "skills": {
+        "fhir-data-access": {
+          "source_path": ".",
+          "notes": "Entire repo — src/fhir_mcp_server/ (server.py, utils.py, oauth/), README.md, pyproject.toml, requirements.txt, server.json"
+        }
+      }
+    },
+
+    "JohnSnowLabs/spark-nlp-workshop": {
+      "url": "https://github.com/JohnSnowLabs/spark-nlp-workshop",
+      "default_branch": "master",
+      "description": "Spark NLP workshop with Healthcare NLP notebooks and examples",
+      "skills": {
+        "hipaa-compliance-checker": {
+          "source_path": "Spark_NLP_Udemy_MOOC/Healthcare_NLP",
+          "notes": "Healthcare NLP module with de-identification, assertion detection, and entity recognition notebooks. Very large repo — only copy README.md and select relevant notebooks (DeIdentification.ipynb, etc.)"
+        }
+      }
+    },
+
+    "AminAlam/meddev-agent-skills": {
+      "url": "https://github.com/AminAlam/meddev-agent-skills",
+      "default_branch": "main",
+      "description": "Medical device agent skills organized by category (regulatory, firmware, architecture, etc.)",
+      "skills": {
+        "iec-62304-compliance": {
+          "source_path": "regulatory/iec-62304",
+          "copy_also": ["README.md", "SKILL_SCHEMA.md", "AGENT_INTEGRATION.md"],
+          "notes": "IEC 62304 compliance skill under regulatory/ category, with SKILL.md"
+        }
+      }
+    },
+
+    "medikode-ai/mcp-server": {
+      "url": "https://github.com/medikode-ai/mcp-server",
+      "default_branch": "main",
+      "description": "Medikode MCP server for medical coding (Node.js, multi-service)",
+      "skills": {
+        "cpt-coding-assistant": {
+          "source_path": ".",
+          "notes": "Entire repo — src/ (services, routes, database, middleware, utils), README.md, package.json. Shared server for CPT and RAF"
+        },
+        "raf-score-calculator": {
+          "source_path": ".",
+          "notes": "Same repo as cpt-coding-assistant — shared MCP server handles both CPT coding and RAF score calculations"
+        }
+      }
+    },
+
+    "matsuikentaro1/humanizer_academic": {
+      "url": "https://github.com/matsuikentaro1/humanizer_academic",
+      "default_branch": "main",
+      "description": "Claude skill for humanizing academic/medical writing (SKILL.md only)",
+      "skills": {
+        "medical-paper-humanizer": {
+          "source_path": ".",
+          "notes": "Minimal repo with SKILL.md, README.md, and LICENSE"
+        }
+      }
+    },
+
+    "AI-Agent-Grandmaster/truthstack-mcp": {
+      "url": "https://github.com/AI-Agent-Grandmaster/truthstack-mcp",
+      "default_branch": "main",
+      "description": "TruthStack MCP server for supplement-drug interaction checking (Node.js)",
+      "skills": {
+        "supplement-drug-interactions": {
+          "source_path": ".",
+          "notes": "Entire repo — server.js, server.json, README.md, package.json. Note: audit listed as TruthStack1/truthstack-mcp but actual repo is AI-Agent-Grandmaster/truthstack-mcp"
+        }
+      }
+    },
+
+    "anthropics/healthcare": {
+      "url": "https://github.com/anthropics/healthcare",
+      "default_branch": "main",
+      "description": "Anthropic healthcare skills collection with skills and plugins",
+      "skills": {
+        "prior-authorization-review": {
+          "source_path": "prior-auth-review-skill",
+          "notes": "Prior authorization review skill with SKILL.md, references/, assets/ (includes sample PDF documents)"
+        }
+      }
+    }
+  }
+}

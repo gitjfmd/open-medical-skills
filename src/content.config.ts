@@ -47,6 +47,9 @@ const skills = defineCollection({
     reviewer: z.string().default('Pending Review'),
     date_added: z.string(),
     verified: z.boolean().default(false),
+    script_content: z.string().optional(),
+    script_language: z.string().default('python'),
+    skill_md: z.string().optional(),
   }),
 });
 

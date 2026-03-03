@@ -1,15 +1,16 @@
 name: "surgical-procedure-planner"
 display_name: "Surgical Procedure Planning Assistant"
 description: "Pre-operative planning tool for surgical procedures. Assists with procedure selection, anatomical considerations, equipment checklists, and patient positioning protocols."
-author: "K-Dense-AI"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/surgical-procedure-planner"
 category: "surgery"
 tags: ["surgical-planning", "operative-planning", "pre-op"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/surgical-procedure-planner"
+  npx: "npx skills add gitjfmd/oms-site --skill surgical-procedure-planner"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/surgical-procedure-planner ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "caution"
 specialty: ["surgery"]

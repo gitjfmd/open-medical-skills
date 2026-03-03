@@ -1,15 +1,16 @@
 name: "biostatistics-analyzer"
 display_name: "Biostatistics Analysis Tool"
 description: "Perform common biostatistical analyses for medical research including survival analysis, logistic regression, ROC curves, and sample size calculations."
-author: "K-Dense-AI"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/biostatistics-analyzer"
 category: "clinical-research-summarizing"
 tags: ["biostatistics", "research", "data-analysis"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/biostatistics-analyzer"
+  npx: "npx skills add gitjfmd/oms-site --skill biostatistics-analyzer"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/biostatistics-analyzer ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["research", "biostatistics"]

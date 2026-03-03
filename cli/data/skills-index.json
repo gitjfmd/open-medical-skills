@@ -1,0 +1,1399 @@
+[
+  {
+    "name": "acls-protocol-assistant",
+    "display_name": "ACLS Protocol Assistant",
+    "description": "Advanced Cardiac Life Support (ACLS) protocol guide for emergency resuscitation. Provides step-by-step guidance for cardiac arrest, arrhythmia management, and post-cardiac arrest care.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/acls-protocol-assistant",
+    "category": "emergency",
+    "tags": [
+      "acls",
+      "resuscitation",
+      "cardiac-arrest",
+      "emergency-protocols"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "caution",
+    "specialty": [
+      "emergency-medicine",
+      "critical-care"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill acls-protocol-assistant",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/acls-protocol-assistant ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "biostatistics-analyzer",
+    "display_name": "Biostatistics Analysis Tool",
+    "description": "Perform common biostatistical analyses for medical research including survival analysis, logistic regression, ROC curves, and sample size calculations.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/biostatistics-analyzer",
+    "category": "clinical-research-summarizing",
+    "tags": [
+      "biostatistics",
+      "research",
+      "data-analysis"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "research",
+      "biostatistics"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill biostatistics-analyzer",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/biostatistics-analyzer ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "board-exam-prep",
+    "display_name": "Medical Board Exam Preparation",
+    "description": "USMLE/COMLEX board exam preparation tool with practice questions, spaced repetition, and high-yield topic reviews. Tracks performance and identifies weak areas.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/board-exam-prep",
+    "category": "education",
+    "tags": [
+      "usmle",
+      "board-exams",
+      "medical-education",
+      "test-prep"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "medical-education"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill board-exam-prep",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/board-exam-prep ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "clinical-differential-diagnosis",
+    "display_name": "Clinical Differential Diagnosis Assistant",
+    "description": "AI-powered clinical decision support tool that helps generate comprehensive differential diagnoses based on patient symptoms, lab results, and medical history. Integrates evidence-based clinical reasoning and medical literature.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/clinical-differential-diagnosis",
+    "category": "diagnosis",
+    "tags": [
+      "differential-diagnosis",
+      "clinical-decision-support",
+      "symptom-analysis"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "internal-medicine",
+      "family-medicine",
+      "emergency-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill clinical-differential-diagnosis",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/clinical-differential-diagnosis ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "clinical-guideline-navigator",
+    "display_name": "Clinical Practice Guideline Navigator",
+    "description": "Search and navigate clinical practice guidelines from major organizations (AHA, ACC, ACP, IDSA, etc.). Provides evidence-graded recommendations for common clinical scenarios.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/clinical-guideline-navigator",
+    "category": "clinical-research-summarizing",
+    "tags": [
+      "clinical-guidelines",
+      "evidence-based-medicine",
+      "best-practices"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "all-specialties"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill clinical-guideline-navigator",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/clinical-guideline-navigator ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "clinical-treatment-plan-generator",
+    "display_name": "Clinical Treatment Plan Generator",
+    "description": "Generate comprehensive clinical treatment plans with SMART goal frameworks and evidence-based interventions. Exports to LaTeX/PDF format for clinical documentation.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/clinical-treatment-plan-generator",
+    "category": "treatment",
+    "tags": [
+      "treatment-planning",
+      "clinical-documentation",
+      "smart-goals"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "internal-medicine",
+      "psychiatry",
+      "family-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill clinical-treatment-plan-generator",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/clinical-treatment-plan-generator ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "clinical-trials-search",
+    "display_name": "ClinicalTrials.gov Database Access",
+    "description": "Access 400,000+ clinical trials from 220+ countries via ClinicalTrials.gov API v2. Search by condition, intervention, sponsor, or location.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/clinical-trials-search",
+    "category": "research",
+    "tags": [
+      "clinical-trials",
+      "research",
+      "evidence-based-medicine"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "research",
+      "clinical-research"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill clinical-trials-search",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/clinical-trials-search ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "cognitive-behavioral-therapy-tools",
+    "display_name": "CBT Therapeutic Techniques Guide",
+    "description": "Evidence-based cognitive behavioral therapy (CBT) tools and worksheets. Includes thought records, behavioral activation, and cognitive restructuring exercises.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/cognitive-behavioral-therapy-tools",
+    "category": "mental-health",
+    "tags": [
+      "cbt",
+      "psychotherapy",
+      "mental-health",
+      "therapy"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "psychiatry",
+      "psychology",
+      "counseling"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill cognitive-behavioral-therapy-tools",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/cognitive-behavioral-therapy-tools ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "cpt-coding-assistant",
+    "display_name": "CPT Procedure Code Assistant",
+    "description": "AI-driven CPT coding validation and suggestion tool. Validates procedure codes against clinical documentation and identifies potential coding gaps.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/cpt-coding-assistant",
+    "category": "administrative",
+    "tags": [
+      "cpt",
+      "medical-coding",
+      "billing",
+      "reimbursement"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "medical-coding",
+      "billing"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill cpt-coding-assistant",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/cpt-coding-assistant ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "developmental-milestone-tracker",
+    "display_name": "Developmental Milestone Tracker",
+    "description": "Track and assess pediatric developmental milestones from birth to 5 years. Flags potential delays using CDC developmental surveillance guidelines.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/developmental-milestone-tracker",
+    "category": "pediatrics",
+    "tags": [
+      "development",
+      "milestones",
+      "pediatrics",
+      "screening"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "pediatrics",
+      "developmental-pediatrics"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill developmental-milestone-tracker",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/developmental-milestone-tracker ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "dicom-metadata-extractor",
+    "display_name": "DICOM Metadata & PHI Anonymization",
+    "description": "Extract metadata from DICOM medical images, anonymize protected health information (PHI), and process imaging data for research or clinical workflows. Supports pydicom integration.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/dicom-metadata-extractor",
+    "category": "lab-imaging",
+    "tags": [
+      "dicom",
+      "medical-imaging",
+      "phi-anonymization",
+      "metadata"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "caution",
+    "specialty": [
+      "radiology",
+      "medical-informatics"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill dicom-metadata-extractor",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/dicom-metadata-extractor ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "drug-interaction-checker",
+    "display_name": "Drug Interaction Safety Checker",
+    "description": "Real-time drug-drug interaction detection with five-level severity classification (A/B/C/D/X). Checks for drug-disease, drug-dose, and drug-food interactions using FDA and clinical databases.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/drug-interaction-checker",
+    "category": "treatment",
+    "tags": [
+      "drug-interactions",
+      "medication-safety",
+      "pharmacology"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "pharmacy",
+      "clinical-pharmacology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill drug-interaction-checker",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/drug-interaction-checker ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "drugbank-search",
+    "display_name": "DrugBank Comprehensive Drug Database",
+    "description": "Access 17,430+ drugs (13,166 small molecules + 4,264 biotech drugs) with high-performance SQLite backend. Search by name, therapeutic category, elimination half-life, or molecular similarity.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/drugbank-search",
+    "category": "pharmacy",
+    "tags": [
+      "drugbank",
+      "drug-database",
+      "pharmacology"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "pharmacy",
+      "clinical-pharmacology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill drugbank-search",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/drugbank-search ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "emergency-triage-protocols",
+    "display_name": "Emergency Department Triage Protocols",
+    "description": "AI-assisted emergency department triage tool with evidence-based protocols for rapid patient assessment. Helps prioritize cases based on acuity and clinical presentation.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/emergency-triage-protocols",
+    "category": "emergency",
+    "tags": [
+      "emergency-medicine",
+      "triage",
+      "acuity-assessment"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "emergency-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill emergency-triage-protocols",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/emergency-triage-protocols ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "epidemiology-surveillance",
+    "display_name": "Epidemiology & Disease Surveillance",
+    "description": "Access WHO Global Health Observatory data for epidemiological analysis. Track disease prevalence, mortality rates, and public health indicators by country and region.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/epidemiology-surveillance",
+    "category": "public-health",
+    "tags": [
+      "epidemiology",
+      "surveillance",
+      "who",
+      "public-health"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "public-health",
+      "epidemiology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill epidemiology-surveillance",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/epidemiology-surveillance ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "evidence-synthesis-ai",
+    "display_name": "Clinical Evidence Synthesis Tool",
+    "description": "Synthesizes clinical evidence from multiple sources including PubMed, Cochrane, and clinical guidelines. Generates evidence summaries with quality grading.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/evidence-synthesis-ai",
+    "category": "clinical-research-summarizing",
+    "tags": [
+      "evidence-synthesis",
+      "clinical-guidelines",
+      "research"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "research",
+      "evidence-based-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill evidence-synthesis-ai",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/evidence-synthesis-ai ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "fda-510k-documentation",
+    "display_name": "FDA 510(k) Documentation Automation",
+    "description": "Automates FDA-required documentation for Software as a Medical Device (SaMD) including 510(k) submissions. Generates traceability matrices linking code to regulatory requirements.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/fda-510k-documentation",
+    "category": "administrative",
+    "tags": [
+      "fda",
+      "510k",
+      "regulatory",
+      "medical-devices"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "regulatory-affairs",
+      "medical-devices"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill fda-510k-documentation",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/fda-510k-documentation ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "fda-drug-information",
+    "display_name": "FDA Drug Information & Adverse Events",
+    "description": "Access comprehensive FDA drug databases including adverse events (FAERS), drug labels, NDC directory, recalls, shortages, and 510(k) device clearances via openFDA API.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/fda-drug-information",
+    "category": "pharmacy",
+    "tags": [
+      "fda",
+      "drug-safety",
+      "adverse-events",
+      "recalls"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "pharmacy",
+      "regulatory-affairs"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill fda-drug-information",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/fda-drug-information ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "fhir-data-access",
+    "display_name": "FHIR Healthcare Data Access",
+    "description": "Connect to FHIR-compliant electronic health record systems to query, retrieve, and analyze patient data using natural language. Supports full CRUD operations on FHIR resources with SMART-on-FHIR authentication.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/fhir-data-access",
+    "category": "diagnosis",
+    "tags": [
+      "fhir",
+      "ehr",
+      "patient-data",
+      "smart-on-fhir"
+    ],
+    "version": "1.0.0",
+    "license": "Apache-2.0",
+    "evidence_level": "high",
+    "safety_classification": "restricted",
+    "specialty": [
+      "health-informatics",
+      "clinical-data-management"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill fhir-data-access",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/fhir-data-access ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "gad7-anxiety-screening",
+    "display_name": "GAD-7 Anxiety Screening Tool",
+    "description": "Generalized Anxiety Disorder 7-item (GAD-7) screening tool with automated scoring. Assesses anxiety severity and guides treatment decisions.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/gad7-anxiety-screening",
+    "category": "mental-health",
+    "tags": [
+      "anxiety",
+      "screening",
+      "gad-7",
+      "mental-health"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "psychiatry",
+      "primary-care"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill gad7-anxiety-screening",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/gad7-anxiety-screening ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "genomics-variant-interpreter",
+    "display_name": "Genomic Variant Interpretation",
+    "description": "Interpret genomic variants using ClinVar, gnomAD, and other genomic databases. Provides pathogenicity classification and clinical significance assessment.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/genomics-variant-interpreter",
+    "category": "clinical-research-summarizing",
+    "tags": [
+      "genomics",
+      "variants",
+      "precision-medicine",
+      "genetics"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "restricted",
+    "specialty": [
+      "medical-genetics",
+      "genomics"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill genomics-variant-interpreter",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/genomics-variant-interpreter ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "hipaa-compliance-checker",
+    "display_name": "HIPAA Compliance & De-identification",
+    "description": "Clinical de-identification pipeline that detects 30+ PHI entity types. Provides masked and obfuscated output modes for HIPAA compliance. Runs locally with data never leaving secure environment.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/hipaa-compliance-checker",
+    "category": "administrative",
+    "tags": [
+      "hipaa",
+      "de-identification",
+      "phi",
+      "privacy"
+    ],
+    "version": "6.3.0",
+    "license": "Commercial",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "health-information-management",
+      "compliance"
+    ],
+    "reviewer": "Verified - OMS Review Team",
+    "date_added": "2026-03-02",
+    "verified": true,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill hipaa-compliance-checker",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/hipaa-compliance-checker ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "icd10-code-lookup",
+    "display_name": "ICD-10 Diagnosis Code Lookup",
+    "description": "Search and validate ICD-10-CM diagnosis codes using NLM Clinical Tables API. Supports partial matching and hierarchical browsing of code categories.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/icd10-code-lookup",
+    "category": "administrative",
+    "tags": [
+      "icd-10",
+      "medical-coding",
+      "billing"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "medical-coding",
+      "health-information-management"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill icd10-code-lookup",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/icd10-code-lookup ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "iec-62304-compliance",
+    "display_name": "IEC 62304 Medical Device Software Lifecycle",
+    "description": "Modular skills for AI coding agents working on medical device software. Aligned to IEC 62304, ISO 14971, FDA, and EU MDR standards for software lifecycle management.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/iec-62304-compliance",
+    "category": "administrative",
+    "tags": [
+      "iec-62304",
+      "medical-devices",
+      "software-lifecycle",
+      "iso-14971"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "regulatory-affairs",
+      "quality-assurance",
+      "medical-devices"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill iec-62304-compliance",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/iec-62304-compliance ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "lab-result-interpreter",
+    "display_name": "Lab Result Interpretation Assistant",
+    "description": "Automatically extract and interpret biochemical test data from lab reports. Provides clinical significance analysis, reference range comparisons, and flags critical values.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/lab-result-interpreter",
+    "category": "lab-imaging",
+    "tags": [
+      "lab-results",
+      "biochemistry",
+      "clinical-pathology"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "pathology",
+      "laboratory-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill lab-result-interpreter",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/lab-result-interpreter ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "medical-anatomy-tutor",
+    "display_name": "Interactive Anatomy Learning Assistant",
+    "description": "Interactive anatomy education tool with 3D anatomical references, clinical correlations, and self-assessment questions. Covers all major organ systems.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/medical-anatomy-tutor",
+    "category": "education",
+    "tags": [
+      "anatomy",
+      "medical-education",
+      "learning"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "medical-education",
+      "anatomy"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill medical-anatomy-tutor",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medical-anatomy-tutor ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "medical-case-generator",
+    "display_name": "Clinical Case Scenario Generator",
+    "description": "Generate realistic clinical case scenarios for medical education and assessment. Customizable by specialty, complexity level, and learning objectives.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/medical-case-generator",
+    "category": "education",
+    "tags": [
+      "medical-education",
+      "case-scenarios",
+      "teaching"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "medical-education"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill medical-case-generator",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medical-case-generator ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "medical-imaging-analysis",
+    "display_name": "Medical Imaging & DICOM Analysis",
+    "description": "Analyze medical imaging data from DICOM servers and PACS systems. Extract metadata, query imaging studies by patient or modality, and process diagnostic imaging reports for clinical decision support.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/medical-imaging-analysis",
+    "category": "diagnosis",
+    "tags": [
+      "dicom",
+      "medical-imaging",
+      "radiology",
+      "pacs"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "radiology",
+      "diagnostic-imaging"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill medical-imaging-analysis",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medical-imaging-analysis ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "medical-paper-humanizer",
+    "display_name": "Medical Academic Writing Humanizer",
+    "description": "Removes signs of AI-generated writing from medical papers and makes them sound more natural. Based on Wikipedia's AI writing guide, adapted for medical literature.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/medical-paper-humanizer",
+    "category": "clinical-research-summarizing",
+    "tags": [
+      "academic-writing",
+      "medical-papers",
+      "writing-tools"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "low",
+    "safety_classification": "safe",
+    "specialty": [
+      "medical-writing",
+      "research"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill medical-paper-humanizer",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medical-paper-humanizer ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "medicare-drug-stats",
+    "display_name": "Medicare Drug Spending & Utilization",
+    "description": "Access CMS Medicare data including physician services, prescriber data, hospital utilization, and drug spending analysis via Socrata API.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/medicare-drug-stats",
+    "category": "administrative",
+    "tags": [
+      "medicare",
+      "cms",
+      "drug-spending",
+      "utilization"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "health-economics",
+      "policy"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill medicare-drug-stats",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medicare-drug-stats ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "medication-administration-safety",
+    "display_name": "Medication Administration Safety Check",
+    "description": "Five Rights of medication administration checker for nursing. Verifies right patient, drug, dose, route, and time before medication administration.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/medication-administration-safety",
+    "category": "nursing",
+    "tags": [
+      "medication-safety",
+      "nursing",
+      "five-rights"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "nursing",
+      "pharmacy"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill medication-administration-safety",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medication-administration-safety ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "nursing-care-plan",
+    "display_name": "Nursing Care Plan Generator",
+    "description": "Generate evidence-based nursing care plans with NANDA-I diagnoses, NOC outcomes, and NIC interventions. Supports individualized patient care planning.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/nursing-care-plan",
+    "category": "nursing",
+    "tags": [
+      "nursing-care-plans",
+      "nanda",
+      "noc",
+      "nic"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "nursing"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill nursing-care-plan",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/nursing-care-plan ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "outbreak-investigation",
+    "display_name": "Outbreak Investigation Assistant",
+    "description": "Systematic approach to outbreak investigation using CDC guidelines. Assists with case definition, epidemic curve analysis, and source identification.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/outbreak-investigation",
+    "category": "public-health",
+    "tags": [
+      "outbreak",
+      "infectious-disease",
+      "epidemiology",
+      "cdc"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "public-health",
+      "infectious-disease"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill outbreak-investigation",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/outbreak-investigation ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "patient-assessment-tool",
+    "display_name": "Nursing Patient Assessment Tool",
+    "description": "Comprehensive nursing assessment tool for systematic patient evaluation. Covers vital signs interpretation, pain assessment, fall risk screening, and activities of daily living.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/patient-assessment-tool",
+    "category": "nursing",
+    "tags": [
+      "nursing-assessment",
+      "patient-evaluation",
+      "vital-signs"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "nursing"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill patient-assessment-tool",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/patient-assessment-tool ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "pediatric-drug-dosing",
+    "display_name": "Pediatric Drug Dosing Calculator",
+    "description": "Weight-based and body-surface-area-based drug dosing calculator for pediatric patients. Includes common pediatric medications with age-appropriate dosing ranges.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/pediatric-drug-dosing",
+    "category": "pediatrics",
+    "tags": [
+      "pediatric-dosing",
+      "medication-safety",
+      "weight-based-dosing"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "caution",
+    "specialty": [
+      "pediatrics",
+      "pharmacy"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill pediatric-drug-dosing",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/pediatric-drug-dosing ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "pediatric-growth-charts",
+    "display_name": "Pediatric Growth Chart Analyzer",
+    "description": "Interpret pediatric growth measurements using CDC and WHO growth charts. Plots height, weight, BMI, and head circumference percentiles for age and gender.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/pediatric-growth-charts",
+    "category": "pediatrics",
+    "tags": [
+      "growth-charts",
+      "pediatrics",
+      "development"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "pediatrics",
+      "family-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill pediatric-growth-charts",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/pediatric-growth-charts ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "phq9-depression-screening",
+    "display_name": "PHQ-9 Depression Screening Tool",
+    "description": "Validated Patient Health Questionnaire-9 (PHQ-9) for depression screening and severity assessment. Automatic scoring and interpretation with suicide risk flagging.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/phq9-depression-screening",
+    "category": "mental-health",
+    "tags": [
+      "depression",
+      "screening",
+      "phq-9",
+      "mental-health"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "caution",
+    "specialty": [
+      "psychiatry",
+      "primary-care"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill phq9-depression-screening",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/phq9-depression-screening ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "precision-medicine-therapeutics",
+    "display_name": "Precision Medicine Treatment Planning",
+    "description": "Generate personalized treatment plans based on pharmacogenomics, variant interpretation, and patient-specific data. Integrates ClinPGx and ClinVar databases for evidence-based precision therapeutics.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/precision-medicine-therapeutics",
+    "category": "treatment",
+    "tags": [
+      "precision-medicine",
+      "pharmacogenomics",
+      "personalized-treatment"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "caution",
+    "specialty": [
+      "medical-genetics",
+      "oncology",
+      "pharmacology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill precision-medicine-therapeutics",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/precision-medicine-therapeutics ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "prior-authorization-review",
+    "display_name": "Prior Authorization Review Assistant",
+    "description": "Official Anthropic skill for insurance prior authorization review workflows. Cross-references coverage requirements, clinical guidelines, and patient records.",
+    "author": "Anthropic",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/prior-authorization-review",
+    "category": "administrative",
+    "tags": [
+      "prior-auth",
+      "insurance",
+      "utilization-review"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "utilization-management",
+      "insurance"
+    ],
+    "reviewer": "Verified - Anthropic Official",
+    "date_added": "2026-03-02",
+    "verified": true,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill prior-authorization-review",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/prior-authorization-review ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "protein-structure-analysis",
+    "display_name": "Protein Structure Database (AlphaFold & PDB)",
+    "description": "Access AlphaFold Protein Structure Database and Protein Data Bank (PDB) for structural biology research. Analyze protein structures and molecular interactions.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/protein-structure-analysis",
+    "category": "clinical-research-summarizing",
+    "tags": [
+      "protein-structure",
+      "alphafold",
+      "structural-biology",
+      "bioinformatics"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "biochemistry",
+      "molecular-biology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill protein-structure-analysis",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/protein-structure-analysis ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "pubmed-literature-search",
+    "display_name": "PubMed Medical Literature Search",
+    "description": "Search 36M+ citations from PubMed and PubMed Central. Advanced search with boolean operators, MeSH terms, author/journal filters, and full-text access.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/pubmed-literature-search",
+    "category": "research",
+    "tags": [
+      "pubmed",
+      "literature-search",
+      "research",
+      "evidence-based-medicine"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "research",
+      "all-specialties"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill pubmed-literature-search",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/pubmed-literature-search ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "radiation-exposure-tracker",
+    "display_name": "Medical Radiation Exposure Tracker",
+    "description": "Track cumulative radiation exposure from medical imaging procedures (X-rays, CT scans). Includes body surface area adjustments and radioactive decay models for comprehensive dosimetry.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/radiation-exposure-tracker",
+    "category": "lab-imaging",
+    "tags": [
+      "radiation-safety",
+      "medical-imaging",
+      "dosimetry"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "radiology",
+      "radiation-oncology",
+      "nuclear-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill radiation-exposure-tracker",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/radiation-exposure-tracker ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "raf-score-calculator",
+    "display_name": "RAF Score & HCC Calculator",
+    "description": "Risk Adjustment Factor (RAF) score calculator with Hierarchical Condition Category (HCC) capture from encounter documentation for Medicare Advantage.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/raf-score-calculator",
+    "category": "administrative",
+    "tags": [
+      "raf-score",
+      "hcc",
+      "risk-adjustment",
+      "medicare"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "safe",
+    "specialty": [
+      "health-information-management",
+      "value-based-care"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill raf-score-calculator",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/raf-score-calculator ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "supplement-drug-interactions",
+    "display_name": "Supplement-Drug Interaction Safety",
+    "description": "First supplement-drug interaction safety tool for AI agents. Evidence-based supplement safety intelligence with 805 FDA FAERS adverse event signals and CYP450 pathway analysis.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/supplement-drug-interactions",
+    "category": "pharmacy",
+    "tags": [
+      "supplements",
+      "drug-interactions",
+      "herbal-medicine",
+      "safety"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "pharmacy",
+      "integrative-medicine"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill supplement-drug-interactions",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/supplement-drug-interactions ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "surgical-procedure-planner",
+    "display_name": "Surgical Procedure Planning Assistant",
+    "description": "Pre-operative planning tool for surgical procedures. Assists with procedure selection, anatomical considerations, equipment checklists, and patient positioning protocols.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/surgical-procedure-planner",
+    "category": "surgery",
+    "tags": [
+      "surgical-planning",
+      "operative-planning",
+      "pre-op"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "moderate",
+    "safety_classification": "caution",
+    "specialty": [
+      "surgery"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill surgical-procedure-planner",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/surgical-procedure-planner ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "surgical-safety-checklist",
+    "display_name": "WHO Surgical Safety Checklist",
+    "description": "Digital implementation of the WHO Surgical Safety Checklist for pre-operative, intra-operative, and post-operative verification. Reduces surgical complications and improves team communication.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/surgical-safety-checklist",
+    "category": "surgery",
+    "tags": [
+      "surgical-safety",
+      "who-checklist",
+      "patient-safety"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "surgery",
+      "anesthesiology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill surgical-safety-checklist",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/surgical-safety-checklist ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "systematic-review-assistant",
+    "display_name": "Systematic Review & Meta-Analysis Assistant",
+    "description": "Assists with systematic review methodology including PICO formulation, search strategy development, study selection, and quality assessment using PRISMA guidelines.",
+    "author": "OMS Contributors",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/systematic-review-assistant",
+    "category": "research",
+    "tags": [
+      "systematic-review",
+      "meta-analysis",
+      "prisma",
+      "evidence-synthesis"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "research",
+      "epidemiology"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill systematic-review-assistant",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/systematic-review-assistant ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "trauma-management-protocols",
+    "display_name": "Trauma Management Protocols (ATLS)",
+    "description": "Advanced Trauma Life Support (ATLS) protocol assistant for initial assessment and management of trauma patients. Covers primary/secondary surveys and critical interventions.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/trauma-management-protocols",
+    "category": "emergency",
+    "tags": [
+      "trauma",
+      "atls",
+      "emergency-surgery",
+      "critical-care"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "caution",
+    "specialty": [
+      "emergency-medicine",
+      "trauma-surgery"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill trauma-management-protocols",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/trauma-management-protocols ~/.claude/skills/"
+    }
+  },
+  {
+    "name": "vaccine-schedule-tracker",
+    "display_name": "Immunization Schedule Tracker",
+    "description": "CDC/WHO immunization schedule tracker for pediatric and adult vaccinations. Identifies overdue vaccines and generates catch-up schedules.",
+    "author": "Open Medical Skills Community",
+    "repository": "https://github.com/gitjfmd/oms-site/tree/main/skills/vaccine-schedule-tracker",
+    "category": "public-health",
+    "tags": [
+      "immunization",
+      "vaccines",
+      "preventive-care"
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "evidence_level": "high",
+    "safety_classification": "safe",
+    "specialty": [
+      "public-health",
+      "family-medicine",
+      "pediatrics"
+    ],
+    "reviewer": "Pending Review",
+    "date_added": "2026-03-02",
+    "verified": false,
+    "install": {
+      "npx": "npx skills add gitjfmd/oms-site --skill vaccine-schedule-tracker",
+      "git": "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/vaccine-schedule-tracker ~/.claude/skills/"
+    }
+  }
+]

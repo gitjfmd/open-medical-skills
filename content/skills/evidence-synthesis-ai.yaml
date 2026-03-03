@@ -1,15 +1,16 @@
 name: "evidence-synthesis-ai"
 display_name: "Clinical Evidence Synthesis Tool"
 description: "Synthesizes clinical evidence from multiple sources including PubMed, Cochrane, and clinical guidelines. Generates evidence summaries with quality grading."
-author: "Healthcare MCP Public"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/evidence-synthesis-ai"
 category: "clinical-research-summarizing"
 tags: ["evidence-synthesis", "clinical-guidelines", "research"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/evidence-synthesis-ai"
+  npx: "npx skills add gitjfmd/oms-site --skill evidence-synthesis-ai"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/evidence-synthesis-ai ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["research", "evidence-based-medicine"]

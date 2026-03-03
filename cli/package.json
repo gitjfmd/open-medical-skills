@@ -1,0 +1,43 @@
+{
+  "name": "@openmedicalskills/cli",
+  "version": "1.0.0",
+  "description": "CLI for Open Medical Skills — install physician-reviewed AI agent skills",
+  "type": "module",
+  "bin": {
+    "oms": "./bin/oms.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "data/"
+  ],
+  "scripts": {
+    "generate-index": "node ../scripts/generate-cli-index.js"
+  },
+  "keywords": [
+    "medical",
+    "ai",
+    "skills",
+    "healthcare",
+    "clinical",
+    "physician",
+    "agent",
+    "claude",
+    "cursor",
+    "open-medical-skills"
+  ],
+  "author": "IntelMedica.ai",
+  "license": "MIT",
+  "homepage": "https://openmedicalskills.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitjfmd/oms-site"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "chalk": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

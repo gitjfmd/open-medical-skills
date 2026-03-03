@@ -1,15 +1,16 @@
 name: "genomics-variant-interpreter"
 display_name: "Genomic Variant Interpretation"
 description: "Interpret genomic variants using ClinVar, gnomAD, and other genomic databases. Provides pathogenicity classification and clinical significance assessment."
-author: "K-Dense-AI"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/genomics-variant-interpreter"
 category: "clinical-research-summarizing"
 tags: ["genomics", "variants", "precision-medicine", "genetics"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/genomics-variant-interpreter"
+  npx: "npx skills add gitjfmd/oms-site --skill genomics-variant-interpreter"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/genomics-variant-interpreter ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "restricted"
 specialty: ["medical-genetics", "genomics"]

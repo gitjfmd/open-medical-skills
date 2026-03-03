@@ -1,15 +1,16 @@
 name: "medical-imaging-analysis"
 display_name: "Medical Imaging & DICOM Analysis"
 description: "Analyze medical imaging data from DICOM servers and PACS systems. Extract metadata, query imaging studies by patient or modality, and process diagnostic imaging reports for clinical decision support."
-author: "K-Dense-AI"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/medical-imaging-analysis"
 category: "diagnosis"
 tags: ["dicom", "medical-imaging", "radiology", "pacs"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/medical-imaging-analysis"
+  npx: "npx skills add gitjfmd/oms-site --skill medical-imaging-analysis"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medical-imaging-analysis ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "caution"
 specialty: ["radiology", "diagnostic-imaging"]

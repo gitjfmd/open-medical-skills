@@ -1,15 +1,16 @@
 name: "fda-510k-documentation"
 display_name: "FDA 510(k) Documentation Automation"
 description: "Automates FDA-required documentation for Software as a Medical Device (SaMD) including 510(k) submissions. Generates traceability matrices linking code to regulatory requirements."
-author: "thoughtbot"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/fda-510k-documentation"
 category: "administrative"
 tags: ["fda", "510k", "regulatory", "medical-devices"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/fda-510k-documentation"
+  npx: "npx skills add gitjfmd/oms-site --skill fda-510k-documentation"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/fda-510k-documentation ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "safe"
 specialty: ["regulatory-affairs", "medical-devices"]

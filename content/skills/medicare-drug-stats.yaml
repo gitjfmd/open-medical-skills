@@ -1,15 +1,16 @@
 name: "medicare-drug-stats"
 display_name: "Medicare Drug Spending & Utilization"
 description: "Access CMS Medicare data including physician services, prescriber data, hospital utilization, and drug spending analysis via Socrata API."
-author: "openpharma-org"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/medicare-drug-stats"
 category: "administrative"
 tags: ["medicare", "cms", "drug-spending", "utilization"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/medicare-drug-stats"
+  npx: "npx skills add gitjfmd/oms-site --skill medicare-drug-stats"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medicare-drug-stats ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["health-economics", "policy"]

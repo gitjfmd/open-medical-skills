@@ -1,0 +1,414 @@
+#!/usr/bin/env python3
+"""
+GAD-7 Anxiety Screening Tool
+==============================
+Validated Generalized Anxiety Disorder 7-item (GAD-7) screening instrument
+with automated scoring, severity classification, and clinical decision
+support for treatment planning.
+
+Clinical Purpose:
+    The GAD-7 is a brief, validated self-report questionnaire used to screen
+    for and measure severity of generalized anxiety disorder. It is widely
+    used in primary care and mental health settings. A score >= 10 has a
+    sensitivity of 89% and specificity of 82% for GAD diagnosis.
+
+References:
+    - Spitzer RL, Kroenke K, Williams JBW, Lowe B. "A brief measure for
+      assessing generalized anxiety disorder: the GAD-7." Arch Intern Med.
+      2006;166(10):1092-1097.
+    - Kroenke K, et al. "Anxiety Disorders in Primary Care: Prevalence,
+      Impairment, Comorbidity, and Detection." Ann Intern Med. 2007.
+    - Plummer F, et al. "Screening for Anxiety Disorders with the GAD-7
+      and GAD-2." Gen Hosp Psychiatry. 2016;39:24-31.
+
+DISCLAIMER: The GAD-7 is a screening tool and does not constitute a
+diagnosis. All results should be interpreted by a qualified clinician
+in the context of a comprehensive clinical assessment.
+"""
+
+import json
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Optional
+
+
+# GAD-7 Question Items (Spitzer et al., 2006)
+GAD7_ITEMS = [
+    {
+        "number": 1,
+        "text": "Feeling nervous, anxious, or on edge",
+    },
+    {
+        "number": 2,
+        "text": "Not being able to stop or control worrying",
+    },
+    {
+        "number": 3,
+        "text": "Worrying too much about different things",
+    },
+    {
+        "number": 4,
+        "text": "Trouble relaxing",
+    },
+    {
+        "number": 5,
+        "text": "Being so restless that it's hard to sit still",
+    },
+    {
+        "number": 6,
+        "text": "Becoming easily annoyed or irritable",
+    },
+    {
+        "number": 7,
+        "text": "Feeling afraid, as if something awful might happen",
+    },
+]
+
+# Response options and scoring
+RESPONSE_OPTIONS = {
+    0: "Not at all",
+    1: "Several days",
+    2: "More than half the days",
+    3: "Nearly every day",
+}
+
+# Severity thresholds (Spitzer et al., 2006)
+SEVERITY_THRESHOLDS = [
+    (0, 4, "minimal", "Minimal anxiety. Symptoms unlikely to be clinically significant."),
+    (5, 9, "mild", "Mild anxiety. Consider watchful waiting and reassessment."),
+    (10, 14, "moderate", "Moderate anxiety. Consider counseling, therapy, and/or pharmacotherapy."),
+    (15, 21, "severe", "Severe anxiety. Active treatment is strongly recommended. Consider both psychotherapy and pharmacotherapy."),
+]
+
+# Functional impairment question
+FUNCTIONAL_IMPAIRMENT_QUESTION = (
+    "If you checked any problems, how difficult have they made it for you "
+    "to do your work, take care of things at home, or get along with other people?"
+)
+
+FUNCTIONAL_IMPAIRMENT_OPTIONS = {
+    0: "Not difficult at all",
+    1: "Somewhat difficult",
+    2: "Very difficult",
+    3: "Extremely difficult",
+}
+
+# GAD-2 screening subset (items 1 and 2)
+GAD2_THRESHOLD = 3  # Score >= 3 warrants full GAD-7
+
+
+@dataclass
+class GAD7Result:
+    """Complete GAD-7 assessment result."""
+    responses: list  # List of 7 integer scores (0-3)
+    total_score: int = 0
+    severity: str = ""
+    severity_description: str = ""
+    functional_impairment: Optional[int] = None
+    gad2_score: int = 0
+    gad2_positive: bool = False
+    screening_positive: bool = False
+    date_administered: str = ""
+    recommendations: list = field(default_factory=list)
+
+    def __post_init__(self):
+        if not self.date_administered:
+            self.date_administered = datetime.now().strftime("%Y-%m-%d")
+
+
+def validate_responses(responses: list) -> tuple:
+    """Validate GAD-7 response array. Returns (is_valid, error_message)."""
+    if not isinstance(responses, list):
+        return False, "Responses must be a list of 7 integers (0-3)"
+    if len(responses) != 7:
+        return False, f"Expected 7 responses, got {len(responses)}"
+    for i, r in enumerate(responses):
+        if not isinstance(r, int) or r < 0 or r > 3:
+            return False, f"Response {i+1} must be an integer from 0 to 3, got {r}"
+    return True, ""
+
+
+def score_gad7(responses: list, functional_impairment: int = None) -> GAD7Result:
+    """
+    Score the GAD-7 questionnaire.
+
+    Args:
+        responses: List of 7 integers (0-3) corresponding to each GAD-7 item
+        functional_impairment: Optional functional impairment score (0-3)
+
+    Returns:
+        GAD7Result with total score, severity, and recommendations
+    """
+    is_valid, error = validate_responses(responses)
+    if not is_valid:
+        raise ValueError(error)
+
+    total = sum(responses)
+    gad2_score = responses[0] + responses[1]
+
+    # Determine severity
+    severity = ""
+    severity_desc = ""
+    for low, high, sev, desc in SEVERITY_THRESHOLDS:
+        if low <= total <= high:
+            severity = sev
+            severity_desc = desc
+            break
+
+    result = GAD7Result(
+        responses=responses,
+        total_score=total,
+        severity=severity,
+        severity_description=severity_desc,
+        functional_impairment=functional_impairment,
+        gad2_score=gad2_score,
+        gad2_positive=gad2_score >= GAD2_THRESHOLD,
+        screening_positive=total >= 10,
+    )
+
+    result.recommendations = _generate_recommendations(result)
+    return result
+
+
+def _generate_recommendations(result: GAD7Result) -> list:
+    """Generate evidence-based clinical recommendations based on GAD-7 score."""
+    recs = []
+
+    if result.severity == "minimal":
+        recs.append({
+            "category": "monitoring",
+            "recommendation": "Routine rescreening at next visit or as clinically indicated",
+            "details": "No specific treatment indicated for anxiety at this time",
+        })
+
+    elif result.severity == "mild":
+        recs.append({
+            "category": "monitoring",
+            "recommendation": "Rescreen in 2-4 weeks to assess trajectory",
+            "details": "Mild symptoms may be transient and situational",
+        })
+        recs.append({
+            "category": "non_pharmacological",
+            "recommendation": "Provide psychoeducation about anxiety management",
+            "details": "Recommend regular exercise (150 min/week moderate intensity), "
+                       "sleep hygiene, stress reduction techniques, and limiting caffeine/alcohol",
+        })
+        recs.append({
+            "category": "self_help",
+            "recommendation": "Consider guided self-help or digital CBT programs",
+            "details": "Evidence supports guided self-help as first-line for mild anxiety "
+                       "(NICE CG113)",
+        })
+
+    elif result.severity == "moderate":
+        recs.append({
+            "category": "psychotherapy",
+            "recommendation": "Refer for cognitive behavioral therapy (CBT)",
+            "details": "CBT is first-line treatment for GAD with strong evidence "
+                       "(NNT ~3-4). 12-16 sessions typical course.",
+        })
+        recs.append({
+            "category": "pharmacotherapy",
+            "recommendation": "Consider SSRI or SNRI if psychotherapy alone insufficient",
+            "details": "First-line: sertraline 50-200 mg/day, escitalopram 10-20 mg/day, "
+                       "or duloxetine 60-120 mg/day. Allow 4-6 weeks for full effect.",
+        })
+        recs.append({
+            "category": "assessment",
+            "recommendation": "Assess for comorbid conditions",
+            "details": "Screen for depression (PHQ-9), panic disorder, social anxiety, "
+                       "PTSD, substance use. Comorbidity is common (>60%).",
+        })
+
+    elif result.severity == "severe":
+        recs.append({
+            "category": "urgent",
+            "recommendation": "Initiate active treatment promptly",
+            "details": "Severe anxiety significantly impairs functioning. Combined "
+                       "psychotherapy + pharmacotherapy recommended.",
+        })
+        recs.append({
+            "category": "pharmacotherapy",
+            "recommendation": "Start SSRI/SNRI with close follow-up",
+            "details": "First-line: sertraline, escitalopram, duloxetine, or venlafaxine XR. "
+                       "Follow up in 1-2 weeks for tolerability, then every 2-4 weeks.",
+        })
+        recs.append({
+            "category": "psychotherapy",
+            "recommendation": "Refer for CBT concurrently with pharmacotherapy",
+            "details": "Combined treatment more effective than either alone for severe GAD",
+        })
+        recs.append({
+            "category": "safety",
+            "recommendation": "Assess for suicidal ideation and safety",
+            "details": "Severe anxiety increases suicide risk. Screen with Columbia "
+                       "Suicide Severity Rating Scale (C-SSRS) or PHQ-9 Item 9.",
+        })
+        recs.append({
+            "category": "assessment",
+            "recommendation": "Consider psychiatric consultation",
+            "details": "For treatment-resistant cases, diagnostic complexity, or "
+                       "significant comorbidity, specialty referral is recommended.",
+        })
+
+    # Functional impairment note
+    if result.functional_impairment is not None and result.functional_impairment >= 2:
+        recs.append({
+            "category": "functional",
+            "recommendation": "Address functional impairment directly",
+            "details": f"Patient reports {'very' if result.functional_impairment == 2 else 'extremely'} "
+                       "difficult functioning. Consider work/school accommodations, "
+                       "occupational therapy, and social support interventions.",
+        })
+
+    return recs
+
+
+def get_gad7_questionnaire() -> dict:
+    """Return the full GAD-7 questionnaire for administration."""
+    return {
+        "instrument": "GAD-7",
+        "reference": "Spitzer RL, et al. Arch Intern Med. 2006;166(10):1092-1097.",
+        "instructions": (
+            "Over the LAST 2 WEEKS, how often have you been bothered by "
+            "the following problems? Rate each item from 0 to 3."
+        ),
+        "response_options": RESPONSE_OPTIONS,
+        "items": GAD7_ITEMS,
+        "functional_impairment_question": {
+            "text": FUNCTIONAL_IMPAIRMENT_QUESTION,
+            "options": FUNCTIONAL_IMPAIRMENT_OPTIONS,
+        },
+        "scoring": {
+            "range": "0-21",
+            "thresholds": {t[2]: f"{t[0]}-{t[1]}" for t in SEVERITY_THRESHOLDS},
+            "screening_cutoff": "Score >= 10 (sensitivity 89%, specificity 82% for GAD)",
+        },
+    }
+
+
+def score_gad2(item1: int, item2: int) -> dict:
+    """
+    Score the GAD-2 (ultra-brief screening).
+
+    The GAD-2 uses only the first 2 items. Score >= 3 warrants full GAD-7.
+    Sensitivity 86%, specificity 83% for any anxiety disorder.
+    """
+    total = item1 + item2
+    return {
+        "instrument": "GAD-2",
+        "score": total,
+        "positive_screen": total >= GAD2_THRESHOLD,
+        "recommendation": (
+            "Positive screen. Administer full GAD-7."
+            if total >= GAD2_THRESHOLD
+            else "Negative screen. Rescreen as clinically indicated."
+        ),
+        "reference": "Kroenke K, et al. Ann Intern Med. 2007;146:317-325.",
+    }
+
+
+def track_longitudinal(scores: list) -> dict:
+    """
+    Analyze longitudinal GAD-7 scores to track treatment response.
+
+    A decrease of >= 5 points is considered clinically meaningful response.
+    A final score < 5 is considered remission.
+    """
+    if len(scores) < 2:
+        return {"error": "At least 2 scores needed for longitudinal tracking"}
+
+    baseline = scores[0]
+    current = scores[-1]
+    change = current - baseline
+    pct_change = ((current - baseline) / max(baseline, 1)) * 100
+
+    # Clinical response: >= 50% reduction or >= 5-point decrease
+    response = change <= -5 or pct_change <= -50
+    remission = current < 5
+
+    trajectory = []
+    for i in range(1, len(scores)):
+        diff = scores[i] - scores[i-1]
+        if diff < -2:
+            trajectory.append("improving")
+        elif diff > 2:
+            trajectory.append("worsening")
+        else:
+            trajectory.append("stable")
+
+    return {
+        "baseline_score": baseline,
+        "current_score": current,
+        "absolute_change": change,
+        "percent_change": round(pct_change, 1),
+        "clinical_response": response,
+        "remission": remission,
+        "trajectory": trajectory,
+        "interpretation": (
+            "Treatment response achieved" if response
+            else "Insufficient response - consider treatment adjustment"
+        ),
+        "total_assessments": len(scores),
+    }
+
+
+def run_gad7(action: str, **kwargs) -> str:
+    """
+    Main entry point for the GAD-7 Screening Tool.
+
+    Actions:
+        questionnaire: Get the GAD-7 questionnaire for administration
+        score: Score a completed GAD-7 (responses: list of 7 ints)
+        gad2: Score the GAD-2 brief screen (item1, item2)
+        track: Track longitudinal scores (scores: list of ints)
+    """
+    if action == "questionnaire":
+        result = get_gad7_questionnaire()
+    elif action == "score":
+        responses = kwargs.get("responses", [])
+        fi = kwargs.get("functional_impairment")
+        try:
+            gad7_result = score_gad7(responses, fi)
+            result = {
+                "total_score": gad7_result.total_score,
+                "severity": gad7_result.severity,
+                "severity_description": gad7_result.severity_description,
+                "screening_positive": gad7_result.screening_positive,
+                "gad2_score": gad7_result.gad2_score,
+                "gad2_positive": gad7_result.gad2_positive,
+                "functional_impairment": gad7_result.functional_impairment,
+                "recommendations": gad7_result.recommendations,
+                "date": gad7_result.date_administered,
+                "item_responses": {
+                    GAD7_ITEMS[i]["text"]: {
+                        "score": r,
+                        "label": RESPONSE_OPTIONS[r],
+                    }
+                    for i, r in enumerate(gad7_result.responses)
+                },
+            }
+        except ValueError as e:
+            result = {"error": str(e)}
+    elif action == "gad2":
+        result = score_gad2(kwargs.get("item1", 0), kwargs.get("item2", 0))
+    elif action == "track":
+        result = track_longitudinal(kwargs.get("scores", []))
+    else:
+        result = {
+            "error": f"Unknown action: {action}",
+            "available_actions": ["questionnaire", "score", "gad2", "track"],
+        }
+
+    return json.dumps(result, indent=2)
+
+
+if __name__ == "__main__":
+    # Example: Score a completed GAD-7
+    print("=== GAD-7 Scoring Example (Moderate Anxiety) ===")
+    print(run_gad7("score", responses=[2, 3, 2, 2, 1, 1, 2], functional_impairment=2))
+    print()
+
+    # Example: Track treatment response
+    print("=== Longitudinal Tracking ===")
+    print(run_gad7("track", scores=[18, 15, 12, 9, 7]))

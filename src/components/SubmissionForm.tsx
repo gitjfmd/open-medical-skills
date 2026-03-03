@@ -1,9 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CATEGORIES, CATEGORY_LABELS } from "../lib/categories";
+import { getUser, isLoggedIn, type GitHubUser } from "../lib/auth";
 
 export default function SubmissionForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [authUser, setAuthUser] = useState<GitHubUser | null>(null);
+  const authorInputRef = useRef<HTMLInputElement>(null);
+
+  // Check auth state on mount + listen for auth events from SubmitAuthBanner
+  useEffect(() => {
+    if (isLoggedIn()) {
+      const user = getUser();
+      if (user) {
+        setAuthUser(user);
+        // Pre-fill the author field
+        if (authorInputRef.current && !authorInputRef.current.value) {
+          authorInputRef.current.value = user.login;
+        }
+      }
+    }
+
+    function handleAuthUser(e: Event) {
+      const detail = (e as CustomEvent<GitHubUser>).detail;
+      setAuthUser(detail);
+      if (authorInputRef.current && !authorInputRef.current.value) {
+        authorInputRef.current.value = detail.login;
+      }
+    }
+
+    window.addEventListener("oms:auth-user", handleAuthUser);
+    return () => window.removeEventListener("oms:auth-user", handleAuthUser);
+  }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -115,14 +143,30 @@ export default function SubmissionForm() {
         <label htmlFor="author" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
           Author <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
-          id="author"
-          name="author"
-          placeholder="Your Name or Organization"
-          required
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
-        />
+        <div className="relative">
+          <input
+            ref={authorInputRef}
+            type="text"
+            id="author"
+            name="author"
+            placeholder="Your Name or Organization"
+            defaultValue={authUser?.login || ""}
+            required
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+          />
+          {authUser && (
+            <span className="absolute right-3 top-1/2 mt-0.5 -translate-y-1/2 flex items-center gap-1.5 text-xs text-primary dark:text-primary-light">
+              <img
+                src={authUser.avatar_url}
+                alt=""
+                className="h-4 w-4 rounded-full"
+                width={16}
+                height={16}
+              />
+              via GitHub
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Repository */}

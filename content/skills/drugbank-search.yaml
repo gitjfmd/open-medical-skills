@@ -1,15 +1,16 @@
 name: "drugbank-search"
 display_name: "DrugBank Comprehensive Drug Database"
 description: "Access 17,430+ drugs (13,166 small molecules + 4,264 biotech drugs) with high-performance SQLite backend. Search by name, therapeutic category, elimination half-life, or molecular similarity."
-author: "openpharma-org"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/drugbank-search"
 category: "pharmacy"
 tags: ["drugbank", "drug-database", "pharmacology"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/drugbank-search"
+  npx: "npx skills add gitjfmd/oms-site --skill drugbank-search"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/drugbank-search ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "clinical-pharmacology"]

@@ -1,15 +1,16 @@
 name: "pediatric-growth-charts"
 display_name: "Pediatric Growth Chart Analyzer"
 description: "Interpret pediatric growth measurements using CDC and WHO growth charts. Plots height, weight, BMI, and head circumference percentiles for age and gender."
-author: "Healthcare MCP Public"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/pediatric-growth-charts"
 category: "pediatrics"
 tags: ["growth-charts", "pediatrics", "development"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/pediatric-growth-charts"
+  npx: "npx skills add gitjfmd/oms-site --skill pediatric-growth-charts"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/pediatric-growth-charts ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pediatrics", "family-medicine"]

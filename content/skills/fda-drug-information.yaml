@@ -1,15 +1,16 @@
 name: "fda-drug-information"
 display_name: "FDA Drug Information & Adverse Events"
 description: "Access comprehensive FDA drug databases including adverse events (FAERS), drug labels, NDC directory, recalls, shortages, and 510(k) device clearances via openFDA API."
-author: "Augmented-Nature"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/fda-drug-information"
 category: "pharmacy"
 tags: ["fda", "drug-safety", "adverse-events", "recalls"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/fda-drug-information"
+  npx: "npx skills add gitjfmd/oms-site --skill fda-drug-information"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/fda-drug-information ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "regulatory-affairs"]

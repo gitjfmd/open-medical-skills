@@ -2,17 +2,632 @@ name: "phq9-depression-screening"
 display_name: "PHQ-9 Depression Screening Tool"
 description: "Validated Patient Health Questionnaire-9 (PHQ-9) for depression screening and severity assessment. Automatic scoring and interpretation with suicide risk flagging."
 author: "Open Medical Skills Community"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/phq9-depression-screening"
 category: "mental-health"
 tags: ["depression", "screening", "phq-9", "mental-health"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/phq9-depression-screening"
+  npx: "npx skills add gitjfmd/oms-site --skill phq9-depression-screening"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/phq9-depression-screening ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "caution"
 specialty: ["psychiatry", "primary-care"]
 reviewer: "Pending Review"
 date_added: "2026-03-02"
 verified: false
+script_language: "python"
+script_content: |
+  #!/usr/bin/env python3
+  """
+  PHQ-9 Depression Screening Tool
+  =================================
+  Validated Patient Health Questionnaire-9 (PHQ-9) for depression screening,
+  severity assessment, and treatment monitoring with automatic suicide risk
+  flagging (Item 9).
+
+  Clinical Purpose:
+      The PHQ-9 is the most widely used depression screening instrument in
+      primary care. It serves dual purposes: (1) establishing a probable
+      diagnosis of major depressive disorder using DSM criteria, and (2)
+      grading depression severity for treatment selection and monitoring.
+      Item 9 screens for suicidal ideation and requires immediate attention.
+
+  References:
+      - Kroenke K, Spitzer RL, Williams JBW. "The PHQ-9: Validity of a Brief
+        Depression Severity Measure." J Gen Intern Med. 2001;16(9):606-613.
+      - Lowe B, et al. "Monitoring Depression Treatment Outcomes with the
+        PHQ-9." Med Care. 2004;42(12):1194-1201.
+      - Manea L, et al. "Optimal Cut-off Score for Diagnosing Depression with
+        the PHQ-9: A Meta-Analysis." CMAJ. 2012;184(3):E191-E196.
+      - USPSTF. Depression Screening in Adults. JAMA. 2016;315(4):380-387.
+
+  DISCLAIMER: The PHQ-9 is a screening and monitoring tool. A positive screen
+  requires clinical confirmation. Item 9 (suicidal ideation) MUST be followed
+  up with a comprehensive suicide risk assessment. If a patient endorses
+  suicidal thoughts, ensure immediate safety evaluation.
+  """
+
+  import json
+  from dataclasses import dataclass, field
+  from datetime import datetime
+  from typing import Optional
+
+
+  # PHQ-9 Question Items (Kroenke et al., 2001)
+  # Maps directly to DSM-5 criteria for Major Depressive Episode
+  PHQ9_ITEMS = [
+      {
+          "number": 1,
+          "text": "Little interest or pleasure in doing things",
+          "dsm_criterion": "Anhedonia (Criterion A2)",
+      },
+      {
+          "number": 2,
+          "text": "Feeling down, depressed, or hopeless",
+          "dsm_criterion": "Depressed mood (Criterion A1)",
+      },
+      {
+          "number": 3,
+          "text": "Trouble falling or staying asleep, or sleeping too much",
+          "dsm_criterion": "Sleep disturbance (Criterion A4)",
+      },
+      {
+          "number": 4,
+          "text": "Feeling tired or having little energy",
+          "dsm_criterion": "Fatigue (Criterion A6)",
+      },
+      {
+          "number": 5,
+          "text": "Poor appetite or overeating",
+          "dsm_criterion": "Appetite/weight change (Criterion A3)",
+      },
+      {
+          "number": 6,
+          "text": "Feeling bad about yourself - or that you are a failure or "
+                  "have let yourself or your family down",
+          "dsm_criterion": "Worthlessness/guilt (Criterion A7)",
+      },
+      {
+          "number": 7,
+          "text": "Trouble concentrating on things, such as reading the newspaper "
+                  "or watching television",
+          "dsm_criterion": "Diminished concentration (Criterion A8)",
+      },
+      {
+          "number": 8,
+          "text": "Moving or speaking so slowly that other people could have noticed? "
+                  "Or the opposite - being so fidgety or restless that you have been "
+                  "moving around a lot more than usual",
+          "dsm_criterion": "Psychomotor agitation/retardation (Criterion A5)",
+      },
+      {
+          "number": 9,
+          "text": "Thoughts that you would be better off dead, or of hurting yourself "
+                  "in some way",
+          "dsm_criterion": "Suicidal ideation (Criterion A9)",
+          "safety_critical": True,
+      },
+  ]
+
+  RESPONSE_OPTIONS = {
+      0: "Not at all",
+      1: "Several days",
+      2: "More than half the days",
+      3: "Nearly every day",
+  }
+
+  # Severity thresholds (Kroenke et al., 2001)
+  SEVERITY_THRESHOLDS = [
+      (0, 4, "none_minimal", "None to minimal depression"),
+      (5, 9, "mild", "Mild depression"),
+      (10, 14, "moderate", "Moderate depression"),
+      (15, 19, "moderately_severe", "Moderately severe depression"),
+      (20, 27, "severe", "Severe depression"),
+  ]
+
+  # PHQ-2 screening subset (items 1 and 2)
+  PHQ2_THRESHOLD = 3  # Score >= 3 warrants full PHQ-9
+
+  # Functional impairment question
+  FUNCTIONAL_QUESTION = (
+      "If you checked off any problems, how difficult have these problems "
+      "made it for you to do your work, take care of things at home, or "
+      "get along with other people?"
+  )
+
+
+  @dataclass
+  class PHQ9Result:
+      responses: list
+      total_score: int = 0
+      severity: str = ""
+      severity_label: str = ""
+      item9_score: int = 0
+      suicide_risk_flag: bool = False
+      phq2_score: int = 0
+      phq2_positive: bool = False
+      meets_dsm_criteria: bool = False
+      functional_impairment: Optional[int] = None
+      recommendations: list = field(default_factory=list)
+      safety_actions: list = field(default_factory=list)
+      date_administered: str = ""
+
+      def __post_init__(self):
+          if not self.date_administered:
+              self.date_administered = datetime.now().strftime("%Y-%m-%d")
+
+
+  def validate_responses(responses: list) -> tuple:
+      """Validate PHQ-9 responses."""
+      if not isinstance(responses, list):
+          return False, "Responses must be a list of 9 integers (0-3)"
+      if len(responses) != 9:
+          return False, f"Expected 9 responses, got {len(responses)}"
+      for i, r in enumerate(responses):
+          if not isinstance(r, int) or r < 0 or r > 3:
+              return False, f"Response {i+1} must be an integer 0-3, got {r}"
+      return True, ""
+
+
+  def check_dsm_criteria(responses: list) -> dict:
+      """
+      Check if PHQ-9 responses suggest major depressive disorder per DSM-5.
+
+      MDD requires:
+      - >= 5 symptoms present "more than half the days" (score >= 2)
+      - At least one symptom is depressed mood (item 2) or anhedonia (item 1)
+      - Symptoms cause functional impairment
+      """
+      symptoms_present = sum(1 for r in responses if r >= 2)
+      has_core_symptom = responses[0] >= 2 or responses[1] >= 2
+
+      meets_criteria = symptoms_present >= 5 and has_core_symptom
+
+      return {
+          "symptoms_at_threshold": symptoms_present,
+          "required_symptoms": 5,
+          "has_core_symptom": has_core_symptom,
+          "core_symptoms": {
+              "anhedonia_item1": responses[0] >= 2,
+              "depressed_mood_item2": responses[1] >= 2,
+          },
+          "probable_mdd": meets_criteria,
+          "note": ("PHQ-9 suggests probable MDD. Clinical interview required to "
+                   "confirm diagnosis, assess duration, and rule out other causes."
+                   if meets_criteria else
+                   "Does not meet PHQ-9 threshold for probable MDD."),
+      }
+
+
+  def score_phq9(responses: list, functional_impairment: int = None) -> PHQ9Result:
+      """
+      Score the PHQ-9 questionnaire.
+
+      Args:
+          responses: List of 9 integers (0-3)
+          functional_impairment: Difficulty score (0-3)
+
+      Returns:
+          PHQ9Result with score, severity, and clinical recommendations
+      """
+      is_valid, error = validate_responses(responses)
+      if not is_valid:
+          raise ValueError(error)
+
+      total = sum(responses)
+      phq2_score = responses[0] + responses[1]
+      item9_score = responses[8]
+
+      # Determine severity
+      severity = ""
+      severity_label = ""
+      for low, high, sev, label in SEVERITY_THRESHOLDS:
+          if low <= total <= high:
+              severity = sev
+              severity_label = label
+              break
+
+      # DSM criteria check
+      dsm_check = check_dsm_criteria(responses)
+
+      result = PHQ9Result(
+          responses=responses,
+          total_score=total,
+          severity=severity,
+          severity_label=severity_label,
+          item9_score=item9_score,
+          suicide_risk_flag=item9_score > 0,
+          phq2_score=phq2_score,
+          phq2_positive=phq2_score >= PHQ2_THRESHOLD,
+          meets_dsm_criteria=dsm_check["probable_mdd"],
+          functional_impairment=functional_impairment,
+      )
+
+      # Safety actions for Item 9
+      if item9_score > 0:
+          result.safety_actions = _generate_safety_actions(item9_score)
+
+      result.recommendations = _generate_recommendations(result)
+      return result
+
+
+  def _generate_safety_actions(item9_score: int) -> list:
+      """
+      Generate immediate safety actions for any endorsement of Item 9.
+
+      ANY positive response on Item 9 requires follow-up, regardless of
+      the overall PHQ-9 score.
+      """
+      actions = [
+          {
+              "priority": "IMMEDIATE",
+              "action": "Conduct suicide risk assessment",
+              "details": [
+                  "Ask directly about suicidal thoughts, plan, intent, and means",
+                  "Use structured tool: Columbia Suicide Severity Rating Scale (C-SSRS)",
+                  "Assess protective factors (social support, reasons for living)",
+                  "Determine level of risk (low, moderate, high, imminent)",
+              ],
+          },
+          {
+              "priority": "IMMEDIATE",
+              "action": "Ensure patient safety",
+              "details": [
+                  "Do NOT leave a high-risk patient alone",
+                  "Remove access to lethal means if possible",
+                  "Contact behavioral health or psychiatry for consultation",
+                  "If imminent risk: emergency psychiatric evaluation",
+              ],
+          },
+          {
+              "priority": "DOCUMENT",
+              "action": "Document and communicate",
+              "details": [
+                  "Document the positive screen and follow-up assessment",
+                  "Communicate risk level to treatment team",
+                  "Develop or update safety plan with patient",
+                  "Provide crisis resources: 988 Suicide & Crisis Lifeline",
+              ],
+          },
+      ]
+
+      if item9_score >= 2:
+          actions.insert(0, {
+              "priority": "CRITICAL",
+              "action": "ELEVATED SUICIDE RISK - Patient endorses suicidal thoughts "
+                        "more than half the days or nearly every day",
+              "details": [
+                  "Immediate in-person safety evaluation required",
+                  "Consider inpatient psychiatric admission",
+                  "Notify attending physician immediately",
+                  "1:1 observation until safety assessment completed",
+              ],
+          })
+
+      return actions
+
+
+  def _generate_recommendations(result: PHQ9Result) -> list:
+      """Generate treatment recommendations based on PHQ-9 severity."""
+      recs = []
+
+      if result.severity == "none_minimal":
+          recs.append({
+              "category": "monitoring",
+              "recommendation": "No treatment indicated for depression at this time",
+              "details": "Rescreen as clinically indicated or at routine visits. "
+                         "USPSTF recommends screening all adults for depression.",
+          })
+
+      elif result.severity == "mild":
+          recs.append({
+              "category": "watchful_waiting",
+              "recommendation": "Watchful waiting with active follow-up",
+              "details": "Repeat PHQ-9 in 2-4 weeks. If persistent, consider active treatment.",
+          })
+          recs.append({
+              "category": "non_pharmacological",
+              "recommendation": "Psychoeducation and lifestyle interventions",
+              "details": "Regular physical exercise (150 min/week), sleep hygiene, "
+                         "social engagement, stress management. Consider guided self-help (CBT-based).",
+          })
+
+      elif result.severity == "moderate":
+          recs.append({
+              "category": "psychotherapy",
+              "recommendation": "Psychotherapy (first-line for moderate depression)",
+              "details": "CBT or interpersonal therapy (IPT). 12-16 sessions. "
+                         "Evidence supports psychotherapy as first-line for moderate depression "
+                         "(APA Practice Guidelines 2010).",
+          })
+          recs.append({
+              "category": "pharmacotherapy",
+              "recommendation": "Consider antidepressant if psychotherapy unavailable or patient preference",
+              "details": "First-line: SSRI (sertraline 50 mg, escitalopram 10 mg). "
+                         "Allow 4-6 weeks for adequate trial. Monitor for side effects "
+                         "and worsening in first 1-2 weeks.",
+          })
+          recs.append({
+              "category": "monitoring",
+              "recommendation": "Repeat PHQ-9 every 2-4 weeks during treatment",
+              "details": "A decrease of >= 5 points indicates treatment response. "
+                         "Target score < 5 (remission).",
+          })
+
+      elif result.severity == "moderately_severe":
+          recs.append({
+              "category": "combined_treatment",
+              "recommendation": "Combined psychotherapy and pharmacotherapy recommended",
+              "details": "Combined treatment is more effective than either alone for "
+                         "moderately severe depression (Cuijpers et al., 2014).",
+          })
+          recs.append({
+              "category": "pharmacotherapy",
+              "recommendation": "Initiate SSRI/SNRI with close follow-up",
+              "details": "First-line: sertraline 50-200 mg, escitalopram 10-20 mg, "
+                         "or duloxetine 60-120 mg. Follow up in 1-2 weeks, then every 2-4 weeks. "
+                         "Assess for suicidality at each visit (especially ages 18-24).",
+          })
+          recs.append({
+              "category": "safety",
+              "recommendation": "Assess suicide risk at every visit",
+              "details": "Moderately severe depression increases suicide risk. "
+                         "Use C-SSRS or Ask Suicide-Screening Questions (ASQ) at each contact.",
+          })
+
+      elif result.severity == "severe":
+          recs.append({
+              "category": "urgent_treatment",
+              "recommendation": "URGENT: Initiate treatment immediately",
+              "details": "Severe depression is associated with significant functional "
+                         "impairment and elevated suicide risk. Do not delay treatment.",
+          })
+          recs.append({
+              "category": "pharmacotherapy",
+              "recommendation": "Start antidepressant medication promptly",
+              "details": "SSRI/SNRI first-line. Consider mirtazapine for insomnia/appetite loss. "
+                         "Bupropion if fatigue/concentration predominant. "
+                         "Follow up within 1 week of initiation.",
+          })
+          recs.append({
+              "category": "psychotherapy",
+              "recommendation": "Concurrent psychotherapy when patient can engage",
+              "details": "CBT or behavioral activation. May need to stabilize with "
+                         "medication before patient can fully participate in therapy.",
+          })
+          recs.append({
+              "category": "referral",
+              "recommendation": "Psychiatric consultation recommended",
+              "details": "For severe depression, consider referral to psychiatry "
+                         "for medication management, especially if suicidal ideation present, "
+                         "psychotic features, or treatment resistance.",
+          })
+          recs.append({
+              "category": "safety",
+              "recommendation": "Comprehensive suicide risk assessment required",
+              "details": "Severe depression significantly elevates suicide risk. "
+                         "Assess at every contact. Consider inpatient evaluation if imminent risk.",
+          })
+
+      # Comorbidity screening
+      if result.total_score >= 10:
+          recs.append({
+              "category": "comorbidity",
+              "recommendation": "Screen for common comorbidities",
+              "details": "Screen for: anxiety (GAD-7), substance use (AUDIT-C, DAST-10), "
+                         "PTSD (PC-PTSD-5), bipolar disorder (MDQ). "
+                         "Assess thyroid function, vitamin D, B12 if not recently checked.",
+          })
+
+      return recs
+
+
+  def score_phq2(item1: int, item2: int) -> dict:
+      """
+      Score the PHQ-2 (ultra-brief depression screen).
+
+      Sensitivity 83%, specificity 92% for MDD at cutoff >= 3.
+      """
+      total = item1 + item2
+      return {
+          "instrument": "PHQ-2",
+          "score": total,
+          "positive_screen": total >= PHQ2_THRESHOLD,
+          "recommendation": (
+              "Positive screen. Administer full PHQ-9."
+              if total >= PHQ2_THRESHOLD
+              else "Negative screen. Rescreen per clinical protocol."
+          ),
+          "reference": "Kroenke K, et al. Med Care. 2003;41(11):1284-1292.",
+      }
+
+
+  def track_treatment_response(scores: list) -> dict:
+      """
+      Track PHQ-9 scores longitudinally for treatment monitoring.
+
+      Response: >= 50% reduction from baseline
+      Remission: PHQ-9 < 5
+      Clinically meaningful change: >= 5-point decrease
+      """
+      if len(scores) < 2:
+          return {"error": "At least 2 scores needed for tracking"}
+
+      baseline = scores[0]
+      current = scores[-1]
+      change = current - baseline
+      pct_change = ((current - baseline) / max(baseline, 1)) * 100
+
+      response = pct_change <= -50 or change <= -5
+      remission = current < 5
+
+      # Assess trajectory
+      trajectory = []
+      for i in range(1, len(scores)):
+          diff = scores[i] - scores[i-1]
+          if diff <= -5:
+              trajectory.append("significant_improvement")
+          elif diff < -2:
+              trajectory.append("mild_improvement")
+          elif diff > 5:
+              trajectory.append("significant_worsening")
+          elif diff > 2:
+              trajectory.append("mild_worsening")
+          else:
+              trajectory.append("stable")
+
+      # Treatment recommendations based on trajectory
+      if remission:
+          tx_rec = ("Remission achieved. Continue current treatment for 4-9 months "
+                    "to prevent relapse (maintenance phase). Gradually taper under "
+                    "medical supervision.")
+      elif response:
+          tx_rec = ("Treatment response achieved but not yet in remission. "
+                    "Optimize current treatment: increase dose, add psychotherapy, "
+                    "or augment medication.")
+      elif len(scores) >= 3 and all(t in ["stable", "mild_worsening", "significant_worsening"]
+                                     for t in trajectory[-2:]):
+          tx_rec = ("Insufficient response after adequate trial. Consider: "
+                    "dose optimization, switching medication, augmentation strategy, "
+                    "or re-evaluation of diagnosis.")
+      else:
+          tx_rec = "Continue current treatment and reassess in 2-4 weeks."
+
+      return {
+          "baseline_score": baseline,
+          "current_score": current,
+          "absolute_change": change,
+          "percent_change": round(pct_change, 1),
+          "treatment_response": response,
+          "remission": remission,
+          "trajectory": trajectory,
+          "treatment_recommendation": tx_rec,
+          "total_assessments": len(scores),
+          "weeks_in_treatment": (len(scores) - 1) * 2,  # Assuming Q2 week assessments
+      }
+
+
+  def get_phq9_questionnaire() -> dict:
+      """Return the full PHQ-9 questionnaire."""
+      return {
+          "instrument": "PHQ-9",
+          "reference": "Kroenke K, et al. J Gen Intern Med. 2001;16(9):606-613.",
+          "instructions": (
+              "Over the LAST 2 WEEKS, how often have you been bothered by "
+              "any of the following problems? Rate each item from 0 to 3."
+          ),
+          "response_options": RESPONSE_OPTIONS,
+          "items": PHQ9_ITEMS,
+          "functional_question": {
+              "text": FUNCTIONAL_QUESTION,
+              "options": {
+                  0: "Not difficult at all",
+                  1: "Somewhat difficult",
+                  2: "Very difficult",
+                  3: "Extremely difficult",
+              },
+          },
+          "scoring": {
+              "range": "0-27",
+              "thresholds": {t[2]: f"{t[0]}-{t[1]}" for t in SEVERITY_THRESHOLDS},
+              "screening_cutoff": "Score >= 10 (sensitivity 88%, specificity 88% for MDD)",
+          },
+          "safety_note": "Item 9 screens for suicidal ideation. ANY positive response "
+                         "requires immediate follow-up safety assessment.",
+      }
+
+
+  def run_phq9(action: str, **kwargs) -> str:
+      """
+      Main entry point for the PHQ-9 Depression Screening Tool.
+
+      Actions:
+          questionnaire: Get the PHQ-9 questionnaire
+          score: Score a completed PHQ-9 (responses: list of 9 ints)
+          phq2: Score PHQ-2 brief screen (item1, item2)
+          track: Track longitudinal scores (scores: list)
+      """
+      if action == "questionnaire":
+          result = get_phq9_questionnaire()
+      elif action == "score":
+          try:
+              phq9_result = score_phq9(
+                  kwargs.get("responses", []),
+                  kwargs.get("functional_impairment"),
+              )
+              result = {
+                  "total_score": phq9_result.total_score,
+                  "severity": phq9_result.severity,
+                  "severity_label": phq9_result.severity_label,
+                  "screening_positive": phq9_result.total_score >= 10,
+                  "meets_dsm_criteria": phq9_result.meets_dsm_criteria,
+                  "phq2_score": phq9_result.phq2_score,
+                  "item9_suicidal_ideation": {
+                      "score": phq9_result.item9_score,
+                      "endorsed": phq9_result.suicide_risk_flag,
+                      "response_label": RESPONSE_OPTIONS.get(phq9_result.item9_score, ""),
+                  },
+                  "safety_actions": phq9_result.safety_actions,
+                  "recommendations": phq9_result.recommendations,
+                  "date": phq9_result.date_administered,
+                  "item_responses": {
+                      PHQ9_ITEMS[i]["text"][:60]: {
+                          "score": r,
+                          "label": RESPONSE_OPTIONS[r],
+                          "dsm_criterion": PHQ9_ITEMS[i]["dsm_criterion"],
+                      }
+                      for i, r in enumerate(phq9_result.responses)
+                  },
+              }
+          except ValueError as e:
+              result = {"error": str(e)}
+      elif action == "phq2":
+          result = score_phq2(kwargs.get("item1", 0), kwargs.get("item2", 0))
+      elif action == "track":
+          result = track_treatment_response(kwargs.get("scores", []))
+      else:
+          result = {
+              "error": f"Unknown action: {action}",
+              "available_actions": ["questionnaire", "score", "phq2", "track"],
+          }
+
+      return json.dumps(result, indent=2)
+
+
+  if __name__ == "__main__":
+      # Moderately severe depression with suicidal ideation
+      print("=== PHQ-9 Scoring (Moderately Severe with Item 9 Positive) ===")
+      print(run_phq9("score", responses=[3, 3, 2, 2, 2, 3, 2, 1, 1],
+                      functional_impairment=2))
+skill_md: |
+  # PHQ-9 Depression Screening Tool
+
+  ## Overview
+
+  The PHQ-9 (Patient Health Questionnaire-9) is the gold standard self-report instrument for depression screening and severity monitoring in clinical practice. This skill implements the complete PHQ-9 with automated scoring, DSM-5 criteria cross-referencing, suicide risk flagging on Item 9, and evidence-based treatment recommendations calibrated to severity level.
+
+  ## Clinical Context
+
+  Major depressive disorder affects approximately 8% of adults in the United States in any given year and is the leading cause of disability worldwide. The USPSTF recommends screening all adults for depression in clinical practices with adequate systems for diagnosis, treatment, and follow-up (Grade B recommendation). The PHQ-9 has a sensitivity of 88% and specificity of 88% for major depression at a cutoff score of 10 (Manea et al., CMAJ 2012).
+
+  ## Features
+
+  - **Full PHQ-9 Scoring:** Nine items scored 0-3, total range 0-27, with five severity levels (none/minimal, mild, moderate, moderately severe, severe)
+  - **PHQ-2 Ultra-Brief Screen:** Two-item initial screen; score >= 3 triggers full PHQ-9
+  - **DSM-5 Criteria Mapping:** Each item maps to a specific DSM-5 criterion for major depressive episode; algorithmic check for probable MDD (>= 5 symptoms including at least one core symptom)
+  - **Item 9 Suicide Risk Flagging:** ANY positive response on Item 9 generates an immediate safety protocol with structured assessment guidance, crisis resources, and documentation requirements
+  - **Treatment Recommendations:** Severity-tiered recommendations from watchful waiting (mild) through combined psychotherapy + pharmacotherapy (severe), aligned with APA Practice Guidelines
+  - **Longitudinal Treatment Monitoring:** Track PHQ-9 scores over time to assess treatment response (>= 50% reduction) and remission (score < 5)
+
+  ## Safety Classification: CAUTION
+
+  The PHQ-9 is a screening tool and does not establish a diagnosis. Item 9 screens for suicidal ideation and requires immediate clinical follow-up regardless of the total score. All patients endorsing suicidal thoughts must receive a comprehensive safety assessment.
+
+  ## References
+
+  - Kroenke K, et al. "The PHQ-9: Validity of a Brief Depression Severity Measure." *J Gen Intern Med*. 2001;16(9):606-613.
+  - Manea L, et al. "Optimal Cut-off Score for Diagnosing Depression with the PHQ-9." *CMAJ*. 2012;184(3):E191-E196.
+  - USPSTF. "Screening for Depression in Adults." *JAMA*. 2016;315(4):380-387.
+  - Lowe B, et al. "Monitoring Depression Treatment Outcomes with the PHQ-9." *Med Care*. 2004;42(12):1194-1201.

@@ -2,17 +2,503 @@ name: "developmental-milestone-tracker"
 display_name: "Developmental Milestone Tracker"
 description: "Track and assess pediatric developmental milestones from birth to 5 years. Flags potential delays using CDC developmental surveillance guidelines."
 author: "Open Medical Skills Community"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/developmental-milestone-tracker"
 category: "pediatrics"
 tags: ["development", "milestones", "pediatrics", "screening"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/developmental-milestone-tracker"
+  npx: "npx skills add gitjfmd/oms-site --skill developmental-milestone-tracker"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/developmental-milestone-tracker ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pediatrics", "developmental-pediatrics"]
 reviewer: "Pending Review"
 date_added: "2026-03-02"
 verified: false
+script_language: "python"
+script_content: |
+  #!/usr/bin/env python3
+  """
+  Developmental Milestone Tracker
+  ================================
+  Pediatric developmental milestone tracking tool based on the CDC's "Learn
+  the Signs. Act Early." program and the 2022 updated milestone checklists.
+
+  Clinical Purpose:
+      Enables systematic developmental surveillance at well-child visits by
+      tracking gross motor, fine motor, language/communication, cognitive,
+      and social-emotional milestones from 2 months through 5 years. Flags
+      potential delays and generates referral recommendations.
+
+  References:
+      - Zubler JM, et al. "Evidence-Informed Milestones for Developmental
+        Surveillance." Pediatrics. 2022;149(3):e2021052138.
+      - CDC "Learn the Signs. Act Early." Program, Updated 2022.
+      - AAP Bright Futures Guidelines for Health Supervision, 4th Ed.
+      - Lipkin PH, Macias MM. "Promoting Optimal Development: Identifying
+        Infants and Young Children with Developmental Disorders Through
+        Developmental Surveillance and Screening." Pediatrics. 2020;145(1).
+
+  DISCLAIMER: This tool supports developmental surveillance, not formal
+  developmental screening. It does not replace validated screening tools
+  (ASQ-3, M-CHAT-R/F, PEDS) or comprehensive developmental evaluation
+  by qualified professionals.
+  """
+
+  import json
+  from dataclasses import dataclass, field
+  from enum import Enum
+  from typing import Optional
+
+
+  class Domain(Enum):
+      GROSS_MOTOR = "gross_motor"
+      FINE_MOTOR = "fine_motor"
+      LANGUAGE = "language_communication"
+      COGNITIVE = "cognitive"
+      SOCIAL_EMOTIONAL = "social_emotional"
+
+
+  class MilestoneStatus(Enum):
+      ACHIEVED = "achieved"
+      EMERGING = "emerging"
+      NOT_YET = "not_yet"
+      CONCERN = "concern"
+
+
+  @dataclass
+  class Milestone:
+      description: str
+      domain: Domain
+      age_months: int
+      is_critical: bool = False  # Red flag if not achieved
+
+
+  # CDC 2022 Updated Milestones (representative selection per age group)
+  # These reflect "most children (>= 75%)" criteria per Zubler et al. 2022
+  MILESTONES = {
+      2: [
+          Milestone("Calms down when spoken to or picked up", Domain.SOCIAL_EMOTIONAL, 2),
+          Milestone("Looks at your face", Domain.SOCIAL_EMOTIONAL, 2),
+          Milestone("Seems happy to see you when you walk up", Domain.SOCIAL_EMOTIONAL, 2),
+          Milestone("Makes sounds other than crying", Domain.LANGUAGE, 2),
+          Milestone("Reacts to loud sounds", Domain.LANGUAGE, 2, is_critical=True),
+          Milestone("Watches you as you move", Domain.COGNITIVE, 2),
+          Milestone("Holds head up when on tummy", Domain.GROSS_MOTOR, 2),
+          Milestone("Moves both arms and both legs", Domain.GROSS_MOTOR, 2, is_critical=True),
+          Milestone("Opens hands briefly", Domain.FINE_MOTOR, 2),
+      ],
+      4: [
+          Milestone("Smiles on own to get your attention", Domain.SOCIAL_EMOTIONAL, 4),
+          Milestone("Chuckles (not full laugh)", Domain.SOCIAL_EMOTIONAL, 4),
+          Milestone("Makes sounds back when you talk", Domain.LANGUAGE, 4),
+          Milestone("Turns head toward sound of your voice", Domain.LANGUAGE, 4, is_critical=True),
+          Milestone("Looks at a toy for several seconds", Domain.COGNITIVE, 4),
+          Milestone("Holds head steady without support", Domain.GROSS_MOTOR, 4, is_critical=True),
+          Milestone("Brings hands to mouth", Domain.FINE_MOTOR, 4),
+          Milestone("Holds a toy when you put it in hand", Domain.FINE_MOTOR, 4),
+      ],
+      6: [
+          Milestone("Knows familiar people", Domain.SOCIAL_EMOTIONAL, 6),
+          Milestone("Likes to look at self in mirror", Domain.SOCIAL_EMOTIONAL, 6),
+          Milestone("Laughs", Domain.SOCIAL_EMOTIONAL, 6),
+          Milestone("Takes turns making sounds with you", Domain.LANGUAGE, 6),
+          Milestone("Blows raspberries (sticks tongue out and blows)", Domain.LANGUAGE, 6),
+          Milestone("Puts things in mouth to explore them", Domain.COGNITIVE, 6),
+          Milestone("Reaches to grab a toy", Domain.COGNITIVE, 6),
+          Milestone("Rolls from tummy to back", Domain.GROSS_MOTOR, 6),
+          Milestone("Pushes up with straight arms when on tummy", Domain.GROSS_MOTOR, 6, is_critical=True),
+          Milestone("Leans on hands to support self when sitting", Domain.GROSS_MOTOR, 6),
+      ],
+      9: [
+          Milestone("Is shy, clingy, or fearful around strangers", Domain.SOCIAL_EMOTIONAL, 9),
+          Milestone("Shows several facial expressions", Domain.SOCIAL_EMOTIONAL, 9),
+          Milestone("Makes different sounds like 'mamamama' or 'babababa'", Domain.LANGUAGE, 9),
+          Milestone("Lifts arms to be picked up", Domain.LANGUAGE, 9),
+          Milestone("Looks when you call their name", Domain.COGNITIVE, 9, is_critical=True),
+          Milestone("Looks for objects when dropped out of sight", Domain.COGNITIVE, 9),
+          Milestone("Bangs two things together", Domain.FINE_MOTOR, 9),
+          Milestone("Sits without support", Domain.GROSS_MOTOR, 9, is_critical=True),
+          Milestone("Gets to sitting position by self", Domain.GROSS_MOTOR, 9),
+      ],
+      12: [
+          Milestone("Plays games with you like pat-a-cake", Domain.SOCIAL_EMOTIONAL, 12),
+          Milestone("Waves bye-bye", Domain.LANGUAGE, 12),
+          Milestone("Calls a parent 'mama' or 'dada' or similar", Domain.LANGUAGE, 12),
+          Milestone("Understands 'no' (pauses or stops briefly)", Domain.LANGUAGE, 12),
+          Milestone("Puts something in a container", Domain.COGNITIVE, 12),
+          Milestone("Looks for things hidden (object permanence)", Domain.COGNITIVE, 12),
+          Milestone("Pulls up to stand", Domain.GROSS_MOTOR, 12, is_critical=True),
+          Milestone("Walks holding on to furniture (cruising)", Domain.GROSS_MOTOR, 12),
+          Milestone("Picks things up between thumb and pointer finger", Domain.FINE_MOTOR, 12),
+      ],
+      15: [
+          Milestone("Copies other children while playing", Domain.SOCIAL_EMOTIONAL, 15),
+          Milestone("Shows you an object they like", Domain.SOCIAL_EMOTIONAL, 15),
+          Milestone("Claps when excited", Domain.SOCIAL_EMOTIONAL, 15),
+          Milestone("Tries to say 1-2 words besides 'mama' or 'dada'", Domain.LANGUAGE, 15),
+          Milestone("Looks at a familiar object when you name it", Domain.LANGUAGE, 15),
+          Milestone("Follows directions given with a gesture", Domain.LANGUAGE, 15),
+          Milestone("Tries to use things the right way (phone, cup, book)", Domain.COGNITIVE, 15),
+          Milestone("Stacks at least 2 small objects", Domain.FINE_MOTOR, 15),
+          Milestone("Takes a few steps on own", Domain.GROSS_MOTOR, 15, is_critical=True),
+      ],
+      18: [
+          Milestone("Moves away from you but looks to make sure you are near", Domain.SOCIAL_EMOTIONAL, 18),
+          Milestone("Points to show you something interesting", Domain.SOCIAL_EMOTIONAL, 18, is_critical=True),
+          Milestone("Tries to say 3 or more words besides 'mama' or 'dada'", Domain.LANGUAGE, 18),
+          Milestone("Follows 1-step directions without gestures", Domain.LANGUAGE, 18),
+          Milestone("Copies you doing chores like sweeping", Domain.COGNITIVE, 18),
+          Milestone("Plays with toys in a simple way like pushing a car", Domain.COGNITIVE, 18),
+          Milestone("Walks without holding on", Domain.GROSS_MOTOR, 18, is_critical=True),
+          Milestone("Scribbles", Domain.FINE_MOTOR, 18),
+          Milestone("Drinks from a cup without a lid", Domain.FINE_MOTOR, 18),
+      ],
+      24: [
+          Milestone("Notices when others are hurt or upset", Domain.SOCIAL_EMOTIONAL, 24),
+          Milestone("Looks at your face to see how to react in new situations", Domain.SOCIAL_EMOTIONAL, 24),
+          Milestone("Points to things in a book when you ask", Domain.LANGUAGE, 24),
+          Milestone("Says at least 2 words together (e.g., 'more milk')", Domain.LANGUAGE, 24, is_critical=True),
+          Milestone("Points to at least 2 body parts when asked", Domain.LANGUAGE, 24),
+          Milestone("Uses more gestures than just waving and pointing", Domain.LANGUAGE, 24),
+          Milestone("Holds something in one hand while using the other", Domain.COGNITIVE, 24),
+          Milestone("Tries to use switches, knobs, or buttons on a toy", Domain.COGNITIVE, 24),
+          Milestone("Kicks a ball", Domain.GROSS_MOTOR, 24),
+          Milestone("Runs", Domain.GROSS_MOTOR, 24),
+          Milestone("Walks (not climbs) up a few stairs with or without help", Domain.GROSS_MOTOR, 24),
+          Milestone("Eats with a spoon", Domain.FINE_MOTOR, 24),
+      ],
+      36: [
+          Milestone("Calms down within 10 minutes after you leave", Domain.SOCIAL_EMOTIONAL, 36),
+          Milestone("Notices other children and joins them to play", Domain.SOCIAL_EMOTIONAL, 36),
+          Milestone("Talks with you in conversation using at least 2 back-and-forth exchanges", Domain.LANGUAGE, 36),
+          Milestone("Asks 'who', 'what', 'where', or 'why' questions", Domain.LANGUAGE, 36),
+          Milestone("Says what action is happening in a picture when asked", Domain.LANGUAGE, 36),
+          Milestone("Says first name when asked", Domain.LANGUAGE, 36),
+          Milestone("Draws a circle when you show how", Domain.COGNITIVE, 36),
+          Milestone("Avoids touching hot objects after you warn them", Domain.COGNITIVE, 36),
+          Milestone("Strings items together (large beads)", Domain.FINE_MOTOR, 36),
+          Milestone("Puts on some clothes by self", Domain.FINE_MOTOR, 36),
+          Milestone("Uses a fork", Domain.FINE_MOTOR, 36),
+          Milestone("Pedals a tricycle", Domain.GROSS_MOTOR, 36),
+      ],
+      48: [
+          Milestone("Pretends to be something else during play", Domain.SOCIAL_EMOTIONAL, 48),
+          Milestone("Asks to go play with children (if no children around)", Domain.SOCIAL_EMOTIONAL, 48),
+          Milestone("Comforts others who are hurt or sad", Domain.SOCIAL_EMOTIONAL, 48),
+          Milestone("Says sentences with 4 or more words", Domain.LANGUAGE, 48),
+          Milestone("Says some words from a song, story, or nursery rhyme", Domain.LANGUAGE, 48),
+          Milestone("Names a few colors of items", Domain.COGNITIVE, 48),
+          Milestone("Tells what comes next in a well-known story", Domain.COGNITIVE, 48),
+          Milestone("Draws a person with 3 or more body parts", Domain.COGNITIVE, 48),
+          Milestone("Catches a large ball most of the time", Domain.GROSS_MOTOR, 48),
+          Milestone("Serves self food or pours water with adult supervision", Domain.FINE_MOTOR, 48),
+          Milestone("Unbuttons some buttons", Domain.FINE_MOTOR, 48),
+          Milestone("Holds crayon or pencil between fingers and thumb", Domain.FINE_MOTOR, 48),
+      ],
+      60: [
+          Milestone("Follows rules or takes turns when playing with other children", Domain.SOCIAL_EMOTIONAL, 60),
+          Milestone("Sings, dances, or acts for you", Domain.SOCIAL_EMOTIONAL, 60),
+          Milestone("Tells a story they heard or made up with at least 2 events", Domain.LANGUAGE, 60),
+          Milestone("Answers simple questions about a short story after you read it", Domain.LANGUAGE, 60),
+          Milestone("Keeps a conversation going with more than 3 back-and-forth exchanges", Domain.LANGUAGE, 60),
+          Milestone("Counts to 10", Domain.COGNITIVE, 60),
+          Milestone("Names some numbers between 1 and 5 when you point to them", Domain.COGNITIVE, 60),
+          Milestone("Uses words about time, like 'yesterday', 'tomorrow'", Domain.COGNITIVE, 60),
+          Milestone("Writes some letters in their name", Domain.FINE_MOTOR, 60),
+          Milestone("Hops on one foot", Domain.GROSS_MOTOR, 60),
+      ],
+  }
+
+  # AAP recommended screening schedule
+  SCREENING_SCHEDULE = {
+      9: ["ASQ-3 or PEDS (general developmental screening)"],
+      18: ["ASQ-3 or PEDS (general)", "M-CHAT-R/F (autism screening)"],
+      24: ["M-CHAT-R/F (autism screening if not done at 18 months)"],
+      30: ["ASQ-3 or PEDS (general developmental screening)"],
+  }
+
+
+  def get_age_bracket(age_months: int) -> int:
+      """Find the closest milestone age bracket at or below the child's age."""
+      brackets = sorted(MILESTONES.keys())
+      applicable = [b for b in brackets if b <= age_months]
+      if not applicable:
+          return brackets[0]
+      return applicable[-1]
+
+
+  def assess_milestones(age_months: int, achieved: dict) -> dict:
+      """
+      Assess a child's developmental milestones.
+
+      Args:
+          age_months: Child's age in months
+          achieved: Dict mapping milestone description to MilestoneStatus value
+                   e.g., {"Holds head up when on tummy": "achieved"}
+
+      Returns:
+          Assessment results with domain analysis and recommendations
+      """
+      bracket = get_age_bracket(age_months)
+      milestones = MILESTONES.get(bracket, [])
+
+      domain_results = {}
+      concerns = []
+      critical_flags = []
+
+      for milestone in milestones:
+          domain = milestone.domain.value
+          if domain not in domain_results:
+              domain_results[domain] = {
+                  "total": 0,
+                  "achieved": 0,
+                  "emerging": 0,
+                  "not_yet": 0,
+                  "concern": 0,
+                  "milestones": [],
+              }
+
+          status_str = achieved.get(milestone.description, "not_yet")
+          try:
+              status = MilestoneStatus(status_str)
+          except ValueError:
+              status = MilestoneStatus.NOT_YET
+
+          domain_results[domain]["total"] += 1
+          domain_results[domain][status.value] += 1
+          domain_results[domain]["milestones"].append({
+              "description": milestone.description,
+              "status": status.value,
+              "is_critical": milestone.is_critical,
+          })
+
+          if status in [MilestoneStatus.NOT_YET, MilestoneStatus.CONCERN]:
+              if milestone.is_critical:
+                  critical_flags.append({
+                      "milestone": milestone.description,
+                      "domain": domain,
+                      "expected_by_months": milestone.age_months,
+                      "severity": "critical",
+                  })
+              else:
+                  concerns.append({
+                      "milestone": milestone.description,
+                      "domain": domain,
+                      "expected_by_months": milestone.age_months,
+                  })
+
+      # Calculate domain percentages
+      domain_summary = {}
+      for domain, results in domain_results.items():
+          total = results["total"]
+          achieved_count = results["achieved"] + results["emerging"]
+          pct = (achieved_count / total * 100) if total > 0 else 0
+          domain_summary[domain] = {
+              "percentage_on_track": round(pct, 1),
+              "total_milestones": total,
+              "achieved": results["achieved"],
+              "emerging": results["emerging"],
+              "not_achieved": results["not_yet"] + results["concern"],
+          }
+
+      # Recommendations
+      recommendations = _generate_recommendations(age_months, critical_flags,
+                                                    concerns, domain_summary)
+
+      # Check if formal screening is recommended at this age
+      screening_due = []
+      for screen_age, tools in SCREENING_SCHEDULE.items():
+          if abs(age_months - screen_age) <= 2:
+              screening_due.extend(tools)
+
+      return {
+          "child_age_months": age_months,
+          "milestone_bracket_months": bracket,
+          "domain_summary": domain_summary,
+          "critical_flags": critical_flags,
+          "concerns": concerns,
+          "recommendations": recommendations,
+          "screening_tools_due": screening_due if screening_due else None,
+          "next_milestone_check": _next_check_age(bracket),
+          "disclaimer": ("Developmental surveillance tool only. Does not replace "
+                         "validated screening instruments or comprehensive "
+                         "developmental evaluation."),
+      }
+
+
+  def _generate_recommendations(age_months: int, critical_flags: list,
+                                 concerns: list, domain_summary: dict) -> list:
+      """Generate clinical recommendations based on milestone assessment."""
+      recommendations = []
+
+      if critical_flags:
+          recommendations.append({
+              "priority": "urgent",
+              "action": "REFER for developmental evaluation",
+              "rationale": (f"{len(critical_flags)} critical milestone(s) not achieved. "
+                           "Critical milestones are those expected in the majority of "
+                           "children by this age. Absence warrants prompt evaluation."),
+              "referrals": ["Developmental-behavioral pediatrician",
+                            "Early Intervention (EI) program (if < 36 months)",
+                            "School district evaluation (if >= 36 months)"],
+          })
+
+      # Check for domain-specific delays
+      delayed_domains = []
+      for domain, summary in domain_summary.items():
+          if summary["percentage_on_track"] < 50:
+              delayed_domains.append(domain)
+
+      if delayed_domains and not critical_flags:
+          recommendations.append({
+              "priority": "high",
+              "action": "Administer validated developmental screening tool",
+              "rationale": (f"Concerns in {len(delayed_domains)} domain(s): "
+                           f"{', '.join(delayed_domains)}. "
+                           "Formal screening recommended to quantify delay."),
+              "suggested_tools": ["ASQ-3", "PEDS", "Bayley-4 (if comprehensive eval needed)"],
+          })
+
+      if concerns and not critical_flags and not delayed_domains:
+          recommendations.append({
+              "priority": "moderate",
+              "action": "Provide anticipatory guidance and recheck at next visit",
+              "rationale": (f"{len(concerns)} milestone(s) not yet achieved. "
+                           "May be within normal variation. Recheck in 1-2 months."),
+          })
+
+      if not critical_flags and not concerns:
+          recommendations.append({
+              "priority": "routine",
+              "action": "Development on track. Continue routine surveillance.",
+              "rationale": "All milestones achieved or emerging for this age bracket.",
+          })
+
+      # Always recommend: promote development
+      recommendations.append({
+          "priority": "routine",
+          "action": "Provide developmental promotion activities",
+          "activities": [
+              "Read together daily",
+              "Encourage age-appropriate play",
+              "Limit screen time per AAP guidelines",
+              "Ensure safe environment for exploration",
+              "Respond to child's cues and communications",
+          ],
+      })
+
+      return recommendations
+
+
+  def _next_check_age(current_bracket: int) -> int:
+      """Determine the next recommended milestone check age."""
+      brackets = sorted(MILESTONES.keys())
+      idx = brackets.index(current_bracket) if current_bracket in brackets else 0
+      if idx + 1 < len(brackets):
+          return brackets[idx + 1]
+      return current_bracket + 12  # Annual after 5 years
+
+
+  def run_milestone_tracker(age_months: int, achieved_milestones: dict = None) -> str:
+      """
+      Main entry point for the Developmental Milestone Tracker.
+
+      Args:
+          age_months: Child's age in months
+          achieved_milestones: Dict of milestone descriptions to status strings
+
+      Returns:
+          JSON assessment results
+      """
+      if age_months < 0 or age_months > 72:
+          return json.dumps({
+              "error": "Age must be between 0 and 72 months (0-6 years)",
+          })
+
+      if achieved_milestones is None:
+          # Return the milestone checklist for this age
+          bracket = get_age_bracket(age_months)
+          milestones = MILESTONES.get(bracket, [])
+          checklist = {}
+          for domain in Domain:
+              domain_milestones = [m for m in milestones if m.domain == domain]
+              if domain_milestones:
+                  checklist[domain.value] = [
+                      {
+                          "description": m.description,
+                          "is_critical": m.is_critical,
+                          "status_options": ["achieved", "emerging", "not_yet", "concern"],
+                      }
+                      for m in domain_milestones
+                  ]
+
+          return json.dumps({
+              "age_months": age_months,
+              "milestone_bracket": bracket,
+              "checklist": checklist,
+              "instructions": "Mark each milestone and re-run with achieved_milestones dict.",
+          }, indent=2)
+
+      result = assess_milestones(age_months, achieved_milestones)
+      return json.dumps(result, indent=2)
+
+
+  if __name__ == "__main__":
+      # Example: 12-month well-child visit
+      print("=== 12-Month Milestone Checklist ===")
+      print(run_milestone_tracker(12))
+      print()
+
+      # Example: Assessment with some delays
+      print("=== 12-Month Assessment with Concerns ===")
+      print(run_milestone_tracker(12, {
+          "Plays games with you like pat-a-cake": "achieved",
+          "Waves bye-bye": "achieved",
+          "Calls a parent 'mama' or 'dada' or similar": "not_yet",
+          "Understands 'no' (pauses or stops briefly)": "emerging",
+          "Puts something in a container": "achieved",
+          "Looks for things hidden (object permanence)": "achieved",
+          "Pulls up to stand": "not_yet",
+          "Walks holding on to furniture (cruising)": "not_yet",
+          "Picks things up between thumb and pointer finger": "achieved",
+      }))
+skill_md: |
+  # Developmental Milestone Tracker
+
+  ## Overview
+
+  The Developmental Milestone Tracker is a clinical surveillance tool for monitoring pediatric developmental progress from birth through 5 years of age. Based on the CDC's 2022 updated "Learn the Signs. Act Early." milestones and the AAP Bright Futures framework, it provides structured checklists across five developmental domains with automated delay detection and referral guidance.
+
+  ## Clinical Context
+
+  Developmental delays affect approximately 1 in 6 children in the United States, yet fewer than half are identified before school entry when early intervention is most effective. The AAP recommends developmental surveillance at every well-child visit, with formal screening at 9, 18, and 30 months. This tool facilitates the surveillance component by providing age-appropriate milestone checklists aligned with the 2022 CDC evidence-based milestone revisions (Zubler et al., Pediatrics 2022).
+
+  ## Developmental Domains Tracked
+
+  - **Gross Motor:** Rolling, sitting, standing, walking, running, climbing
+  - **Fine Motor:** Grasping, manipulation, feeding, drawing, writing
+  - **Language/Communication:** Babbling, words, sentences, comprehension
+  - **Cognitive:** Problem solving, object permanence, pretend play, counting
+  - **Social-Emotional:** Attachment, joint attention, peer interaction, emotion regulation
+
+  ## Key Features
+
+  - Age-appropriate milestone checklists from 2 months through 60 months
+  - Critical milestone flagging for high-priority developmental indicators
+  - Domain-level percentage scoring to identify specific areas of concern
+  - Automated referral recommendations based on the severity and pattern of delays
+  - Integration with AAP-recommended formal screening tool schedule (ASQ-3, M-CHAT-R/F, PEDS)
+  - Developmental promotion activity suggestions for caregivers
+
+  ## Configuration
+
+  Provide the child's age in months and mark each milestone as "achieved", "emerging", "not_yet", or "concern." The tracker returns a comprehensive assessment with domain-specific analysis and prioritized recommendations.
+
+  ## References
+
+  - Zubler JM, et al. "Evidence-Informed Milestones for Developmental Surveillance." *Pediatrics*. 2022;149(3):e2021052138.
+  - Lipkin PH, Macias MM. "Promoting Optimal Development." *Pediatrics*. 2020;145(1):e20193449.
+  - Hagan JF, et al. *Bright Futures: Guidelines for Health Supervision*. 4th Ed. AAP, 2017.

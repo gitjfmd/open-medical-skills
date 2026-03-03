@@ -1,15 +1,16 @@
 name: "medication-administration-safety"
 display_name: "Medication Administration Safety Check"
 description: "Five Rights of medication administration checker for nursing. Verifies right patient, drug, dose, route, and time before medication administration."
-author: "Claude-Ally-Health / WellAlly Tech"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/medication-administration-safety"
 category: "nursing"
 tags: ["medication-safety", "nursing", "five-rights"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/medication-administration-safety"
+  npx: "npx skills add gitjfmd/oms-site --skill medication-administration-safety"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/medication-administration-safety ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["nursing", "pharmacy"]

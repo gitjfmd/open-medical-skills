@@ -38,7 +38,7 @@ function checkRateLimit(ip: string): boolean {
     return false;
   }
 
-  entry.count++;
+  rateLimitMap.set(ip, { ...entry, count: entry.count + 1 });
   return true;
 }
 
@@ -64,8 +64,8 @@ function corsHeaders(env: Env, origin: string | null): Headers {
   } else {
     headers.set('Access-Control-Allow-Origin', env.ALLOWED_ORIGIN);
   }
-  headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   headers.set('Access-Control-Max-Age', '86400');
   return headers;
 }
@@ -82,8 +82,19 @@ function handleOptions(env: Env, request: Request): Response {
 // Input sanitization
 // ---------------------------------------------------------------------------
 
+const MAX_NAME_LENGTH = 80;
+const MAX_DISPLAY_NAME_LENGTH = 120;
+const MAX_DESCRIPTION_LENGTH = 1000;
+const MAX_URL_LENGTH = 300;
+const MAX_TAG_LENGTH = 50;
+const MAX_TAGS_COUNT = 10;
+const MAX_VERSION_LENGTH = 20;
+const MAX_LICENSE_LENGTH = 50;
+const MAX_EVIDENCE_LENGTH = 2000;
+const DEFAULT_SANITIZE_LENGTH = 500;
+
 /** Strip HTML tags and limit string length */
-function sanitize(str: string, maxLength = 500): string {
+function sanitize(str: string, maxLength = DEFAULT_SANITIZE_LENGTH): string {
   return str
     .replace(/<[^>]*>/g, '')  // strip HTML tags
     .replace(/\r/g, '')
@@ -107,6 +118,15 @@ interface ValidationResult {
   valid: boolean;
   errors: string[];
   submission?: SubmissionData;
+}
+
+function sanitizeInstallCommands(install: Record<string, unknown>): SubmissionData['install'] {
+  return {
+    npx: typeof install.npx === 'string' ? sanitize(install.npx, MAX_URL_LENGTH) : undefined,
+    wget: typeof install.wget === 'string' ? sanitize(install.wget, MAX_URL_LENGTH) : undefined,
+    git: typeof install.git === 'string' ? sanitize(install.git, MAX_URL_LENGTH) : undefined,
+    docker: typeof install.docker === 'string' ? sanitize(install.docker, MAX_URL_LENGTH) : undefined,
+  };
 }
 
 function validateSubmission(data: unknown): ValidationResult {
@@ -139,8 +159,8 @@ function validateSubmission(data: unknown): ValidationResult {
     if (!/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(d.name)) {
       errors.push('name: Must be kebab-case (lowercase letters, numbers, hyphens)');
     }
-    if (d.name.length > 80) {
-      errors.push('name: Must be 80 characters or fewer');
+    if (d.name.length > MAX_NAME_LENGTH) {
+      errors.push(`name: Must be ${MAX_NAME_LENGTH} characters or fewer`);
     }
   }
 
@@ -166,28 +186,24 @@ function validateSubmission(data: unknown): ValidationResult {
   }
 
   // Build sanitized submission
+  const installData = d.install as Record<string, unknown> | undefined;
   const submission: SubmissionData = {
-    name: sanitize(d.name as string, 80),
-    display_name: sanitize(d.display_name as string, 120),
-    description: sanitize(d.description as string, 1000),
-    author: sanitize(d.author as string, 120),
-    repository: sanitize(d.repository as string, 300),
+    name: sanitize(d.name as string, MAX_NAME_LENGTH),
+    display_name: sanitize(d.display_name as string, MAX_DISPLAY_NAME_LENGTH),
+    description: sanitize(d.description as string, MAX_DESCRIPTION_LENGTH),
+    author: sanitize(d.author as string, MAX_DISPLAY_NAME_LENGTH),
+    repository: sanitize(d.repository as string, MAX_URL_LENGTH),
     category: d.category as MedicalCategory,
     tags: Array.isArray(d.tags)
-      ? (d.tags as unknown[]).filter((t): t is string => typeof t === 'string').map(t => sanitize(t, 50)).slice(0, 10)
+      ? (d.tags as unknown[]).filter((t): t is string => typeof t === 'string').map(t => sanitize(t, MAX_TAG_LENGTH)).slice(0, MAX_TAGS_COUNT)
       : undefined,
-    version: typeof d.version === 'string' ? sanitize(d.version, 20) : undefined,
-    license: typeof d.license === 'string' ? sanitize(d.license, 50) : undefined,
-    install: typeof d.install === 'object' && d.install !== null
-      ? {
-          npx: typeof (d.install as Record<string, unknown>).npx === 'string' ? sanitize((d.install as Record<string, unknown>).npx as string, 300) : undefined,
-          wget: typeof (d.install as Record<string, unknown>).wget === 'string' ? sanitize((d.install as Record<string, unknown>).wget as string, 300) : undefined,
-          git: typeof (d.install as Record<string, unknown>).git === 'string' ? sanitize((d.install as Record<string, unknown>).git as string, 300) : undefined,
-          docker: typeof (d.install as Record<string, unknown>).docker === 'string' ? sanitize((d.install as Record<string, unknown>).docker as string, 300) : undefined,
-        }
+    version: typeof d.version === 'string' ? sanitize(d.version, MAX_VERSION_LENGTH) : undefined,
+    license: typeof d.license === 'string' ? sanitize(d.license, MAX_LICENSE_LENGTH) : undefined,
+    install: typeof d.install === 'object' && d.install !== null && installData
+      ? sanitizeInstallCommands(installData)
       : undefined,
-    clinical_evidence: typeof d.clinical_evidence === 'string' ? sanitize(d.clinical_evidence, 2000) : undefined,
-    safety_guardrails: typeof d.safety_guardrails === 'string' ? sanitize(d.safety_guardrails, 2000) : undefined,
+    clinical_evidence: typeof d.clinical_evidence === 'string' ? sanitize(d.clinical_evidence, MAX_EVIDENCE_LENGTH) : undefined,
+    safety_guardrails: typeof d.safety_guardrails === 'string' ? sanitize(d.safety_guardrails, MAX_EVIDENCE_LENGTH) : undefined,
   };
 
   return { valid: true, errors: [], submission };
@@ -319,6 +335,157 @@ async function createSubmissionPR(
 }
 
 // ---------------------------------------------------------------------------
+// GitHub OAuth handlers
+// ---------------------------------------------------------------------------
+
+/**
+ * POST /auth/github/callback
+ *
+ * Receives the authorization code from the client, exchanges it with GitHub
+ * for an access token using the client secret (kept server-side), and returns
+ * the access token to the client.
+ */
+async function handleAuthCallback(env: Env, request: Request): Promise<Response> {
+  const origin = request.headers.get('Origin');
+  const headers = corsHeaders(env, origin);
+  headers.set('Content-Type', 'application/json');
+
+  try {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON body' }),
+        { status: 400, headers },
+      );
+    }
+
+    const { code } = body as { code?: string };
+    if (!code || typeof code !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization code' }),
+        { status: 400, headers },
+      );
+    }
+
+    // Exchange the code for an access token with GitHub
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: env.GITHUB_CLIENT_ID,
+        client_secret: env.GITHUB_CLIENT_SECRET,
+        code,
+      }),
+    });
+
+    if (!tokenResponse.ok) {
+      console.error('GitHub token exchange failed:', tokenResponse.status);
+      return new Response(
+        JSON.stringify({ error: 'Failed to exchange code with GitHub' }),
+        { status: 502, headers },
+      );
+    }
+
+    const tokenData = (await tokenResponse.json()) as {
+      access_token?: string;
+      error?: string;
+      error_description?: string;
+    };
+
+    if (tokenData.error || !tokenData.access_token) {
+      return new Response(
+        JSON.stringify({
+          error: tokenData.error_description || tokenData.error || 'GitHub denied the token request',
+        }),
+        { status: 400, headers },
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ access_token: tokenData.access_token }),
+      { status: 200, headers },
+    );
+  } catch (err) {
+    console.error('Auth callback error:', err);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers },
+    );
+  }
+}
+
+/**
+ * GET /auth/user
+ *
+ * Validates the provided Bearer token against the GitHub API and returns
+ * the authenticated user's info. Acts as a proxy so the client can verify
+ * a stored token is still valid.
+ */
+async function handleAuthUser(env: Env, request: Request): Promise<Response> {
+  const origin = request.headers.get('Origin');
+  const headers = corsHeaders(env, origin);
+  headers.set('Content-Type', 'application/json');
+
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return new Response(
+      JSON.stringify({ error: 'Missing or invalid Authorization header' }),
+      { status: 401, headers },
+    );
+  }
+
+  const BEARER_PREFIX_LENGTH = 'Bearer '.length;
+  const token = authHeader.slice(BEARER_PREFIX_LENGTH);
+
+  try {
+    const ghResponse = await fetch('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': 'OMS-Submission-API/1.0',
+      },
+    });
+
+    if (!ghResponse.ok) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired token' }),
+        { status: 401, headers },
+      );
+    }
+
+    const userData = (await ghResponse.json()) as {
+      login: string;
+      id: number;
+      avatar_url: string;
+      name: string | null;
+      html_url: string;
+    };
+
+    return new Response(
+      JSON.stringify({
+        login: userData.login,
+        id: userData.id,
+        avatar_url: userData.avatar_url,
+        name: userData.name,
+        html_url: userData.html_url,
+      }),
+      { status: 200, headers },
+    );
+  } catch (err) {
+    console.error('Auth user error:', err);
+    return new Response(
+      JSON.stringify({ error: 'Failed to verify token' }),
+      { status: 500, headers },
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Request handler
 // ---------------------------------------------------------------------------
 
@@ -395,6 +562,16 @@ export default {
     // POST /api/submit
     if (request.method === 'POST' && url.pathname === '/api/submit') {
       return handleSubmission(env, request);
+    }
+
+    // POST /auth/github/callback — exchange OAuth code for access token
+    if (request.method === 'POST' && url.pathname === '/auth/github/callback') {
+      return handleAuthCallback(env, request);
+    }
+
+    // GET /auth/user — validate token and return user info
+    if (request.method === 'GET' && url.pathname === '/auth/user') {
+      return handleAuthUser(env, request);
     }
 
     // Everything else -> 404

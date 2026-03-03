@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SubmissionForm from "../components/SubmissionForm.tsx";
+import AuthBanner from "../components/SubmitAuthBanner.tsx";
 ---
 
 <BaseLayout title="Submit a Skill" description="Submit a medical AI skill or plugin for physician review and listing.">
@@ -9,6 +10,9 @@ import SubmissionForm from "../components/SubmissionForm.tsx";
     <p class="mt-2 text-slate-600 dark:text-slate-400">
       Contribute to the medical AI community. All submissions are reviewed by physician maintainers.
     </p>
+
+    <!-- Auth status banner -->
+    <AuthBanner client:load />
 
     <!-- Two-path layout -->
     <div class="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">

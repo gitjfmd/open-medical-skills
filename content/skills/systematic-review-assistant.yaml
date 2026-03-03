@@ -1,15 +1,16 @@
 name: "systematic-review-assistant"
 display_name: "Systematic Review & Meta-Analysis Assistant"
 description: "Assists with systematic review methodology including PICO formulation, search strategy development, study selection, and quality assessment using PRISMA guidelines."
-author: "K-Dense-AI"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/systematic-review-assistant"
 category: "research"
 tags: ["systematic-review", "meta-analysis", "prisma", "evidence-synthesis"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/systematic-review-assistant"
+  npx: "npx skills add gitjfmd/oms-site --skill systematic-review-assistant"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/systematic-review-assistant ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["research", "epidemiology"]

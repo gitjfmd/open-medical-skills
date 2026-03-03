@@ -1,15 +1,16 @@
 name: "drug-interaction-checker"
 display_name: "Drug Interaction Safety Checker"
 description: "Real-time drug-drug interaction detection with five-level severity classification (A/B/C/D/X). Checks for drug-disease, drug-dose, and drug-food interactions using FDA and clinical databases."
-author: "Claude-Ally-Health / WellAlly Tech"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/drug-interaction-checker"
 category: "treatment"
 tags: ["drug-interactions", "medication-safety", "pharmacology"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/drug-interaction-checker"
+  npx: "npx skills add gitjfmd/oms-site --skill drug-interaction-checker"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/drug-interaction-checker ~/.claude/skills/"
 evidence_level: "high"
 safety_classification: "safe"
 specialty: ["pharmacy", "clinical-pharmacology"]

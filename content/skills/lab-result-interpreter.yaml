@@ -1,15 +1,16 @@
 name: "lab-result-interpreter"
 display_name: "Lab Result Interpretation Assistant"
 description: "Automatically extract and interpret biochemical test data from lab reports. Provides clinical significance analysis, reference range comparisons, and flags critical values."
-author: "Claude-Ally-Health / WellAlly Tech"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/lab-result-interpreter"
 category: "lab-imaging"
 tags: ["lab-results", "biochemistry", "clinical-pathology"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/lab-result-interpreter"
+  npx: "npx skills add gitjfmd/oms-site --skill lab-result-interpreter"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/lab-result-interpreter ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "caution"
 specialty: ["pathology", "laboratory-medicine"]

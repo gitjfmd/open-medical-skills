@@ -1,15 +1,16 @@
 name: "cpt-coding-assistant"
 display_name: "CPT Procedure Code Assistant"
 description: "AI-driven CPT coding validation and suggestion tool. Validates procedure codes against clinical documentation and identifies potential coding gaps."
-author: "Medikode"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/skills/cpt-coding-assistant"
 category: "administrative"
 tags: ["cpt", "medical-coding", "billing", "reimbursement"]
 version: "1.0.0"
 license: "MIT"
 type: "skill"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/skills/cpt-coding-assistant"
+  npx: "npx skills add gitjfmd/oms-site --skill cpt-coding-assistant"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/skills/cpt-coding-assistant ~/.claude/skills/"
 evidence_level: "moderate"
 safety_classification: "caution"
 specialty: ["medical-coding", "billing"]

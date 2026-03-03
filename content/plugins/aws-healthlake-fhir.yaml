@@ -1,15 +1,16 @@
 name: "aws-healthlake-fhir"
 display_name: "AWS HealthLake FHIR Platform"
 description: "Official AWS MCP server for HealthLake FHIR operations with 11 tools, automatic datastore discovery, and read-only security mode. Supports advanced search with chained parameters, patient-everything operations, and FHIR job management (import/export). 96% test coverage with SigV4 authentication."
-author: "AWS Labs"
-repository: "https://github.com/gitjfmd/open-medical-skills"
+author: "OMS Contributors"
+repository: "https://github.com/gitjfmd/oms-site/tree/main/plugins/aws-healthlake-fhir"
 category: "administrative"
 tags: ["mcp-plugin", "aws", "fhir", "ehr", "enterprise", "cloud"]
 version: "1.0.0"
 license: "Apache-2.0"
 type: "plugin"
 install:
-  git: "git clone https://github.com/gitjfmd/open-medical-skills.git ~/.claude/plugins/aws-healthlake-fhir"
+  npx: "npx skills add gitjfmd/oms-site --skill aws-healthlake-fhir"
+  git: "git clone https://github.com/gitjfmd/oms-site.git && cp -r oms-site/plugins/aws-healthlake-fhir ~/.claude/plugins/"
 evidence_level: "high"
 safety_classification: "restricted"
 specialty: ["health-informatics", "enterprise-health-it"]
