@@ -2,54 +2,48 @@
 
 Risk Adjustment Factor (RAF) score calculator with Hierarchical Condition Category (HCC) capture from encounter documentation for Medicare Advantage.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-administrative
+## Quick Install
 
-## Specialty
-
-health-information-management, value-based-care
-
-## Tags
-
-raf-score, hcc, risk-adjustment, medicare
-
-## Safety Classification
-
-Safe
-
-## Evidence Level
-
-Moderate
-
-## Author
-
-Medikode
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/raf-score-calculator
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill raf-score-calculator
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/raf-score-calculator ~/.claude/skills/
+## What It Does
+
+- Risk Adjustment Factor (RAF) score calculator with Hierarchical Condition Category (HCC) capture from encounter documentation for Medicare Advantage.
+
+## Clinical Use Cases
+
+- Medical coding and billing support
+- Compliance documentation
+- Prior authorization workflows
+
+## Safety & Evidence
+
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** Moderate — Supported by well-designed observational studies or expert consensus guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Find the ICD-10 code for acute exacerbation of COPD with pneumonia."
+```
+
+## Technical Details
+
+- **Category:** administrative
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** raf-score, hcc, risk-adjustment, medicare
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

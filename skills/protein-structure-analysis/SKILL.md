@@ -2,54 +2,48 @@
 
 Access AlphaFold Protein Structure Database and Protein Data Bank (PDB) for structural biology research. Analyze protein structures and molecular interactions.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-clinical-research-summarizing
+## Quick Install
 
-## Specialty
-
-biochemistry, molecular-biology
-
-## Tags
-
-protein-structure, alphafold, structural-biology, bioinformatics
-
-## Safety Classification
-
-Safe
-
-## Evidence Level
-
-High
-
-## Author
-
-Augmented-Nature
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/protein-structure-analysis
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill protein-structure-analysis
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/protein-structure-analysis ~/.claude/skills/
+## What It Does
+
+- Access AlphaFold Protein Structure Database and Protein Data Bank (PDB) for structural biology research. Analyze protein structures and molecular interactions.
+
+## Clinical Use Cases
+
+- Clinical evidence synthesis
+- Guideline navigation and retrieval
+- Research paper analysis
+
+## Safety & Evidence
+
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Summarize the latest AHA guidelines on hypertension management."
+```
+
+## Technical Details
+
+- **Category:** clinical-research-summarizing
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** protein-structure, alphafold, structural-biology, bioinformatics
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

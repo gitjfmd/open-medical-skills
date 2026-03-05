@@ -1,39 +1,47 @@
 # Outbreak Investigation Assistant
 
-## Overview
+Systematic approach to outbreak investigation using CDC guidelines. Assists with case definition, epidemic curve analysis, and source identification.
 
-The Outbreak Investigation Assistant provides structured guidance through the CDC's systematic approach to disease outbreak investigation. It assists public health professionals, infection preventionists, and epidemiologists in conducting rigorous, step-by-step outbreak investigations from initial detection through final reporting.
+## Quick Install
 
-## Clinical Context
+```bash
+npx skills add gitjfmd/open-medical-skills --skill outbreak-investigation
+```
 
-Disease outbreaks require rapid, systematic investigation to identify the source, mode of transmission, and at-risk populations, enabling effective control measures. The CDC's 10-step framework provides a standardized approach used worldwide for investigating outbreaks of foodborne illness, healthcare-associated infections, respiratory pathogens, and emerging infectious diseases.
+## What It Does
 
-Timely outbreak investigation is critical: each day of delay in identifying a common source allows additional exposures and cases. This tool helps investigation teams stay organized and methodical under the time pressure of an active outbreak.
+- Systematic approach to outbreak investigation using CDC guidelines. Assists with case definition, epidemic curve analysis, and source identification.
 
-## Features
+## Clinical Use Cases
 
-- **CDC 10-Step Investigation Guide:** Complete framework with detailed actions, tools, and checklists for each investigation phase
-- **Epidemic Curve Analysis:** Automated analysis of onset dates to classify outbreak patterns (point source, propagated, continuous, mixed) and estimate exposure timing
-- **Attack Rate Calculation:** Calculate attack rates for exposed and unexposed groups
-- **Odds Ratio (Case-Control):** 2x2 table analysis with 95% confidence intervals for case-control studies
-- **Relative Risk (Cohort):** 2x2 table analysis with 95% confidence intervals for cohort studies
+- Disease surveillance and outbreak detection
+- Population health data analysis
+- Epidemiological investigation support
 
-## Investigation Steps Covered
+## Safety & Evidence
 
-1. Verify diagnosis and confirm outbreak
-2. Define cases and conduct active case finding
-3. Descriptive epidemiology (person, place, time)
-4. Develop hypotheses about source and transmission
-5. Evaluate hypotheses with analytic epidemiology
-6. Refine hypotheses and conduct additional studies
-7. Implement control and prevention measures
-8. Communicate findings to stakeholders
-9. Maintain surveillance for new cases
-10. Prepare final investigation report
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
+
+## Example Usage
+
+```
+Prompt: "Analyze outbreak data: 23 cases of gastroenteritis in a school over 5 days."
+```
+
+## Technical Details
+
+- **Category:** public-health
+- **Version:** 1.0.0
+- **Author:** Open Medical Skills Community
+- **License:** MIT
+- **Tags:** outbreak, infectious-disease, epidemiology, cdc
 
 ## References
 
-- CDC. "Principles of Epidemiology in Public Health Practice." 3rd Ed. Self-Study Course SS1978.
-- Goodman RA, et al. *Field Epidemiology*. 3rd Ed. Oxford University Press, 2013.
-- Reingold AL. "Outbreak Investigations -- A Perspective." *Emerg Infect Dis*. 1998;4(1):21-27.
-- WHO. "Foodborne Disease Outbreaks: Guidelines for Investigation and Control." 2008.
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
+
+---
+
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

@@ -1,33 +1,47 @@
 # Nursing Care Plan Generator
 
-## Overview
+Generate evidence-based nursing care plans with NANDA-I diagnoses, NOC outcomes, and NIC interventions. Supports individualized patient care planning.
 
-The Nursing Care Plan Generator assists registered nurses in developing comprehensive, evidence-based care plans using the NANDA-I, NOC, NIC (NNN) linkage framework. This standardized nursing language system connects nursing diagnoses to measurable patient outcomes and specific nursing interventions, promoting consistent, high-quality documentation and interdisciplinary communication.
+## Quick Install
 
-## Clinical Context
+```bash
+npx skills add gitjfmd/open-medical-skills --skill nursing-care-plan
+```
 
-Nursing care plans are foundational documents that guide patient care, facilitate communication among healthcare team members, and support continuity of care across shifts and settings. The NNN linkage framework provides a standardized taxonomy that has been validated across diverse patient populations and clinical settings (Johnson et al., NANDA-NOC-NIC Linkages, 3rd Ed).
+## What It Does
 
-Effective care planning requires clinical judgment to individualize standard templates to each patient's unique needs, preferences, and clinical status. This tool provides the evidence-based template; the nurse applies their clinical expertise to customize it.
+- Generate evidence-based nursing care plans with NANDA-I diagnoses, NOC outcomes, and NIC interventions. Supports individualized patient care planning.
 
-## Features
+## Clinical Use Cases
 
-- **NANDA-I Diagnosis Templates:** Standardized nursing diagnoses with PES format (Problem, Etiology, Signs/Symptoms) and risk diagnosis format
-- **NOC Outcomes:** Measurable patient outcomes with specific indicators and 1-5 Likert scale ratings for baseline and target tracking
-- **NIC Interventions:** Evidence-based nursing interventions with specific activities, frequency recommendations, and rationale citations
-- **NNN Linkages:** Pre-linked diagnosis-outcome-intervention sets based on published NNN linkage evidence
+- Patient assessment and documentation
+- Care plan development and monitoring
+- Medication administration safety checks
 
-## Available Care Plans
+## Safety & Evidence
 
-Current templates include: Impaired Gas Exchange, Risk for Falls, and Acute Pain. Each template includes complete diagnosis definitions, multiple NOC outcomes, and multiple NIC interventions with detailed activity lists.
+- **Safety Classification:** Caution — This skill assists with clinical decisions. Always verify outputs against current guidelines and clinical judgment.
+- **Evidence Level:** Moderate — Supported by well-designed observational studies or expert consensus guidelines.
 
-## Safety Classification: CAUTION
+## Example Usage
 
-Care plans must be individualized to each patient by a licensed nurse. These templates provide a starting framework based on published NNN linkages but do not account for individual patient factors, comorbidities, or institutional policies.
+```
+Prompt: "Create a care plan for a post-operative hip replacement patient."
+```
+
+## Technical Details
+
+- **Category:** nursing
+- **Version:** 1.0.0
+- **Author:** Open Medical Skills Community
+- **License:** MIT
+- **Tags:** nursing-care-plans, nanda, noc, nic
 
 ## References
 
-- Herdman TH, et al. *NANDA International Nursing Diagnoses: Definitions and Classification, 2024-2026*. 13th Ed. Thieme.
-- Moorhead S, et al. *Nursing Outcomes Classification (NOC)*. 6th Ed. Elsevier.
-- Butcher HK, et al. *Nursing Interventions Classification (NIC)*. 7th Ed. Elsevier.
-- Cameron ID, et al. "Interventions for Preventing Falls in Older People." *Cochrane Database Syst Rev*. 2018.
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
+
+---
+
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

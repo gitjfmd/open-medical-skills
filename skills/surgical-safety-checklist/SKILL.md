@@ -1,35 +1,47 @@
 # WHO Surgical Safety Checklist
 
-## Overview
+Digital implementation of the WHO Surgical Safety Checklist for pre-operative, intra-operative, and post-operative verification. Reduces surgical complications and improves team communication.
 
-The WHO Surgical Safety Checklist is a digital implementation of the World Health Organization's evidence-based surgical safety protocol. Introduced in 2008 as part of the WHO "Safe Surgery Saves Lives" initiative, this three-phase checklist has been demonstrated to reduce surgical mortality by 47% and major complications by 36% across diverse hospital settings worldwide (Haynes et al., NEJM 2009).
+## Quick Install
 
-## Clinical Context
+```bash
+npx skills add gitjfmd/open-medical-skills --skill surgical-safety-checklist
+```
 
-An estimated 310 million surgical procedures are performed worldwide each year, with major complication rates of 3-17% and death rates of 0.4-0.8% in developed countries. Many surgical complications are preventable through systematic verification of critical safety steps. The WHO Surgical Safety Checklist addresses the most common categories of surgical error: wrong patient/site/procedure, anesthesia equipment failure, retained foreign bodies, and communication breakdowns.
+## What It Does
 
-## Three Phases
+- Digital implementation of the WHO Surgical Safety Checklist for pre-operative, intra-operative, and post-operative verification. Reduces surgical complications and improves team communication.
 
-### Sign In (Before Anesthesia Induction)
-Verifies patient identity, procedure, consent, and surgical site marking. Assesses anesthesia risks including difficult airway, allergy history, and anticipated blood loss. This is the last reliable opportunity to catch identification errors.
+## Clinical Use Cases
 
-### Time Out (Before Skin Incision)
-Full team introduction and verbal confirmation of patient, procedure, and site. Surgeon briefs on critical steps and anticipated duration. Anesthesiologist reports patient-specific concerns. Nursing confirms sterility and equipment readiness. Antibiotic prophylaxis timing is verified.
+- Pre-operative planning and risk assessment
+- Intra-operative safety checklist management
+- Post-operative care protocol guidance
 
-### Sign Out (Before Patient Leaves OR)
-Procedure documentation verified. Instrument, sponge, and needle counts confirmed. Specimens labeled. Equipment issues documented. Key recovery and management concerns communicated to the entire team.
+## Safety & Evidence
 
-## Features
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
 
-- Complete WHO checklist item set with role assignments (surgeon, anesthesiologist, nurse)
-- Critical item flagging that blocks phase progression if not confirmed
-- Concern escalation protocol for any team member
-- Phase completion verification with summary statistics
-- Detailed phase guides with evidence-based rationale
+## Example Usage
+
+```
+Prompt: "Generate pre-operative checklist for laparoscopic cholecystectomy."
+```
+
+## Technical Details
+
+- **Category:** surgery
+- **Version:** 1.0.0
+- **Author:** Open Medical Skills Community
+- **License:** MIT
+- **Tags:** surgical-safety, who-checklist, patient-safety
 
 ## References
 
-- Haynes AB, et al. "A Surgical Safety Checklist to Reduce Morbidity and Mortality." *N Engl J Med*. 2009;360(5):491-499.
-- de Vries EN, et al. "Effect of a Comprehensive Surgical Safety System on Patient Outcomes." *N Engl J Med*. 2010;363(20):1928-1937.
-- Borchard A, et al. "A Systematic Review of Safety Checklists in Surgery." *Ann Surg*. 2012;256(6):925-933.
-- WHO. *WHO Guidelines for Safe Surgery 2009*. World Health Organization, 2009.
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
+
+---
+
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

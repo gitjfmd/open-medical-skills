@@ -1,36 +1,48 @@
 # Developmental Milestone Tracker
 
-## Overview
+Track and assess pediatric developmental milestones from birth to 5 years. Flags potential delays using CDC developmental surveillance guidelines.
 
-The Developmental Milestone Tracker is a clinical surveillance tool for monitoring pediatric developmental progress from birth through 5 years of age. Based on the CDC's 2022 updated "Learn the Signs. Act Early." milestones and the AAP Bright Futures framework, it provides structured checklists across five developmental domains with automated delay detection and referral guidance.
+## Quick Install
 
-## Clinical Context
+```bash
+npx skills add gitjfmd/open-medical-skills --skill developmental-milestone-tracker
+```
 
-Developmental delays affect approximately 1 in 6 children in the United States, yet fewer than half are identified before school entry when early intervention is most effective. The AAP recommends developmental surveillance at every well-child visit, with formal screening at 9, 18, and 30 months. This tool facilitates the surveillance component by providing age-appropriate milestone checklists aligned with the 2022 CDC evidence-based milestone revisions (Zubler et al., Pediatrics 2022).
+## What It Does
 
-## Developmental Domains Tracked
+- Track and assess pediatric developmental milestones from birth to 5 years. Flags potential delays using CDC developmental surveillance guidelines.
 
-- **Gross Motor:** Rolling, sitting, standing, walking, running, climbing
-- **Fine Motor:** Grasping, manipulation, feeding, drawing, writing
-- **Language/Communication:** Babbling, words, sentences, comprehension
-- **Cognitive:** Problem solving, object permanence, pretend play, counting
-- **Social-Emotional:** Attachment, joint attention, peer interaction, emotion regulation
+## Clinical Use Cases
 
-## Key Features
+- Age-appropriate clinical assessments
+- Growth and developmental monitoring
+- Pediatric dosing calculations
 
-- Age-appropriate milestone checklists from 2 months through 60 months
-- Critical milestone flagging for high-priority developmental indicators
-- Domain-level percentage scoring to identify specific areas of concern
-- Automated referral recommendations based on the severity and pattern of delays
-- Integration with AAP-recommended formal screening tool schedule (ASQ-3, M-CHAT-R/F, PEDS)
-- Developmental promotion activity suggestions for caregivers
+## Safety & Evidence
 
-## Configuration
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
 
-Provide the child's age in months and mark each milestone as "achieved", "emerging", "not_yet", or "concern." The tracker returns a comprehensive assessment with domain-specific analysis and prioritized recommendations.
+## Example Usage
+
+```
+Prompt: "Calculate amoxicillin dose for a 3-year-old weighing 15kg with acute otitis media."
+```
+
+## Technical Details
+
+- **Category:** pediatrics
+- **Version:** 1.0.0
+- **Author:** Open Medical Skills Community
+- **License:** MIT
+- **Tags:** development, milestones, pediatrics, screening
 
 ## References
 
-- Zubler JM, et al. "Evidence-Informed Milestones for Developmental Surveillance." *Pediatrics*. 2022;149(3):e2021052138.
-- Lipkin PH, Macias MM. "Promoting Optimal Development." *Pediatrics*. 2020;145(1):e20193449.
-- Hagan JF, et al. *Bright Futures: Guidelines for Health Supervision*. 4th Ed. AAP, 2017.
+- CDC Developmental Milestones
+- WHO Growth Standards
+- AAP Clinical Guidelines
+
+---
+
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

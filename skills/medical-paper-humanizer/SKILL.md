@@ -2,54 +2,48 @@
 
 Removes signs of AI-generated writing from medical papers and makes them sound more natural. Based on Wikipedia's AI writing guide, adapted for medical literature.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-clinical-research-summarizing
+## Quick Install
 
-## Specialty
-
-medical-writing, research
-
-## Tags
-
-academic-writing, medical-papers, writing-tools
-
-## Safety Classification
-
-Safe
-
-## Evidence Level
-
-Low
-
-## Author
-
-matsuikentaro1
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/medical-paper-humanizer
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill medical-paper-humanizer
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/medical-paper-humanizer ~/.claude/skills/
+## What It Does
+
+- Removes signs of AI-generated writing from medical papers and makes them sound more natural. Based on Wikipedia's AI writing guide, adapted for medical literature.
+
+## Clinical Use Cases
+
+- Clinical evidence synthesis
+- Guideline navigation and retrieval
+- Research paper analysis
+
+## Safety & Evidence
+
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** Low — Based on case reports, expert opinion, or limited evidence. Use with additional clinical validation.
+
+## Example Usage
+
 ```
+Prompt: "Summarize the latest AHA guidelines on hypertension management."
+```
+
+## Technical Details
+
+- **Category:** clinical-research-summarizing
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** academic-writing, medical-papers, writing-tools
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

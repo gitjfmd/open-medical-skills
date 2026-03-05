@@ -2,54 +2,48 @@
 
 Synthesizes clinical evidence from multiple sources including PubMed, Cochrane, and clinical guidelines. Generates evidence summaries with quality grading.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-clinical-research-summarizing
+## Quick Install
 
-## Specialty
-
-research, evidence-based-medicine
-
-## Tags
-
-evidence-synthesis, clinical-guidelines, research
-
-## Safety Classification
-
-Safe
-
-## Evidence Level
-
-Moderate
-
-## Author
-
-Healthcare MCP Public
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/evidence-synthesis-ai
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill evidence-synthesis-ai
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/evidence-synthesis-ai ~/.claude/skills/
+## What It Does
+
+- Synthesizes clinical evidence from multiple sources including PubMed, Cochrane, and clinical guidelines. Generates evidence summaries with quality grading.
+
+## Clinical Use Cases
+
+- Clinical evidence synthesis
+- Guideline navigation and retrieval
+- Research paper analysis
+
+## Safety & Evidence
+
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** Moderate — Supported by well-designed observational studies or expert consensus guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Summarize the latest AHA guidelines on hypertension management."
+```
+
+## Technical Details
+
+- **Category:** clinical-research-summarizing
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** evidence-synthesis, clinical-guidelines, research
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

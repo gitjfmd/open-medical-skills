@@ -2,54 +2,49 @@
 
 AI-assisted emergency department triage tool with evidence-based protocols for rapid patient assessment. Helps prioritize cases based on acuity and clinical presentation.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-emergency
+## Quick Install
 
-## Specialty
-
-emergency-medicine
-
-## Tags
-
-emergency-medicine, triage, acuity-assessment
-
-## Safety Classification
-
-Caution
-
-## Evidence Level
-
-Moderate
-
-## Author
-
-Healthcare MCP Public
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/emergency-triage-protocols
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill emergency-triage-protocols
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/emergency-triage-protocols ~/.claude/skills/
+## What It Does
+
+- AI-assisted emergency department triage tool with evidence-based protocols for rapid patient assessment. Helps prioritize cases based on acuity and clinical presentation.
+
+## Clinical Use Cases
+
+- Rapid triage of incoming emergency patients
+- Protocol-guided resuscitation management
+- Time-critical clinical decision support
+
+## Safety & Evidence
+
+- **Safety Classification:** Caution — This skill assists with clinical decisions. Always verify outputs against current guidelines and clinical judgment.
+- **Evidence Level:** Moderate — Supported by well-designed observational studies or expert consensus guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Patient presents with chest pain, diaphoresis, and shortness of breath. Run ACLS assessment."
+```
+
+## Technical Details
+
+- **Category:** emergency
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** emergency-medicine, triage, acuity-assessment
+
+## References
+
+- American Heart Association (AHA) Guidelines
+- Advanced Cardiac Life Support (ACLS) Protocols
+- Advanced Trauma Life Support (ATLS) Standards
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

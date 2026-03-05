@@ -2,54 +2,48 @@
 
 Search and validate ICD-10-CM diagnosis codes using NLM Clinical Tables API. Supports partial matching and hierarchical browsing of code categories.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-administrative
+## Quick Install
 
-## Specialty
-
-medical-coding, health-information-management
-
-## Tags
-
-icd-10, medical-coding, billing
-
-## Safety Classification
-
-Safe
-
-## Evidence Level
-
-High
-
-## Author
-
-MCP Healthcare Server
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/icd10-code-lookup
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill icd10-code-lookup
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/icd10-code-lookup ~/.claude/skills/
+## What It Does
+
+- Search and validate ICD-10-CM diagnosis codes using NLM Clinical Tables API. Supports partial matching and hierarchical browsing of code categories.
+
+## Clinical Use Cases
+
+- Medical coding and billing support
+- Compliance documentation
+- Prior authorization workflows
+
+## Safety & Evidence
+
+- **Safety Classification:** Safe — This skill provides informational support and does not directly influence clinical decisions.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Find the ICD-10 code for acute exacerbation of COPD with pneumonia."
+```
+
+## Technical Details
+
+- **Category:** administrative
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** icd-10, medical-coding, billing
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

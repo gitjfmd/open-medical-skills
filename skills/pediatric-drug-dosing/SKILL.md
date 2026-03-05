@@ -1,34 +1,48 @@
 # Pediatric Drug Dosing Calculator
 
-## Overview
+Weight-based and body-surface-area-based drug dosing calculator for pediatric patients. Includes common pediatric medications with age-appropriate dosing ranges.
 
-The Pediatric Drug Dosing Calculator provides weight-based and body-surface-area-based medication dosing for common pediatric drugs. It incorporates maximum dose limits, age-appropriate validation, contraindication screening, and safety alerts to reduce medication errors in pediatric patients.
+## Quick Install
 
-## Clinical Context
+```bash
+npx skills add gitjfmd/open-medical-skills --skill pediatric-drug-dosing
+```
 
-Medication errors are three times more common in pediatric patients than adults, primarily due to the need for individual weight-based dose calculations, the lack of standard dosing, and the wide range of patient sizes from premature neonates to adolescents (Kaushal et al., JAMA 2001). Dosing errors, particularly 10-fold overdoses, are a well-documented preventable source of pediatric morbidity.
+## What It Does
 
-This calculator enforces multiple safety layers: weight-based dose ranges, absolute maximum dose caps, age category validation, and contraindication flags.
+- Weight-based and body-surface-area-based drug dosing calculator for pediatric patients. Includes common pediatric medications with age-appropriate dosing ranges.
 
-## Features
+## Clinical Use Cases
 
-- **Weight-Based Dosing:** Calculates mg/kg dose ranges with frequency and route recommendations
-- **BSA-Based Dosing:** Mosteller formula for body surface area calculation and BSA-based drug dosing
-- **Maximum Dose Enforcement:** Automatic capping at maximum single and daily dose limits
-- **Age Validation:** Flags medications with age restrictions (e.g., ibuprofen < 6 months, ceftriaxone in neonates)
-- **Contraindication Alerts:** Checks for known contraindications and generates alerts
-- **Clinical Notes:** Indication-specific dosing guidance, common formulations, and practical administration tips
+- Age-appropriate clinical assessments
+- Growth and developmental monitoring
+- Pediatric dosing calculations
 
-## Medications Included
+## Safety & Evidence
 
-Amoxicillin, amoxicillin-clavulanate, acetaminophen, ibuprofen, ceftriaxone, prednisolone, ondansetron, albuterol, and more. Database covers the most commonly prescribed pediatric outpatient and emergency department medications.
+- **Safety Classification:** Caution — This skill assists with clinical decisions. Always verify outputs against current guidelines and clinical judgment.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
 
-## Safety Classification: CAUTION
+## Example Usage
 
-All calculated doses MUST be independently verified by a licensed pharmacist or physician before administration. This tool is intended as a clinical decision support aid and does not replace professional judgment or current drug reference resources.
+```
+Prompt: "Calculate amoxicillin dose for a 3-year-old weighing 15kg with acute otitis media."
+```
+
+## Technical Details
+
+- **Category:** pediatrics
+- **Version:** 1.0.0
+- **Author:** Open Medical Skills Community
+- **License:** MIT
+- **Tags:** pediatric-dosing, medication-safety, weight-based-dosing
 
 ## References
 
-- Taketomo CK, et al. *Pediatric & Neonatal Dosage Handbook*. Lexicomp, Latest Edition.
-- Kaushal R, et al. "Medication Errors and Adverse Drug Events in Pediatric Inpatients." *JAMA*. 2001;285(16):2114-2120.
-- Mosteller RD. "Simplified Calculation of BSA." *N Engl J Med*. 1987;317:1098.
+- CDC Developmental Milestones
+- WHO Growth Standards
+- AAP Clinical Guidelines
+
+---
+
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

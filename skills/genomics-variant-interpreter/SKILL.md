@@ -2,54 +2,48 @@
 
 Interpret genomic variants using ClinVar, gnomAD, and other genomic databases. Provides pathogenicity classification and clinical significance assessment.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-clinical-research-summarizing
+## Quick Install
 
-## Specialty
-
-medical-genetics, genomics
-
-## Tags
-
-genomics, variants, precision-medicine, genetics
-
-## Safety Classification
-
-Restricted
-
-## Evidence Level
-
-High
-
-## Author
-
-K-Dense-AI
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/genomics-variant-interpreter
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill genomics-variant-interpreter
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/genomics-variant-interpreter ~/.claude/skills/
+## What It Does
+
+- Interpret genomic variants using ClinVar, gnomAD, and other genomic databases. Provides pathogenicity classification and clinical significance assessment.
+
+## Clinical Use Cases
+
+- Clinical evidence synthesis
+- Guideline navigation and retrieval
+- Research paper analysis
+
+## Safety & Evidence
+
+- **Safety Classification:** Restricted — This skill handles sensitive clinical data or influences treatment decisions. Requires physician oversight and institutional authorization.
+- **Evidence Level:** High — Based on systematic reviews, randomized controlled trials, or authoritative clinical guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Summarize the latest AHA guidelines on hypertension management."
+```
+
+## Technical Details
+
+- **Category:** clinical-research-summarizing
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** genomics, variants, precision-medicine, genetics
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*

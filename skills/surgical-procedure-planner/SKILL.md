@@ -2,54 +2,48 @@
 
 Pre-operative planning tool for surgical procedures. Assists with procedure selection, anatomical considerations, equipment checklists, and patient positioning protocols.
 
-## Category
+> **Status:** In Development — Implementation in progress. Core functionality defined, full feature set coming soon.
 
-surgery
+## Quick Install
 
-## Specialty
-
-surgery
-
-## Tags
-
-surgical-planning, operative-planning, pre-op
-
-## Safety Classification
-
-Caution
-
-## Evidence Level
-
-Moderate
-
-## Author
-
-K-Dense-AI
-
-## Version
-
-1.0.0
-
-## License
-
-MIT
-
-## Repository
-
-https://github.com/gitjfmd/open-medical-skills/tree/main/skills/surgical-procedure-planner
-
-## Installation
-
-**npx:**
 ```bash
 npx skills add gitjfmd/open-medical-skills --skill surgical-procedure-planner
 ```
 
-**git:**
-```bash
-git clone https://github.com/gitjfmd/open-medical-skills.git && cp -r open-medical-skills/skills/surgical-procedure-planner ~/.claude/skills/
+## What It Does
+
+- Pre-operative planning tool for surgical procedures. Assists with procedure selection, anatomical considerations, equipment checklists, and patient positioning protocols.
+
+## Clinical Use Cases
+
+- Pre-operative planning and risk assessment
+- Intra-operative safety checklist management
+- Post-operative care protocol guidance
+
+## Safety & Evidence
+
+- **Safety Classification:** Caution — This skill assists with clinical decisions. Always verify outputs against current guidelines and clinical judgment.
+- **Evidence Level:** Moderate — Supported by well-designed observational studies or expert consensus guidelines.
+
+## Example Usage
+
 ```
+Prompt: "Generate pre-operative checklist for laparoscopic cholecystectomy."
+```
+
+## Technical Details
+
+- **Category:** surgery
+- **Version:** 1.0.0
+- **Author:** OMS Contributors
+- **License:** MIT
+- **Tags:** surgical-planning, operative-planning, pre-op
+
+## References
+
+- Evidence-based clinical guidelines
+- Peer-reviewed medical literature
 
 ---
 
-*This skill is part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills), a curated marketplace of medical AI skills maintained by physicians for physicians and the healthcare industry.*
+*Part of [Open Medical Skills](https://github.com/gitjfmd/open-medical-skills) — physician-curated AI skills for healthcare.*
