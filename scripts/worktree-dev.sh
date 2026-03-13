@@ -53,6 +53,13 @@ if [[ ! -d "$WT_DIR" ]]; then
   ln -sf "$(pwd)/data" "$WT_DIR/data" 2>/dev/null || true
   ln -sf "$(pwd)/.env" "$WT_DIR/.env" 2>/dev/null || true
 
+  # Symlink CLI orchestration configs
+  ln -sfn "$(pwd)/GEMINI.md" "$WT_DIR/GEMINI.md" 2>/dev/null || true
+  ln -sfn "$(pwd)/AGENTS.md" "$WT_DIR/AGENTS.md" 2>/dev/null || true
+  ln -sfn "$(pwd)/AGENTS" "$WT_DIR/AGENTS" 2>/dev/null || true
+  ln -sfn "$(pwd)/.claude" "$WT_DIR/.claude" 2>/dev/null || true
+  ln -sf "$(pwd)/.mcp.json" "$WT_DIR/.mcp.json" 2>/dev/null || true
+
   # Install dependencies
   echo "Installing dependencies in $WT_DIR..."
   (cd "$WT_DIR" && pnpm install)
