@@ -41,6 +41,11 @@
   --color-safety-caution: #F59E0B;
   --color-safety-restricted: #EF4444;
 
+  /* FDA enforcement status colors */
+  --color-fda-ongoing: #EF4444;
+  --color-fda-terminated: #22C55E;
+  --color-fda-completed: #F59E0B;
+
   /* Fonts */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
