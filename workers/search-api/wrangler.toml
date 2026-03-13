@@ -1,0 +1,22 @@
+name = "oms-search-api"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+
+[vars]
+# These are overridden in production via secrets
+QDRANT_URL = "http://localhost:6333"
+SURREALDB_URL = "http://localhost:8000"
+SUPABASE_URL = "http://localhost:8000"
+OLLAMA_URL = "http://localhost:11434"
+QDRANT_COLLECTION = "tu_tools_nomic"
+EMBED_MODEL = "nomic-embed-text"
+ALLOWED_ORIGIN = "http://localhost:4321"
+
+[env.production]
+vars = { ALLOWED_ORIGIN = "https://openmedica.us" }
+
+# In production, these route through Cloudflare Tunnel:
+# QDRANT_URL → qdrant.oms.internal (tunnel ingress)
+# SURREALDB_URL → surrealdb.oms.internal (tunnel ingress)
+# SUPABASE_URL → supabase.oms.internal (tunnel ingress)
+# OLLAMA_URL → ollama.oms.internal (tunnel ingress)
