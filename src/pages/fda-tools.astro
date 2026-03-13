@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FdaToolsApp from '../features/fda-tools/components/FdaToolsApp';
+---
+
+<BaseLayout title="FDA Drug Shortage Tracker" description="Real-time FDA drug shortage and enforcement data for healthcare professionals. Search, filter, and track drug recalls and safety alerts.">
+  <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
+        FDA Drug Shortage Tracker
+      </h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-400">
+        Real-time drug enforcement and shortage data from the U.S. Food and Drug Administration.
+      </p>
+    </div>
+    <FdaToolsApp client:load />
+  </section>
+</BaseLayout>
