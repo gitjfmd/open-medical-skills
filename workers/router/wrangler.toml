@@ -1,0 +1,10 @@
+name = "openmedica-router"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+routes = [{ pattern = "openmedica.us/*", zone_name = "openmedica.us" }]
+
+[vars]
+PAGES_URL = "https://open-medical-skills.pages.dev"
+
+[env.production]
+vars = { PAGES_URL = "https://open-medical-skills.pages.dev" }

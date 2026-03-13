@@ -2,13 +2,9 @@ name: Deploy Site
 
 on:
   push:
+    branches: [main, dev]
+  pull_request:
     branches: [main]
-    paths:
-      - "content/**"
-      - "src/**"
-      - "public/**"
-      - "package.json"
-      - "pnpm-lock.yaml"
   workflow_dispatch:
     inputs:
       reason:
@@ -19,10 +15,11 @@ on:
 permissions:
   contents: read
   deployments: write
+  pull-requests: write
 
-# Allow only one concurrent deployment
+# Allow only one concurrent deployment per branch
 concurrency:
-  group: "cloudflare-pages"
+  group: "cloudflare-pages-${{ github.ref }}"
   cancel-in-progress: false
 
 jobs:
@@ -37,15 +34,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -70,9 +66,16 @@ jobs:
           echo "All content files valid."
 
       - name: Build site
-        run: pnpm run build
+        run: pnpm build
         env:
           NODE_ENV: production
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
 
   # ──────────────────────────────────────────────────
   # Job 2: Deploy to Cloudflare Pages
@@ -86,42 +89,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: "22"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build site
-        run: pnpm run build
-        env:
-          NODE_ENV: production
+          name: dist
+          path: dist/
 
       - name: Deploy to Cloudflare Pages
-        id: deployment
-        uses: cloudflare/pages-action@v1
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: open-medical-skills
-          directory: dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=open-medical-skills --branch=${{ github.ref_name }}
+
+      - name: Comment PR with preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview deployed: ${{ steps.deploy.outputs.deployment-url }}`
+            })
 
   # ──────────────────────────────────────────────────
-  # Job 3: Post-deployment notifications
+  # Job 3: Post-deployment notifications (production only)
   # ──────────────────────────────────────────────────
   notify:
     needs: deploy
     runs-on: ubuntu-latest
     name: Post-Deploy Notifications
-    if: success()
+    if: success() && github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout repository
@@ -212,12 +213,3 @@ jobs:
               fi
             done
           fi
-
-  # ──────────────────────────────────────────────────
-  # Job 4: Auto-merge approved PRs (runs on PR approval)
-  # ──────────────────────────────────────────────────
-  # NOTE: Auto-merge is handled separately via branch protection rules.
-  # Configure in GitHub Settings > Branches > main:
-  #   - Require pull request reviews (1 review from physician-reviewers team)
-  #   - Require status checks (validate-pr-submission must pass)
-  #   - Enable auto-merge for PRs with the 'approved' label

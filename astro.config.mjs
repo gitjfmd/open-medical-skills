@@ -4,7 +4,8 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://openmedicalskills.org',
+  site: 'https://openmedica.us',
+  base: '/open-medical-skills',
   output: 'static',
   integrations: [
     react(),
