@@ -55,3 +55,10 @@ yarn-error.log*
 
 # Handoff (session-specific)
 HANDOFF.md
+
+# Infrastructure (private)
+.mcp.json
+GUARDRAILS.md
+refs/
+data/
+wrangler.local.toml

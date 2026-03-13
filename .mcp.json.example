@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "kubernetes": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-server-kubernetes"],
+      "env": {
+        "KUBECONFIG": "$HOME/.kube/config"
+      }
+    },
+    "oms-postgres": {
+      "type": "url",
+      "url": "http://YOUR_MCP_TOOLBOX_HOST:YOUR_PORT/mcp"
+    }
+  }
+}

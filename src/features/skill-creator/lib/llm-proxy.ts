@@ -49,6 +49,48 @@ export const PROVIDER_PRESETS: Record<string, Partial<LLMProviderConfig>> = {
     maxTokens: 2048,
     temperature: 0.7,
   },
+  openrouter: {
+    name: 'OpenRouter',
+    endpoint: 'https://openrouter.ai/api/v1',
+    model: 'google/gemma-3-27b-it:free',
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
+  runpod: {
+    name: 'RunPod',
+    endpoint: 'https://api.runpod.ai/v2/{YOUR_ENDPOINT_ID}/openai/v1',
+    model: 'default',
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
+  together: {
+    name: 'Together AI',
+    endpoint: 'https://api.together.xyz/v1',
+    model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
+  groq: {
+    name: 'Groq',
+    endpoint: 'https://api.groq.com/openai/v1',
+    model: 'llama-3.3-70b-versatile',
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
+  huggingface: {
+    name: 'Hugging Face',
+    endpoint: 'https://router.huggingface.co/v1',
+    model: 'Qwen/Qwen2.5-72B-Instruct',
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
+  mistral: {
+    name: 'Mistral AI',
+    endpoint: 'https://api.mistral.ai/v1',
+    model: 'mistral-small-latest',
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
 };
 
 const STORAGE_KEY = 'oms-llm-provider';
@@ -85,6 +127,37 @@ export function getDefaultProvider(): LLMProviderConfig {
 }
 
 /**
+ * Fetch available models from the LLM endpoint.
+ * Works with Ollama, LMStudio, vLLM, and any OpenAI-compatible API.
+ */
+export async function fetchAvailableModels(provider: LLMProviderConfig): Promise<string[]> {
+  try {
+    const endpoint = provider.endpoint.replace(/\/+$/, '');
+    const headers: Record<string, string> = {};
+    if (provider.apiKey) {
+      headers['Authorization'] = `Bearer ${provider.apiKey}`;
+    }
+
+    const res = await fetch(`${endpoint}/models`, {
+      method: 'GET',
+      headers,
+      signal: AbortSignal.timeout(5000),
+    });
+
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    // OpenAI-compatible format: { data: [{ id: "model-name", ... }] }
+    if (data.data && Array.isArray(data.data)) {
+      return data.data.map((m: any) => m.id).filter(Boolean).sort();
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Send a refinement request to the configured LLM provider.
  *
  * Constructs the messages array with the section system prompt and user content,
@@ -114,11 +187,27 @@ export async function refineSection(request: LLMRequest): Promise<LLMResponse> {
     stream: false,
   };
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(30000),
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      throw new Error(
+        'Request timed out after 30 seconds. Check your LLM endpoint in Settings — if using a local model (Ollama/LMStudio), make sure it is reachable from your browser.'
+      );
+    }
+    if (err instanceof TypeError) {
+      throw new Error(
+        'Cannot reach the LLM endpoint. If accessing OMS remotely, use the server\'s IP instead of "localhost" in Settings.'
+      );
+    }
+    throw err;
+  }
 
   if (!res.ok) {
     const errText = await res.text().catch(() => 'Unknown error');
@@ -192,11 +281,27 @@ export async function* streamRefineSection(
     stream: true,
   };
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(60000),
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      throw new Error(
+        'Streaming request timed out after 60 seconds. Check your LLM endpoint in Settings — if using a local model (Ollama/LMStudio), make sure it is reachable from your browser.'
+      );
+    }
+    if (err instanceof TypeError) {
+      throw new Error(
+        'Cannot reach the LLM endpoint. If accessing OMS remotely, use the server\'s IP instead of "localhost" in Settings.'
+      );
+    }
+    throw err;
+  }
 
   if (!res.ok) {
     const errText = await res.text().catch(() => 'Unknown error');

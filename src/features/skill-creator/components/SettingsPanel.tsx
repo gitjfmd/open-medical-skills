@@ -7,7 +7,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import type { LLMProviderConfig } from '../types';
-import { PROVIDER_PRESETS, testConnection } from '../lib/llm-proxy';
+import { PROVIDER_PRESETS, testConnection, fetchAvailableModels } from '../lib/llm-proxy';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -26,12 +26,16 @@ export default function SettingsPanel({
 }: SettingsPanelProps) {
   const [local, setLocal] = useState<LLMProviderConfig>(provider);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('idle');
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [loadingModels, setLoadingModels] = useState(false);
 
   // Reset local state when panel opens
   useEffect(() => {
     if (isOpen) {
       setLocal(provider);
       setConnectionStatus('idle');
+      setAvailableModels([]);
+      setLoadingModels(false);
     }
   }, [isOpen, provider]);
 
@@ -60,10 +64,29 @@ export default function SettingsPanel({
     }
   }, []);
 
+  const handleFetchModels = useCallback(async () => {
+    setLoadingModels(true);
+    const models = await fetchAvailableModels(local);
+    setAvailableModels(models);
+    setLoadingModels(false);
+    // Auto-select first model if current model isn't in the list
+    if (models.length > 0 && !models.includes(local.model)) {
+      setLocal((prev) => ({ ...prev, model: models[0] }));
+    }
+  }, [local]);
+
   const handleTestConnection = useCallback(async () => {
     setConnectionStatus('testing');
     const ok = await testConnection(local);
     setConnectionStatus(ok ? 'connected' : 'failed');
+    if (ok) {
+      // Auto-fetch available models on successful connection
+      const models = await fetchAvailableModels(local);
+      setAvailableModels(models);
+      if (models.length > 0 && !models.includes(local.model)) {
+        setLocal((prev) => ({ ...prev, model: models[0] }));
+      }
+    }
   }, [local]);
 
   const handleSave = useCallback(() => {
@@ -102,26 +125,110 @@ export default function SettingsPanel({
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
+          {/* Remote access tip */}
+          <div className="rounded-lg border border-amber-800/50 bg-amber-950/30 px-3.5 py-3">
+            <p className="text-xs text-amber-300 leading-relaxed">
+              <span className="font-semibold">Remote access?</span>{' '}
+              If you are accessing OMS from another device, use your server's IP address
+              (e.g., <code className="rounded bg-amber-900/40 px-1 py-0.5 text-[11px] font-mono">http://YOUR_SERVER_IP:11434/v1</code>)
+              instead of <code className="rounded bg-amber-900/40 px-1 py-0.5 text-[11px] font-mono">localhost</code>.
+            </p>
+          </div>
+
           {/* Provider presets */}
           <div>
             <label className="block text-xs font-medium text-slate-400 mb-2">
               Quick Setup
             </label>
-            <div className="grid grid-cols-2 gap-2">
-              {Object.entries(PROVIDER_PRESETS).map(([key, preset]) => (
-                <button
-                  key={key}
-                  onClick={() => handlePresetSelect(key)}
-                  className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-                    local.name === preset.name
-                      ? 'border-cyan-600 bg-cyan-950/30 text-cyan-400'
-                      : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200'
-                  }`}
-                >
-                  {preset.name}
-                </button>
-              ))}
+
+            {/* Local / Self-Hosted */}
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+              Local / Self-Hosted
+            </p>
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              {(
+                [
+                  { key: 'ollama', badge: null },
+                  { key: 'lmstudio', badge: null },
+                  { key: 'vllm', badge: null },
+                  { key: 'runpod', badge: null },
+                ] as const
+              ).map(({ key, badge }) => {
+                const preset = PROVIDER_PRESETS[key];
+                return (
+                  <button
+                    key={key}
+                    onClick={() => handlePresetSelect(key)}
+                    className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                      local.name === preset.name
+                        ? 'border-cyan-600 bg-cyan-950/30 text-cyan-400'
+                        : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200'
+                    }`}
+                  >
+                    {preset.name}
+                    {badge && (
+                      <span className="ml-1.5 rounded-full bg-slate-800 px-1.5 py-0.5 text-[9px] font-medium text-slate-500">
+                        {badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Cloud APIs */}
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+              Cloud APIs
+            </p>
+            <div className="grid grid-cols-3 gap-2 mb-3">
+              {(
+                [
+                  { key: 'deepseek', badge: 'Recommended' },
+                  { key: 'openrouter', badge: 'Free tier' },
+                  { key: 'groq', badge: 'Fast' },
+                  { key: 'together', badge: null },
+                  { key: 'huggingface', badge: null },
+                  { key: 'mistral', badge: null },
+                  { key: 'openai', badge: null },
+                ] as const
+              ).map(({ key, badge }) => {
+                const preset = PROVIDER_PRESETS[key];
+                return (
+                  <button
+                    key={key}
+                    onClick={() => handlePresetSelect(key)}
+                    className={`rounded-lg border px-3 py-2 text-left transition-colors ${
+                      local.name === preset.name
+                        ? 'border-cyan-600 bg-cyan-950/30'
+                        : 'border-slate-700 hover:border-slate-600'
+                    }`}
+                  >
+                    <span className={`block text-xs font-medium ${
+                      local.name === preset.name ? 'text-cyan-400' : 'text-slate-300'
+                    }`}>
+                      {preset.name}
+                    </span>
+                    {badge && (
+                      <span className={`mt-0.5 inline-block rounded-full px-1.5 py-0.5 text-[9px] font-medium ${
+                        badge === 'Recommended'
+                          ? 'bg-emerald-900/40 text-emerald-400'
+                          : badge === 'Free tier'
+                            ? 'bg-violet-900/40 text-violet-400'
+                            : badge === 'Fast'
+                              ? 'bg-amber-900/40 text-amber-400'
+                              : 'bg-slate-800 text-slate-500'
+                      }`}>
+                        {badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <p className="text-[10px] text-slate-600 leading-relaxed">
+              All providers use the OpenAI-compatible API format. You can use any endpoint that supports <code className="rounded bg-slate-800 px-1 py-0.5 text-[9px] font-mono text-slate-400">/v1/chat/completions</code>.
+            </p>
           </div>
 
           {/* Endpoint */}
@@ -141,17 +248,46 @@ export default function SettingsPanel({
 
           {/* Model */}
           <div>
-            <label htmlFor="settings-model" className="block text-xs font-medium text-slate-400 mb-1">
-              Model
-            </label>
-            <input
-              id="settings-model"
-              type="text"
-              value={local.model}
-              onChange={(e) => setLocal((prev) => ({ ...prev, model: e.target.value }))}
-              placeholder="llama3"
-              className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-600"
-            />
+            <div className="flex items-center justify-between mb-1">
+              <label htmlFor="settings-model" className="block text-xs font-medium text-slate-400">
+                Model
+              </label>
+              {availableModels.length === 0 && (
+                <button
+                  onClick={handleFetchModels}
+                  disabled={loadingModels}
+                  className="text-[10px] text-cyan-500 hover:text-cyan-400 disabled:opacity-50"
+                >
+                  {loadingModels ? 'Loading...' : 'Detect Models'}
+                </button>
+              )}
+            </div>
+            {availableModels.length > 0 ? (
+              <select
+                id="settings-model"
+                value={local.model}
+                onChange={(e) => setLocal((prev) => ({ ...prev, model: e.target.value }))}
+                className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-white focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-600"
+              >
+                {availableModels.map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id="settings-model"
+                type="text"
+                value={local.model}
+                onChange={(e) => setLocal((prev) => ({ ...prev, model: e.target.value }))}
+                placeholder="llama3"
+                className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-600"
+              />
+            )}
+            {availableModels.length > 0 && (
+              <p className="mt-1 text-[10px] text-slate-600">
+                {availableModels.length} model{availableModels.length !== 1 ? 's' : ''} detected
+              </p>
+            )}
           </div>
 
           {/* API Key */}
@@ -254,7 +390,7 @@ export default function SettingsPanel({
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                Connection failed. Check endpoint and ensure CORS is enabled.
+                Connection failed. Verify the endpoint URL is correct, the service is running, and CORS is enabled. If accessing remotely, replace localhost with the server IP.
               </p>
             )}
           </div>

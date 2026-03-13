@@ -272,6 +272,16 @@ export default function SkillCreatorApp() {
       if (!userInput.trim() || state.isGenerating) return;
 
       setError(null);
+
+      // Check if a localhost endpoint will work when accessing OMS remotely
+      const isRemoteAccess = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      const isLocalhostEndpoint = state.provider.endpoint.includes('localhost') || state.provider.endpoint.includes('127.0.0.1');
+
+      if (isLocalhostEndpoint && isRemoteAccess) {
+        setError('Your LLM endpoint is set to localhost, but you are accessing OMS remotely. Open Settings to configure a reachable endpoint (e.g., your server\'s IP address or a cloud API like DeepSeek).');
+        return;
+      }
+
       dispatch({ type: 'SET_GENERATING', value: true });
       dispatch({ type: 'SET_STREAMING_CONTENT', content: '' });
 
