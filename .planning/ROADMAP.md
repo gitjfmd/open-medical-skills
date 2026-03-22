@@ -33,7 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. `Open-Medica/open-medical-skills` exists on GitHub with MIT license and is publicly visible
   2. All 49 skill YAMLs, 5 plugin YAMLs, skill source dirs, plugin source dirs, CLI, logo, and scripts are present in the repo
   3. The repo has a `dev` branch created from `main`
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 01-01-PLAN.md — Complete public repo with content, CLI, logo, scripts, docs, LICENSE fix, and dev branch
 
 ### Phase 2: Community Standards
 **Goal**: The public repo meets GitHub community standards and is ready for external contributors
@@ -136,7 +138,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Public Repository Creation | 0/? | Not started | - |
+| 1. Public Repository Creation | 0/1 | Planned | - |
 | 2. Community Standards | 0/? | Not started | - |
 | 3. Content Sync via Submodule | 0/? | Not started | - |
 | 4. Cross-Repo Authentication | 0/? | Not started | - |
