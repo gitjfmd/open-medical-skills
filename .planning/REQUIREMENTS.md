@@ -128,13 +128,69 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| — | — | Populated by roadmapper |
+| REPO-01 | Phase 1: Public Repository Creation | Pending |
+| REPO-02 | Phase 1: Public Repository Creation | Pending |
+| REPO-03 | Phase 3: Content Sync via Submodule | Pending |
+| REPO-04 | Phase 1: Public Repository Creation | Pending |
+| REPO-05 | Phase 3: Content Sync via Submodule | Pending |
+| REPO-06 | Phase 10: Private Repo Cleanup | Pending |
+| REPO-07 | Phase 10: Private Repo Cleanup | Pending |
+| SYNC-01 | Phase 3: Content Sync via Submodule | Pending |
+| SYNC-02 | Phase 3: Content Sync via Submodule | Pending |
+| SYNC-03 | Phase 3: Content Sync via Submodule | Pending |
+| SYNC-04 | Phase 3: Content Sync via Submodule | Pending |
+| SYNC-05 | Phase 5: Public Repo CI/CD | Pending |
+| SYNC-06 | Phase 6: Private Repo CI/CD | Pending |
+| SYNC-07 | Phase 3: Content Sync via Submodule | Pending |
+| PCI-01 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-02 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-03 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-04 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-05 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-06 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-07 | Phase 5: Public Repo CI/CD | Pending |
+| PCI-08 | Phase 5: Public Repo CI/CD | Pending |
+| SCI-01 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-02 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-03 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-04 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-05 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-06 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-07 | Phase 6: Private Repo CI/CD | Pending |
+| SCI-08 | Phase 6: Private Repo CI/CD | Pending |
+| BP-01 | Phase 7: Branch Protection | Pending |
+| BP-02 | Phase 7: Branch Protection | Pending |
+| BP-03 | Phase 7: Branch Protection | Pending |
+| BP-04 | Phase 7: Branch Protection | Pending |
+| BP-05 | Phase 7: Branch Protection | Pending |
+| SUB-01 | Phase 8: Submission Pipeline | Pending |
+| SUB-02 | Phase 8: Submission Pipeline | Pending |
+| SUB-03 | Phase 8: Submission Pipeline | Pending |
+| SUB-04 | Phase 8: Submission Pipeline | Pending |
+| SUB-05 | Phase 8: Submission Pipeline | Pending |
+| DOC-01 | Phase 9: Documentation | Pending |
+| DOC-02 | Phase 9: Documentation | Pending |
+| DOC-03 | Phase 9: Documentation | Pending |
+| DOC-04 | Phase 9: Documentation | Pending |
+| DOC-05 | Phase 9: Documentation | Pending |
+| DOC-06 | Phase 9: Documentation | Pending |
+| DOC-07 | Phase 9: Documentation | Pending |
+| DOC-08 | Phase 9: Documentation | Pending |
+| COM-01 | Phase 2: Community Standards | Pending |
+| COM-02 | Phase 2: Community Standards | Pending |
+| COM-03 | Phase 2: Community Standards | Pending |
+| COM-04 | Phase 2: Community Standards | Pending |
+| COM-05 | Phase 2: Community Standards | Pending |
+| AUTH-01 | Phase 4: Cross-Repo Authentication | Pending |
+| AUTH-02 | Phase 4: Cross-Repo Authentication | Pending |
+| AUTH-03 | Phase 4: Cross-Repo Authentication | Pending |
+| AUTH-04 | Phase 4: Cross-Repo Authentication | Pending |
 
 **Coverage:**
-- v1 requirements: 52 total
-- Mapped to phases: 0
-- Unmapped: 52
+- v1 requirements: 57 total
+- Mapped to phases: 57
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-22*
-*Last updated: 2026-03-22 after initial definition*
+*Last updated: 2026-03-22 after roadmap creation (traceability populated)*
