@@ -11,12 +11,12 @@
 ### Checklist
 
 - [ ] I have added a YAML file to `content/skills/` or `content/plugins/`
-- [ ] The YAML file follows the [schema specification](../../docs/schema.md)
+- [ ] The YAML file follows the [content schema](../../src/content.config.ts)
 - [ ] The skill/plugin name is unique (no duplicates in the content directory)
 - [ ] The repository URL is publicly accessible
 - [ ] At least one install method is provided
 - [ ] Safety guardrails and disclaimers are documented
-- [ ] The YAML file passes local validation (`node scripts/validate-submission.js`)
+- [ ] CI validation passes on this PR (automated — no local step needed)
 
 ### Submission Details
 
@@ -24,7 +24,7 @@
 
 **Display Name:** <!-- e.g., Clinical Note Summarizer -->
 
-**Category:** <!-- clinical | diagnostic | administrative | research | education | pharmacology | radiology | pathology | surgery | mental-health | pediatrics | emergency-medicine | public-health | telemedicine | other -->
+**Category:** <!-- diagnosis | treatment | lab-imaging | pharmacy | emergency | surgery | nursing | pediatrics | mental-health | public-health | research | education | administrative | clinical-research-summarizing -->
 
 **Author:** <!-- Your name or organization -->
 
@@ -62,6 +62,8 @@
 - [ ] This submission does not expose PHI without appropriate safeguards
 - [ ] I understand this will be reviewed by physician maintainers
 - [ ] This submission includes appropriate medical AI disclaimers
+- [ ] This submission is a research and learning tool, not clinical decision support (CDS)
+- [ ] All SKILL.md files contain appropriate medical disclaimers
 
 ---
 
