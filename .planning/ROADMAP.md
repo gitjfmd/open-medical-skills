@@ -45,7 +45,9 @@ Plans:
   1. Public repo root has LICENSE (MIT), DISCLAIMER.md (medical content disclaimer), and a properly configured .gitignore
   2. Issue templates for submit-skill and submit-plugin are functional (can create new issue from template)
   3. PR templates for skill-submission and dev-to-main are present and render correctly
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 02-01-PLAN.md — Fix PR template references, add dev-to-main template, create .gitignore, push to public repo
 
 ### Phase 3: Content Sync via Submodule
 **Goal**: The private repo consumes public content through a git submodule and builds successfully with zero missing pages
@@ -138,8 +140,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Public Repository Creation | 0/1 | Planned | - |
-| 2. Community Standards | 0/? | Not started | - |
+| 1. Public Repository Creation | 1/1 | Complete | 2026-03-22 |
+| 2. Community Standards | 0/1 | Planned | - |
 | 3. Content Sync via Submodule | 0/? | Not started | - |
 | 4. Cross-Repo Authentication | 0/? | Not started | - |
 | 5. Public Repo CI/CD | 0/? | Not started | - |
